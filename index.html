@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sindicato OS // Terminal de Operadores</title>
+    <style>
+        /* =========================================
+           ESTÉTICA COMP/CON (LANCER INSPIRED)
+           ========================================= */
+        :root {
+            --bg-base: #05070a;
+            --bg-panel: #0d121a;
+            --bg-modal: #131924;
+            --border-dim: #1f2937;
+            --text-main: #e2e8f0;
+            --text-muted: #718096;
+            --cyan: #00f0ff;
+            --red: #ff2a5f;
+            --gold: #ffb800;
+            --green: #00ff66;
+            --font-ui: 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'Courier New', monospace;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            overflow-x: hidden;
+        }
+
+        /* Scanlines */
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 999; opacity: 0.4;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+
+        /* Typography & Basics */
+        h1, h2, h3, h4 { font-family: var(--font-mono); text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal; letter-spacing: 1px; }
+        h1 { color: var(--cyan); border-bottom: 2px solid var(--cyan); padding-bottom: 5px; }
+        h2 { color: var(--gold); border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; font-size: 1.2rem; }
+        
+        input, select, textarea {
+            background: #000; color: var(--text-main); border: 1px solid var(--border-dim);
+            padding: 8px; font-family: var(--font-mono); font-size: 0.9rem; width: 100%;
+            box-sizing: border-box; transition: all 0.2s;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 5px rgba(0,240,255,0.2); }
+        input[readonly] { color: var(--text-muted); background: #080a0f; border-style: dashed; cursor: not-allowed; }
+
+        /* Buttons */
+        .btn {
+            background: var(--bg-panel); color: var(--cyan); border: 1px solid var(--cyan);
+            padding: 10px 20px; font-family: var(--font-mono); font-weight: bold; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px rgba(0,240,255,0.4); }
+        .btn-red { color: var(--red); border-color: var(--red); }
+        .btn-red:hover { background: var(--red); color: #fff; box-shadow: 0 0 15px rgba(255,42,95,0.4); }
+        .btn-small { padding: 4px 8px; font-size: 0.8rem; }
+
+        /* Views */
+        .view { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.3s; }
+        .view.active { display: block; }
+
+        /* Layout Grids */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+
+        .panel { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 15px; position: relative; }
+        
+        /* Modal Selector */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal { background: var(--bg-modal); border: 1px solid var(--cyan); width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; padding: 20px; box-shadow: 0 0 30px rgba(0,240,255,0.1); }
+        .item-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; background: #000; padding: 10px; border: 1px solid var(--border-dim); margin-bottom: 5px; transition: 0.2s; }
+        .item-row:hover { border-color: var(--cyan); }
+        .item-nf-lock { opacity: 0.5; pointer-events: none; border-color: var(--red); }
+
+        /* Hub / Roster */
+        .roster-card { display: flex; gap: 15px; background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 15px; cursor: pointer; transition: 0.2s; border-left: 4px solid var(--cyan); }
+        .roster-card:hover { border-color: var(--cyan); transform: translateX(5px); }
+        .roster-img { width: 80px; height: 80px; background: #000; object-fit: cover; border: 1px solid var(--border-dim); }
+        
+        /* Tabs */
+        .tab-bar { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 1px solid var(--border-dim); }
+        .tab-btn { background: #000; color: var(--text-muted); border: 1px solid var(--border-dim); border-bottom: none; padding: 10px 20px; cursor: pointer; font-family: var(--font-mono); font-weight: bold; transition: 0.2s; }
+        .tab-btn.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
+
+        /* Specific Sheet Elements */
+        .stat-box { background: #000; border: 1px solid var(--border-dim); padding: 10px; text-align: center; }
+        .stat-val { font-size: 1.5rem; font-weight: bold; color: #fff; font-family: var(--font-mono); }
+        .stat-mod { color: var(--cyan); font-size: 0.9rem; }
+        
+        .resource-tracker { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 10px; border: 1px solid var(--border-dim); margin-bottom: 10px; }
+        .resource-val { font-size: 2rem; font-family: var(--font-mono); font-weight: bold; margin: 0 15px; }
+
+        .loadout-slot { border: 1px dashed var(--border-dim); padding: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.3); }
+        .loadout-slot.filled { border-style: solid; border-color: var(--border-dim); background: #000; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- OVERLAY DE CARREGAMENTO -->
+    <div id="loader" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:2000; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <h1 style="border:none;">CONECTANDO AO GRID...</h1>
+        <p id="loader-msg" style="color:var(--text-muted); font-family:var(--font-mono);">Sincronizando Banco de Dados</p>
+    </div>
+
+    <!-- MODAL SELETOR DE ITENS (Gaveta) -->
+    <div id="modal-selector" class="modal-overlay">
+        <div class="modal">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h1 id="modal-title" style="margin:0; border:none;">SELECIONE O HARDWARE</h1>
+                <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
+            </div>
+            <div id="modal-list"></div>
+        </div>
+    </div>
+
+    <!-- VIEW 1: HUB (ROSTER) -->
+    <div id="view-hub" class="view">
+        <div style="text-align:center; margin-bottom: 40px;">
+            <h1 style="font-size: 3rem; border:none; text-shadow: 0 0 15px rgba(0,240,255,0.5);">SINDICATO O.S.</h1>
+            <p style="color:var(--cyan); font-family:var(--font-mono);">Terminal Operacional v10.0</p>
+        </div>
+        
+        <div style="display:flex; justify-content:center; gap:15px; margin-bottom: 30px;">
+            <button class="btn" onclick="startBuilder()">+ NOVO CONTRATO (CRIAR OPERADOR)</button>
+            <button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="window.open('regras.md', '_blank')">📘 ARQUIVO MESTRE (REGRAS)</button>
+        </div>
+
+        <h2 style="color:var(--text-muted);">SEU ESQUADRÃO REGISTRADO</h2>
+        <div id="roster-grid" class="grid-2">
+            <!-- Preenchido via JS -->
+        </div>
+    </div>
+
+    <!-- VIEW 2: BUILDER (CRIAÇÃO) -->
+    <div id="view-builder" class="view">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h1>PROTOCOLO DE RECRUTAMENTO</h1>
+            <button class="btn btn-red btn-small" onclick="switchView('view-hub')">CANCELAR</button>
+        </div>
+
+        <div class="panel" style="margin-top:20px;">
+            <h2>1. IDENTIDADE</h2>
+            <div class="grid-2">
+                <div>
+                    <label>NOME E CALLSIGN</label>
+                    <input type="text" id="b_name" placeholder="Ex: John 'Ghost' Doe">
+                    
+                    <label style="margin-top:10px; display:block;">ARQUÉTIPO</label>
+                    <select id="b_arch">
+                        <option value="Sentinela">Sentinela</option>
+                        <option value="Espectro">Espectro</option>
+                        <option value="Executor">Executor</option>
+                        <option value="Especialista">Especialista</option>
+                    </select>
+
+                    <label style="margin-top:10px; display:block;">FOTO (ARQUIVO LOCAL)</label>
+                    <input type="file" id="b_img_upload" accept="image/*" onchange="processBuilderImage(this)">
+                </div>
+                <div style="display:flex; justify-content:center; align-items:center;">
+                    <canvas id="b_canvas" width="150" height="200" style="border:1px solid var(--cyan); background:#000;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top:20px;">
+            <h2>2. HISTÓRICO (MÁXIMO 2)</h2>
+            <p style="font-size:0.8rem; color:var(--text-muted); font-family:var(--font-mono);">
+                Regra: Escolha 1 Histórico e ganhe 3 vantagens, OU escolha 2 Históricos e ganhe 1 vantagem de cada.
+            </p>
+            <div class="grid-2">
+                <div>
+                    <label>HISTÓRICO PRIMÁRIO</label>
+                    <select id="b_hist1" onchange="renderBuilderHistories()"><option value="">-- Selecione --</option></select>
+                </div>
+                <div>
+                    <label>HISTÓRICO SECUNDÁRIO (OPCIONAL)</label>
+                    <select id="b_hist2" onchange="renderBuilderHistories()"><option value="">-- Selecione --</option></select>
+                </div>
+            </div>
+            <div id="b_adv_container" style="margin-top:15px; border-top:1px dashed var(--border-dim); padding-top:10px;">
+                <!-- Checkboxes de vantagens -->
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top:20px;">
+            <h2>3. ORIGEM E ATRIBUTOS</h2>
+            <div class="grid-2" style="margin-bottom:15px;">
+                <div>
+                    <label>ORIGEM BIOLÓGICA</label>
+                    <select id="b_origin" onchange="applyOriginBase()"></select>
+                </div>
+                <div style="text-align:right;">
+                    <span style="font-family:var(--font-mono); font-size:1.2rem;">PONTOS RESTANTES: </span>
+                    <span id="b_pts" style="font-family:var(--font-mono); font-size:2rem; font-weight:bold; color:var(--green);">0</span>
+                </div>
+            </div>
+            
+            <div id="b_stats_grid" class="grid-4">
+                <!-- Inputs de estatísticas gerados via JS -->
+            </div>
+        </div>
+
+        <div style="margin-top:30px; text-align:right;">
+            <button class="btn" onclick="finalizeBuilder()">CONFIRMAR E GERAR FICHA >></button>
+        </div>
+    </div>
+
+    <!-- VIEW 3: ACTIVE SHEET -->
+    <div id="view-sheet" class="view">
+        
+        <!-- HEADER (Fixado) -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px; border-bottom: 2px solid var(--border-dim); padding-bottom:15px;">
+            <div style="display:flex; gap:20px;">
+                <img id="s_img" src="" style="width:120px; height:160px; object-fit:cover; border:1px solid var(--cyan);">
+                <div>
+                    <h1 id="s_name" style="border:none; margin:0; font-size:2.5rem;">CALLSIGN</h1>
+                    <div style="font-family:var(--font-mono); color:var(--gold); margin-bottom:10px;">
+                        <span id="s_origin">ORIGEM</span> // <span id="s_arch">ARQUÉTIPO</span>
+                    </div>
+                    <div style="display:flex; gap:15px; font-family:var(--font-mono); font-size:0.9rem;">
+                        <div class="stat-box" style="padding:5px;">NÍVEL FAMA (NF)<br><input type="number" id="s_nf" value="0" style="text-align:center; border:none; font-size:1.2rem; color:var(--cyan); padding:0;" onchange="autoSave()"></div>
+                        <div class="stat-box" style="padding:5px;">CRÉDITOS (¢)<br><input type="number" id="s_cred" value="20" style="text-align:center; border:none; font-size:1.2rem; color:var(--green); padding:0;" onchange="autoSave()"></div>
+                        <div class="stat-box" style="padding:5px;">ÉTER<br><input type="number" id="s_eter" value="1" style="text-align:center; border:none; font-size:1.2rem; color:#b000ff; padding:0;" onchange="autoSave()"></div>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
+                <button class="btn btn-small" onclick="switchView('view-hub')">⬅ VOLTAR AO HUB</button>
+                <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted);">AUTO-SAVE ATIVO</div>
+            </div>
+        </div>
+
+        <!-- TABS NAV -->
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('t_combat')">1. COMBATE & STATUS</button>
+            <button class="tab-btn" onclick="switchTab('t_skills')">2. SISTEMA & PERÍCIAS</button>
+            <button class="tab-btn" onclick="switchTab('t_gear')">3. ARSENAL & CROMO</button>
+            <button class="tab-btn" onclick="switchTab('t_identity')">4. IDENTIDADE & LOG</button>
+        </div>
+
+        <!-- TAB 1: COMBATE -->
+        <div id="t_combat" class="tab-content">
+            <div class="grid-2">
+                <!-- COL 1: VITALS -->
+                <div>
+                    <h2 style="color:var(--green)">SISTEMAS VITAIS</h2>
+                    
+                    <div class="resource-tracker" style="border-color:var(--green);">
+                        <label style="color:var(--green);">PONTOS DE RESISTÊNCIA (PR)</label>
+                        <div style="display:flex; align-items:center;">
+                            <input type="number" id="s_hp_cur" style="width:60px; text-align:center; font-size:1.5rem;" onchange="autoSave()">
+                            <span class="resource-val" style="color:var(--text-muted)">/ <span id="s_hp_max">0</span></span>
+                        </div>
+                    </div>
+
+                    <div class="resource-tracker" style="border-color:var(--cyan);">
+                        <div>
+                            <label style="color:var(--cyan);">ESCUDO ETÉREO</label><br>
+                            <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted);">RECARGA: <span id="s_shield_rec">0</span></span>
+                        </div>
+                        <div style="display:flex; align-items:center;">
+                            <input type="number" id="s_shield_cur" style="width:60px; text-align:center; font-size:1.5rem;" onchange="autoSave()">
+                            <span class="resource-val" style="color:var(--text-muted)">/ <span id="s_shield_max">0</span></span>
+                        </div>
+                    </div>
+
+                    <div class="panel" style="margin-bottom:10px; border-color:var(--gold);">
+                        <div style="display:flex; justify-content:space-between;">
+                            <label style="color:var(--gold);">SOBRECARGA ESTRUTURAL (SE)</label>
+                            <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted);">LIMITE: <span id="s_se_max">0</span></span>
+                        </div>
+                        <input type="number" id="s_se_cur" style="width:100%; text-align:center; font-size:1.5rem; margin-top:5px;" onchange="checkOverload()">
+                        <div id="s_se_alert" style="color:var(--red); font-family:var(--font-mono); font-size:0.8rem; font-weight:bold; margin-top:5px; text-align:center; display:none;">⚠️ COLAPSO NEURAL</div>
+                    </div>
+
+                    <div class="panel" style="border-color:var(--text-muted);">
+                        <label>ARMADURA</label>
+                        <select id="s_armor_state" style="margin-bottom:10px;" onchange="autoSave()">
+                            <option value="normal">Normal (Placas Íntegras)</option>
+                            <option value="danificada">Danificada (Metade Eficiência)</option>
+                            <option value="quebrada">Quebrada (Comprometida)</option>
+                        </select>
+                        <div style="display:flex; justify-content:space-between; font-family:var(--font-mono);">
+                            <span>ABSORÇÃO ATUAL: <strong id="s_armor_abs" style="font-size:1.5rem;">0</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COL 2: WEAPONS -->
+                <div>
+                    <h2 style="color:var(--red)">ARSENAL ATIVO (SIC)</h2>
+                    
+                    <!-- Primary -->
+                    <div class="loadout-slot filled" style="border-color:var(--red);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <label style="color:var(--red)">ARMA PRIMÁRIA</label>
+                            <button class="btn btn-small" onclick="openWeaponBuilder('primary')">MONTAR/TROCAR</button>
+                        </div>
+                        <div id="wpn_primary_display" style="font-family:var(--font-mono); font-size:0.9rem;">
+                            <!-- Filled by JS -->
+                            <span style="color:var(--text-muted);">Nenhuma arma equipada.</span>
+                        </div>
+                    </div>
+
+                    <!-- Secondary -->
+                    <div class="loadout-slot filled" style="border-color:var(--red);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <label style="color:var(--red)">ARMA SECUNDÁRIA</label>
+                            <button class="btn btn-small" onclick="openWeaponBuilder('secondary')">MONTAR/TROCAR</button>
+                        </div>
+                        <div id="wpn_secondary_display" style="font-family:var(--font-mono); font-size:0.9rem;">
+                            <span style="color:var(--text-muted);">Nenhuma arma equipada.</span>
+                        </div>
+                    </div>
+
+                    <!-- Combat Masteries -->
+                    <div class="panel">
+                        <div style="display:flex; justify-content:space-between;">
+                            <label>MAESTRIAS DE COMBATE</label>
+                            <button class="btn btn-small" onclick="openSelector('masteries', 'ADICIONAR MAESTRIA')">+ ADD</button>
+                        </div>
+                        <div id="combat_masteries_list" style="margin-top:10px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: SKILLS -->
+        <div id="t_skills" class="tab-content" style="display:none;">
+            <div class="grid-2">
+                <!-- ESSENCES -->
+                <div>
+                    <h2>ESSÊNCIAS (ATRIBUTOS)</h2>
+                    <div id="s_essences_grid" class="grid-2">
+                        <!-- Filled by JS. Readonly inputs. -->
+                    </div>
+                    
+                    <div class="panel" style="margin-top:20px; text-align:center;">
+                        <label>DEFESA PASSIVA (MELEE)</label>
+                        <div id="s_def_melee" style="font-size:2rem; font-family:var(--font-mono); color:var(--cyan); font-weight:bold;">+0%</div>
+                        <span style="font-size:0.8rem; color:var(--text-muted);">(Maior entre Bônus Agilidade ou Confronto x 5)</span>
+                    </div>
+                </div>
+
+                <!-- DOMAINS & MAGIC -->
+                <div>
+                    <div class="panel" style="margin-bottom:20px;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h2>DOMÍNIOS (TREINAMENTO)</h2>
+                            <button class="btn btn-small" onclick="addCustomDomain()">+ ADD NOVO</button>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-muted); font-family:var(--font-mono);">Concedem "Flips" (Inversão de Dados) em falhas. Nível I = 1 Flip, Nível II = 2 Flips, Nível III = 3 Flips.</p>
+                        <div id="s_domains_list"></div>
+                    </div>
+
+                    <div class="panel" style="border-color:#b000ff;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h2 style="color:#b000ff">FOCALIZADORES RÚNICOS (SIC)</h2>
+                            <button class="btn btn-small" onclick="openSelector('runes', 'SINTONIZAR RUNA', 'utility_eq')">+ ADD</button>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-muted); font-family:var(--font-mono);">Capacidade Máxima: 2 (ou 3 com Maestria). 1º uso livre por cena. Usar a mesma Runa de novo = +1 SE.</p>
+                        <div id="s_runes_list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: GEAR -->
+        <div id="t_gear" class="tab-content" style="display:none;">
+            <div class="grid-3">
+                <!-- TACTICAL -->
+                <div class="panel">
+                    <div style="display:flex; justify-content:space-between;">
+                        <h2 style="color:var(--red);">ENCAIXE TÁTICO</h2>
+                        <span style="font-family:var(--font-mono);"><span id="l_tactical_cur">0</span> / 4</span>
+                    </div>
+                    <button class="btn btn-small" style="width:100%; margin-bottom:10px;" onclick="openSelector('tactical_all', 'ADICIONAR ITEM TÁTICO')">+ ADD ITEM TÁTICO / DRONE</button>
+                    <div id="s_tactical_list"></div>
+                </div>
+
+                <!-- UTILITY -->
+                <div class="panel">
+                    <div style="display:flex; justify-content:space-between;">
+                        <h2 style="color:var(--gold);">ENCAIXE UTILIDADE</h2>
+                        <span style="font-family:var(--font-mono);"><span id="l_utility_cur">0</span> / 4</span>
+                    </div>
+                    <button class="btn btn-small" style="width:100%; margin-bottom:10px;" onclick="openSelector('utility_all', 'ADICIONAR UTILIDADE')">+ ADD GRANADA/FÁRMACO</button>
+                    <div id="s_utility_list"></div>
+                </div>
+
+                <!-- GENERAL -->
+                <div class="panel">
+                    <div style="display:flex; justify-content:space-between;">
+                        <h2>MOCHILA (GERAL)</h2>
+                        <span style="font-family:var(--font-mono);"><span id="l_general_cur">0</span> / <span id="l_general_max">0</span></span>
+                    </div>
+                    <div id="l_general_alert" style="color:var(--red); font-size:0.8rem; font-weight:bold; display:none; text-align:right;">⚠️ LENTIDÃO (PESO)</div>
+                    <button class="btn btn-small" style="width:100%; margin-bottom:10px;" onclick="openSelector('general_all', 'ADICIONAR CARGA')">+ ADD ITEM GERAL</button>
+                    <div id="s_general_list"></div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-top:20px; border-color:#b000ff;">
+                <div style="display:flex; justify-content:space-between;">
+                    <h2 style="color:#b000ff;">CIBERNÉTICOS E CROMO</h2>
+                    <button class="btn btn-small" onclick="openSelector('cyber_all', 'INSTALAR CROMO')">+ INSTALAR CROMO</button>
+                </div>
+                <div id="s_cyber_list" class="grid-2"></div>
+            </div>
+        </div>
+
+        <!-- TAB 4: IDENTITY -->
+        <div id="t_identity" class="tab-content" style="display:none;">
+            <div class="grid-2">
+                <div class="panel">
+                    <h2>HISTÓRICO & TRAÇOS</h2>
+                    <div id="s_hist_list" style="margin-bottom:15px;"></div>
+                    
+                    <label>TRAÇO NEGATIVO (GERA ÉTER)</label>
+                    <textarea id="s_traco_neg" rows="3" onchange="autoSave()"></textarea>
+                    
+                    <label style="margin-top:10px; display:block;">ESTILO DE VIDA ATUAL</label>
+                    <input type="text" id="s_lifestyle" placeholder="Ex: Comum (3¢)" onchange="autoSave()">
+                </div>
+                <div class="panel">
+                    <div style="display:flex; justify-content:space-between;">
+                        <h2>CONTATOS & DÍVIDAS</h2>
+                        <button class="btn btn-small" onclick="addContact()">+ NOVO CONTATO</button>
+                    </div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); font-family:var(--font-mono);">Mecânica: Solicitar favores gera Dívida. Máximo 5 pts por contato.</p>
+                    <div id="s_contact_list"></div>
+                </div>
+            </div>
+            
+            <div class="panel" style="margin-top:20px;">
+                <h2>LOG DE DADOS (ANOTAÇÕES DA MISSÃO)</h2>
+                <textarea id="s_notes" rows="10" placeholder="Insira senhas, pistas e códigos aqui..." onchange="autoSave()"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPTS CORE -->
+    <script>
+        // --- GLOBAIS ---
+        let db = null;
+        let roster =[];
+        let activeCharIndex = -1;
+        let activeChar = {};
+
+        // --- INICIALIZAÇÃO E FETCH DO DB ---
+        window.onload = async function() {
+            try {
+                // Tenta puxar o arquivo JSON solto na pasta
+                const response = await fetch('database.json');
+                if(!response.ok) throw new Error("File not found");
+                db = await response.json();
+                
+                // Carrega jogadores do LocalStorage
+                const savedRoster = localStorage.getItem('sindicato_roster_v10');
+                if(savedRoster) roster = JSON.parse(savedRoster);
+
+                document.getElementById('loader').style.display = 'none';
+                renderHub();
+            } catch (error) {
+                console.error("ERRO CORS OU ARQUIVO NÃO ENCONTRADO:", error);
+                document.getElementById('loader-msg').innerHTML = "<span style='color:var(--red)'>ERRO CRÍTICO: Não foi possível carregar o database.json.<br>Motivo provável: Você está abrindo o arquivo direto no PC sem um servidor.<br>Solução: Suba os arquivos no GitHub Pages.</span>";
+            }
+        };
+
+        function saveRoster() {
+            if(activeCharIndex > -1) roster[activeCharIndex] = activeChar;
+            localStorage.setItem('sindicato_roster_v10', JSON.stringify(roster));
+        }
+
+        function autoSave() {
+            scrapeSheetToActiveChar();
+            saveRoster();
+            updateCalculations();
+        }
+
+        // --- CONTROLE DE TELAS (VIEWS & TABS) ---
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            if(viewId === 'view-hub') { activeCharIndex = -1; renderHub(); }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        function openModal(title, contentHTML) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-list').innerHTML = contentHTML;
+            document.getElementById('modal-selector').style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('modal-selector').style.display = 'none'; }
+
+        // --- HUB LOGIC ---
+        function renderHub() {
+            const grid = document.getElementById('roster-grid');
+            grid.innerHTML = '';
+            roster.forEach((c, idx) => {
+                grid.innerHTML += `
+                    <div class="roster-card" onclick="loadChar(${idx})">
+                        <img class="roster-img" src="${c.img || ''}">
+                        <div style="flex-grow:1;">
+                            <h3 style="margin:0; border:none; color:#fff;">${c.name || 'Desconhecido'}</h3>
+                            <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">${c.origin} // ${c.arch}</div>
+                            <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--cyan);">NF: ${c.nf || 0} | ¢: ${c.credits || 0}</div>
+                        </div>
+                        <button class="btn btn-red btn-small" style="height:fit-content;" onclick="deleteChar(${idx}, event)">EXCLUIR</button>
+                    </div>
+                `;
+            });
+            switchView('view-hub');
+        }
+
+        function deleteChar(idx, e) {
+            e.stopPropagation();
+            if(confirm("Expulsar Operador do Sindicato permanentemente?")) {
+                roster.splice(idx, 1);
+                saveRoster();
+                renderHub();
+            }
+        }
+
+        // --- BUILDER LOGIC (NOVO OPERADOR) ---
+        function startBuilder() {
+            // Limpa o form
+            document.getElementById('b_name').value = '';
+            document.getElementById('b_arch').value = 'Sentinela';
+            const ctx = document.getElementById('b_canvas').getContext('2d');
+            ctx.clearRect(0,0,150,200);
+
+            // Popula selects
+            let optHist = '<option value="">-- Nenhum --</option>';
+            db.histories.forEach((h, i) => { optHist += `<option value="${i}">${h.name}</option>`; });
+            document.getElementById('b_hist1').innerHTML = optHist;
+            document.getElementById('b_hist2').innerHTML = optHist;
+
+            let optOrigin = '';
+            for(let key in db.origins) { optOrigin += `<option value="${key}">${db.origins[key].name}</option>`; }
+            document.getElementById('b_origin').innerHTML = optOrigin;
+
+            applyOriginBase();
+            switchView('view-builder');
+        }
+
+        function processBuilderImage(input) {
+            if(input.files && input.files[0]){
+                const reader = new FileReader();
+                reader.onload = function(e){
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.getElementById('b_canvas');
+                        const ctx = canvas.getContext('2d');
+                        ctx.clearRect(0,0,150,200);
+                        // Corta pelo topo e ajusta proporção (Width 150, Height 200 = ratio 0.75)
+                        const scale = 150 / img.width;
+                        ctx.drawImage(img, 0, 0, img.width, 200/scale, 0, 0, 150, 200);
+                        canvas.dataset.src = canvas.toDataURL('image/jpeg', 0.7);
+                    }
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function renderBuilderHistories() {
+            const h1Idx = document.getElementById('b_hist1').value;
+            const h2Idx = document.getElementById('b_hist2').value;
+            let html = '';
+
+            if(h1Idx !== "") {
+                const h1 = db.histories[h1Idx];
+                html += `<h4 style="color:var(--cyan);">${h1.name}</h4>`;
+                h1.advantages.forEach((adv, i) => {
+                    html += `<label style="display:flex; gap:10px; margin-bottom:5px; font-family:var(--font-mono); font-size:0.8rem;">
+                        <input type="checkbox" class="chk-hist1" value="${h1Idx}_${i}" onchange="checkHistLimits()">
+                        <span><strong style="color:#fff;">${adv.name}:</strong> ${adv.effect}</span>
+                    </label>`;
+                });
+            }
+            if(h2Idx !== "" && h2Idx !== h1Idx) {
+                const h2 = db.histories[h2Idx];
+                html += `<h4 style="color:var(--cyan); margin-top:10px;">${h2.name}</h4>`;
+                h2.advantages.forEach((adv, i) => {
+                    html += `<label style="display:flex; gap:10px; margin-bottom:5px; font-family:var(--font-mono); font-size:0.8rem;">
+                        <input type="checkbox" class="chk-hist2" value="${h2Idx}_${i}" onchange="checkHistLimits()">
+                        <span><strong style="color:#fff;">${adv.name}:</strong> ${adv.effect}</span>
+                    </label>`;
+                });
+            }
+            document.getElementById('b_adv_container').innerHTML = html;
+        }
+
+        function checkHistLimits() {
+            const h2Idx = document.getElementById('b_hist2').value;
+            const chks1 = document.querySelectorAll('.chk-hist1');
+            const chks2 = document.querySelectorAll('.chk-hist2');
+            
+            let count1 = Array.from(chks1).filter(c => c.checked).length;
+            let count2 = Array.from(chks2).filter(c => c.checked).length;
+
+            if(h2Idx === "") {
+                // Puro: max 3
+                if(count1 >= 3) chks1.forEach(c => { if(!c.checked) c.disabled = true; });
+                else chks1.forEach(c => c.disabled = false);
+            } else {
+                // Misto: max 1 de cada
+                if(count1 >= 1) chks1.forEach(c => { if(!c.checked) c.disabled = true; });
+                else chks1.forEach(c => c.disabled = false);
+
+                if(count2 >= 1) chks2.forEach(c => { if(!c.checked) c.disabled = true; });
+                else chks2.forEach(c => c.disabled = false);
+            }
+        }
+
+        const attrKeys =['esf','agi','ard','cor','int','per','lab','von','bal','con'];
+        const fullNames =['Esforço','Agilidade','Ardil','Corpo','Intelecto','Percepção','Lábia','Vontade','Balística','Confronto'];
+
+        function applyOriginBase() {
+            const key = document.getElementById('b_origin').value;
+            const org = db.origins[key];
+            const grid = document.getElementById('b_stats_grid');
+            grid.innerHTML = '';
+            
+            attrKeys.forEach((k, idx) => {
+                grid.innerHTML += `
+                    <div class="stat-box">
+                        <label>${fullNames[idx]}</label>
+                        <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin-top:5px;">
+                            <button class="btn btn-small btn-red" onclick="modAttr('${k}', -10)">-</button>
+                            <input type="number" id="b_attr_${k}" value="${org[k]}" readonly style="width:50px; text-align:center; font-size:1.2rem; border:none; padding:0;">
+                            <button class="btn btn-small" onclick="modAttr('${k}', 10)">+</button>
+                        </div>
+                    </div>
+                `;
+            });
+            calcBuilderPts();
+        }
+
+        function modAttr(key, val) {
+            const orgKey = document.getElementById('b_origin').value;
+            const org = db.origins[orgKey];
+            const inp = document.getElementById('b_attr_' + key);
+            let cur = parseInt(inp.value) || 0;
+            let nxt = cur + val;
+            
+            // Checks base limits
+            if(nxt < org[key]) return; // can't go below racial base
+            let cap = 50;
+            if(orgKey === 'jotun' && (key==='esf' || key==='cor')) cap = 60;
+            if(orgKey === 'oni' && (key==='agi' || key==='per')) cap = 60;
+            if(orgKey === 'dokka' && (key==='int' || key==='von')) cap = 60;
+            if(nxt > cap) return;
+
+            inp.value = nxt;
+            calcBuilderPts();
+        }
+
+        function calcBuilderPts() {
+            const orgKey = document.getElementById('b_origin').value;
+            const org = db.origins[orgKey];
+            // Correction applied here: 130 for human, 120 for others.
+            let budget = (orgKey === 'humano') ? 130 : 120; 
+            
+            let spent = 0;
+            attrKeys.forEach(k => {
+                let cur = parseInt(document.getElementById('b_attr_'+k).value) || 0;
+                spent += (cur - org[k]); // custa 1 pt por %
+            });
+
+            const rem = budget - spent;
+            const pDisp = document.getElementById('b_pts');
+            pDisp.innerText = rem;
+            pDisp.style.color = (rem < 0) ? "var(--red)" : (rem === 0 ? "var(--cyan)" : "var(--green)");
+        }
+
+        function finalizeBuilder() {
+            const rem = parseInt(document.getElementById('b_pts').innerText);
+            if(rem < 0) { alert("Orçamento de atributos excedido!"); return; }
+
+            const orgKey = document.getElementById('b_origin').value;
+            const org = db.origins[orgKey];
+
+            // Coleta vantagens selecionadas
+            let selAdv =[];
+            document.querySelectorAll('.chk-hist1:checked').forEach(c => {
+                let [hIdx, aIdx] = c.value.split('_');
+                selAdv.push({ hist: db.histories[hIdx].name, name: db.histories[hIdx].advantages[aIdx].name, effect: db.histories[hIdx].advantages[aIdx].effect });
+            });
+            document.querySelectorAll('.chk-hist2:checked').forEach(c => {
+                let [hIdx, aIdx] = c.value.split('_');
+                selAdv.push({ hist: db.histories[hIdx].name, name: db.histories[hIdx].advantages[aIdx].name, effect: db.histories[hIdx].advantages[aIdx].effect });
+            });
+
+            // Monta o Personagem
+            const newChar = {
+                name: document.getElementById('b_name').value || "Operador Base",
+                arch: document.getElementById('b_arch').value,
+                origin: org.name,
+                img: document.getElementById('b_canvas').dataset.src || "",
+                nf: 0, credits: 20, ether: 1,
+                stats: {},
+                advantages: selAdv,
+                traits_racial: org.traits, // salva as passivas da raca
+                weapons: { primary: null, secondary: null },
+                armor: null,
+                masteries: [], domains: [], runic:[],
+                inv_tactical: [], inv_util: [], inv_general: [], cyber: [],
+                contacts:[], notes: ""
+            };
+
+            attrKeys.forEach(k => { newChar.stats[k] = parseInt(document.getElementById('b_attr_'+k).value); });
+
+            roster.push(newChar);
+            activeCharIndex = roster.length - 1;
+            saveRoster();
+            loadChar(activeCharIndex);
+        }
+
+        // --- SHEET RENDER LOGIC ---
+        function loadChar(idx) {
+            activeCharIndex = idx;
+            activeChar = roster[idx];
+            
+            // Header
+            document.getElementById('s_img').src = activeChar.img || "";
+            document.getElementById('s_name').innerText = activeChar.name.toUpperCase();
+            document.getElementById('s_origin').innerText = activeChar.origin.toUpperCase();
+            document.getElementById('s_arch').innerText = activeChar.arch.toUpperCase();
+            document.getElementById('s_nf').value = activeChar.nf;
+            document.getElementById('s_cred').value = activeChar.credits;
+            document.getElementById('s_eter').value = activeChar.ether;
+            document.getElementById('s_notes').value = activeChar.notes || "";
+
+            // Init missing arrays if old save['weapons','masteries','domains','runic','inv_tactical','inv_util','inv_general','cyber','contacts'].forEach(k => {
+                if(!activeChar[k]) activeChar[k] = (k==='weapons')?{primary:null, secondary:null}:[];
+            });
+
+            // Status HP/Shield/Armor state variables initialization
+            if(activeChar.hp_cur === undefined) activeChar.hp_cur = 999; // Will cap later
+            if(activeChar.shield_cur === undefined) activeChar.shield_cur = 0;
+            if(activeChar.se_cur === undefined) activeChar.se_cur = 0;
+            if(!activeChar.armor_state) activeChar.armor_state = "normal";
+            
+            document.getElementById('s_hp_cur').value = activeChar.hp_cur;
+            document.getElementById('s_shield_cur').value = activeChar.shield_cur;
+            document.getElementById('s_se_cur').value = activeChar.se_cur;
+            document.getElementById('s_armor_state').value = activeChar.armor_state;
+
+            // Render Grids
+            renderSkills();
+            renderArsenal();
+            renderIdentity();
+            updateCalculations();
+
+            switchView('view-sheet');
+            switchTab('t_combat');
+        }
+
+        function scrapeSheetToActiveChar() {
+            activeChar.nf = parseInt(document.getElementById('s_nf').value) || 0;
+            activeChar.credits = parseInt(document.getElementById('s_cred').value) || 0;
+            activeChar.ether = parseInt(document.getElementById('s_eter').value) || 0;
+            activeChar.notes = document.getElementById('s_notes').value;
+            
+            activeChar.hp_cur = parseInt(document.getElementById('s_hp_cur').value) || 0;
+            activeChar.shield_cur = parseInt(document.getElementById('s_shield_cur').value) || 0;
+            activeChar.se_cur = parseInt(document.getElementById('s_se_cur').value) || 0;
+            activeChar.armor_state = document.getElementById('s_armor_state').value;
+            
+            // Salvando calor das armas se existirem
+            if(activeChar.weapons.primary) activeChar.weapons.primary.heat_cur = parseInt(document.getElementById('wpn_p_heat')?.value) || 0;
+            if(activeChar.weapons.secondary) activeChar.weapons.secondary.heat_cur = parseInt(document.getElementById('wpn_s_heat')?.value) || 0;
+        }
+
+        function getBonus(val) { return Math.floor(val/10); }
+
+        function updateCalculations() {
+            // 1. Calc Base Stats
+            const b_corpo = getBonus(activeChar.stats.cor);
+            const b_vontade = getBonus(activeChar.stats.von);
+            const b_esf = getBonus(activeChar.stats.esf);
+            const b_agi = getBonus(activeChar.stats.agi);
+            const b_con = getBonus(activeChar.stats.con);
+
+            // 2. Health & SE
+            let baseHp = 5 + (b_corpo * 2) + b_vontade;
+            if(activeChar.origin === "Jotun") baseHp += 5; // Racial
+            // Add Fluxo cyber bonus if present
+            activeChar.cyber.forEach(c => {
+                if(c.effect && c.effect.includes("PR Max")) baseHp += 10; // example extraction
+            });
+
+            let cyberCostTotal = 0;
+            activeChar.cyber.forEach(c => { cyberCostTotal += parseInt(c.cost) || 0; });
+            
+            let baseSE = 3 + b_corpo + b_vontade;
+            if(activeChar.origin === "Dokka") baseSE += 2;
+            let maxSE = baseSE - cyberCostTotal;
+            if(maxSE < 1) maxSE = 1;
+
+            if(activeChar.hp_cur > baseHp) { activeChar.hp_cur = baseHp; document.getElementById('s_hp_cur').value = baseHp; }
+            document.getElementById('s_hp_max').innerText = baseHp;
+            document.getElementById('s_se_max').innerText = maxSE;
+
+            // 3. Melee Def
+            let defM = Math.max(b_agi, b_con) * 5;
+            // Check def masteries/armor mods manually if needed, for now just base:
+            document.getElementById('s_def_melee').innerText = "+" + defM + "%";
+
+            // 4. Overload alert
+            const seAlert = document.getElementById('s_se_alert');
+            if(activeChar.se_cur >= maxSE) {
+                seAlert.style.display = 'block';
+                seAlert.innerText = (activeChar.se_cur > maxSE) ? "⚠️ INCONSCIENTE! (DANO FÍSICO APLICADO)" : "⚠️ COLAPSO (-20% TESTES)";
+            } else { seAlert.style.display = 'none'; }
+
+            // 5. Armor calculation
+            let baseAbs = 0; let brokaAbs = 0; let sMax = 0; let sRec = 0;
+            if(activeChar.armor) {
+                baseAbs = activeChar.armor.abs;
+                brokaAbs = activeChar.armor.broken;
+                // Mods calc
+                if(activeChar.armor.mods) {
+                    activeChar.armor.mods.forEach(m => {
+                        if(m.effect.includes("+1 Absorção")) baseAbs += 1;
+                        if(m.effect.includes("Escudo 10")) { sMax += 10; sRec += 3; }
+                        if(m.effect.includes("Escudo 20")) { sMax += 20; sRec += 2; }
+                        if(m.effect.includes("Escudo 30")) { sMax += 30; sRec += 1; }
+                        if(m.effect.includes("+5 PE")) sMax += 5;
+                    });
+                }
+            }
+            let curAbs = (activeChar.armor_state === "normal") ? baseAbs : ((activeChar.armor_state === "danificada") ? Math.floor(baseAbs/2) : brokaAbs);
+            document.getElementById('s_armor_abs').innerText = curAbs;
+            document.getElementById('s_shield_max').innerText = sMax;
+            document.getElementById('s_shield_rec').innerText = sRec;
+            if(activeChar.shield_cur > sMax) activeChar.shield_cur = sMax;
+
+            // 6. Loads
+            let loadGenMax = 3 + b_esf;
+            let t_cur=0, u_cur=0, g_cur=0;
+            activeChar.inv_tactical.forEach(i => t_cur += parseInt(i.load||1));
+            activeChar.inv_util.forEach(i => u_cur += parseInt(i.load||1));
+            activeChar.inv_general.forEach(i => g_cur += parseInt(i.load||1));
+            
+            document.getElementById('l_tactical_cur').innerText = t_cur;
+            document.getElementById('l_tactical_cur').style.color = (t_cur > 4) ? "var(--red)" : "inherit";
+            document.getElementById('l_utility_cur').innerText = u_cur;
+            document.getElementById('l_utility_cur').style.color = (u_cur > 4) ? "var(--red)" : "inherit";
+            document.getElementById('l_general_cur').innerText = g_cur;
+            document.getElementById('l_general_max').innerText = loadGenMax;
+            
+            const gAlert = document.getElementById('l_general_alert');
+            if(g_cur > loadGenMax) gAlert.style.display = 'block'; else gAlert.style.display = 'none';
+        }
+
+        function renderSkills() {
+            const grid = document.getElementById('s_essences_grid');
+            grid.innerHTML = '';
+            attrKeys.forEach((k, i) => {
+                let val = activeChar.stats[k];
+                grid.innerHTML += `<div class="stat-box">
+                    <label style="color:var(--cyan);">${fullNames[i]}</label>
+                    <div class="stat-val">${val}%</div>
+                    <div class="stat-mod">Bônus: +${getBonus(val)}</div>
+                </div>`;
+            });
+            // (Render Domains and Runes handled generically below via array renderers)
+            renderSimpleList('s_domains_list', activeChar.domains, "Domínio", "Nível");
+            renderSimpleList('s_runes_list', activeChar.runic, "Runa", "Efeito");
+        }
+
+        function checkOverload() {
+            autoSave(); // Triggers updateCalculations and alerts
+        }
+
+        // --- ARSENAL BUILDING ---
+        function openWeaponBuilder(slot) {
+            let html = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">`;
+            // Col 1: Firearms
+            html += `<div><h3 style="color:var(--cyan);">MONTAR ARMA (BALÍSTICA)</h3>
+                     <label>Frame (Chassi)</label><select id="w_b_frame">`;
+            db.arsenal.frames.forEach((f, i) => html+=`<option value="f_${i}">${f.name} [${f.range}]</option>`);
+            html += `</select><label>Núcleo Corporativo</label><select id="w_b_core">`;
+            db.arsenal.cores.forEach((c, i) => html+=`<option value="c_${i}">${c.name}</option>`);
+            html += `</select><button class="btn" style="margin-top:10px;" onclick="confirmWeaponBuild('${slot}')">CRIAR BALÍSTICA</button></div>`;
+            
+            // Col 2: Melee
+            html += `<div><h3 style="color:var(--red);">ARSENAL CORPO A CORPO</h3>
+                     <label>Arma Branca / Energia</label><select id="w_b_melee">`;
+            const mList = (slot === 'primary') ? db.arsenal.melee_primary : db.arsenal.melee_secondary;
+            mList.forEach((m, i) => html+=`<option value="m_${i}">${m.name}[Dano: ${m.dmg}]</option>`);
+            html += `</select><button class="btn btn-red" style="margin-top:10px;" onclick="confirmMeleeBuild('${slot}')">EQUIPAR MELEE</button></div>`;
+            
+            html += `</div>`;
+            openModal(`SLOT ${slot.toUpperCase()}`, html);
+        }
+
+        function confirmWeaponBuild(slot) {
+            const fIdx = document.getElementById('w_b_frame').value.split('_')[1];
+            const cIdx = document.getElementById('w_b_core').value.split('_')[1];
+            const frame = db.arsenal.frames[fIdx];
+            const core = db.arsenal.cores[cIdx];
+            
+            // Resolve damage mapping based on frame name
+            let dmg = 0;
+            if(frame.name.includes("Pistola")) dmg = core.dmg_pistol;
+            else if(frame.name.includes("Subm")) dmg = core.dmg_smg;
+            else if(frame.name.includes("Escopeta")) dmg = core.dmg_shotgun;
+            else if(frame.name.includes("Precisão")) dmg = core.dmg_sniper;
+            else dmg = core.dmg_rifle;
+
+            activeChar.weapons[slot] = {
+                type: 'ranged',
+                name: `${frame.name} (${core.name})`,
+                dmg: dmg, range: frame.range, heat_max: core.heat, heat_cur: 0,
+                traits: frame.effect + " | " + core.effect,
+                mods:[]
+            };
+            closeModal(); autoSave(); renderArsenal();
+        }
+
+        function confirmMeleeBuild(slot) {
+            const mIdx = document.getElementById('w_b_melee').value.split('_')[1];
+            const mList = (slot === 'primary') ? db.arsenal.melee_primary : db.arsenal.melee_secondary;
+            const w = mList[mIdx];
+            activeChar.weapons[slot] = {
+                type: 'melee', name: w.name, dmg: w.dmg, range: "Engajado", heat_max: w.heat, heat_cur: 0,
+                traits: w.traits, mods:[]
+            };
+            closeModal(); autoSave(); renderArsenal();
+        }
+
+        function renderArsenal() {['primary','secondary'].forEach(slot => {
+                const w = activeChar.weapons[slot];
+                const div = document.getElementById(`wpn_${slot}_display`);
+                if(!w) { div.innerHTML = "<span style='color:var(--text-muted);'>Vazio.</span>"; return; }
+                
+                let html = `
+                    <div style="font-size:1.2rem; font-weight:bold; color:#fff;">${w.name}</div>
+                    <div style="display:grid; grid-template-columns:auto auto auto; gap:10px; margin:5px 0; color:var(--cyan);">
+                        <div>DANO: <span style="color:#fff; font-size:1.2rem;">${w.dmg}</span></div>
+                        <div>ALCANCE: <span style="color:#fff;">${w.range}</span></div>
+                        <div style="color:var(--gold);">CALOR: <input type="number" id="wpn_${slot.charAt(0)}_heat" value="${w.heat_cur}" style="width:40px; padding:2px; height:25px;" onchange="autoSave()"> / ${w.heat_max}</div>
+                    </div>
+                    <div style="color:var(--text-muted); font-size:0.8rem; margin-bottom:5px;"><strong>TRAÇOS:</strong> ${w.traits}</div>
+                `;
+                html += `<button class="btn btn-small" style="font-size:0.7rem;" onclick="addWpnMod('${slot}')">+ MODIFICAÇÃO</button>`;
+                if(w.mods && w.mods.length > 0) {
+                    w.mods.forEach((m, i) => {
+                        html += `<div style="display:flex; justify-content:space-between; border-top:1px dashed var(--border-dim); padding-top:5px; margin-top:5px;">
+                            <span><span style="color:var(--cyan)">[MOD]</span> ${m.name}: ${m.effect}</span>
+                            <button class="btn btn-red btn-small" style="padding:2px 5px;" onclick="removeArrayItem('weapons.${slot}.mods', ${i})">X</button>
+                        </div>`;
+                    });
+                }
+                div.innerHTML = html;
+            });
+        }
+
+        function addWpnMod(slot) {
+            let html = `<div class="grid-2"><div><h4 style="color:var(--cyan)">MODS DE FRAME</h4>`;
+            db.arsenal.mods_weapon.filter(m=>m.type==="Frame").forEach((m,i)=> {
+                html += `<div class="item-row"><div><strong>${m.name}</strong><br><span style="font-size:0.8rem;">${m.effect}</span></div>
+                <button class="btn btn-small" onclick="pushArrayItem('weapons.${slot}.mods', {name:'${m.name}', effect:'${m.effect}'})">ADD</button></div>`;
+            });
+            html += `</div><div><h4 style="color:var(--gold)">MODS DE NÚCLEO</h4>`;
+            db.arsenal.mods_weapon.filter(m=>m.type==="Core").forEach((m,i)=> {
+                html += `<div class="item-row"><div><strong>${m.name}</strong><br><span style="font-size:0.8rem;">${m.effect}</span></div>
+                <button class="btn btn-small" onclick="pushArrayItem('weapons.${slot}.mods', {name:'${m.name}', effect:'${m.effect}'})">ADD</button></div>`;
+            });
+            html += `</div></div>`;
+            openModal("INSTALAR MODIFICAÇÃO", html);
+        }
+
+        // --- GENERIC LIST RENDERS ---
+        function renderIdentity() {
+            // Histories
+            let hHtml = '';
+            activeChar.advantages.forEach((a, i) => {
+                hHtml += `<div style="background:#000; border:1px solid var(--border-dim); padding:8px; margin-bottom:5px;">
+                    <div style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem;">[${a.hist}]</div>
+                    <strong style="color:#fff;">${a.name}</strong>: <span style="font-size:0.9rem; color:var(--text-muted);">${a.effect}</span>
+                </div>`;
+            });
+            document.getElementById('s_hist_list').innerHTML = hHtml;
+            
+            // Generic Lists
+            renderComplexList('combat_masteries_list', activeChar.masteries, 'masteries');
+            renderComplexList('s_tactical_list', activeChar.inv_tactical, 'inv_tactical');
+            renderComplexList('s_utility_list', activeChar.inv_util, 'inv_util');
+            renderComplexList('s_general_list', activeChar.inv_general, 'inv_general');
+            renderComplexList('s_cyber_list', activeChar.cyber, 'cyber');
+            renderComplexList('s_contact_list', activeChar.contacts, 'contacts');
+        }
+
+        function renderComplexList(containerId, array, keyPath) {
+            const c = document.getElementById(containerId);
+            c.innerHTML = '';
+            if(!array) return;
+            array.forEach((item, i) => {
+                c.innerHTML += `<div class="item-row" style="align-items:start;">
+                    <div><strong style="color:var(--cyan);">${item.name}</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">${item.effect || item.desc || ''}</span></div>
+                    <button class="btn btn-red btn-small" onclick="removeArrayItem('${keyPath}', ${i})">X</button>
+                </div>`;
+            });
+        }
+
+        function renderSimpleList(containerId, array, titleKey, descKey) {
+            const c = document.getElementById(containerId);
+            c.innerHTML = '';
+            if(!array) return;
+            array.forEach((item, i) => {
+                c.innerHTML += `<div style="display:flex; gap:10px; margin-bottom:5px;">
+                    <input type="text" value="${item.name}" readonly style="flex:1;">
+                    <input type="text" value="${item.val}" readonly style="flex:2;">
+                    <button class="btn btn-red btn-small" onclick="removeArrayItem('domains', ${i})">X</button>
+                </div>`; // simplified for domains/runes. Will refine add function to capture inputs.
+            });
+        }
+
+        // --- ARRAY MANIPULATION ---
+        function pushArrayItem(path, obj) {
+            const parts = path.split('.');
+            let target = activeChar;
+            for(let i=0; i<parts.length-1; i++) target = target[parts[i]];
+            target[parts[parts.length-1]].push(obj);
+            closeModal(); autoSave();
+        }
+
+        function removeArrayItem(path, idx) {
+            const parts = path.split('.');
+            let target = activeChar;
+            for(let i=0; i<parts.length-1; i++) target = target[parts[i]];
+            target[parts[parts.length-1]].splice(idx, 1);
+            autoSave();
+        }
+
+        // --- SELECTORS (Gavetas) ---
+        function openSelector(category, title, targetArray = category) {
+            let html = `<div class="grid-2">`;
+            let arr =[];
+            
+            // Map category to DB array
+            if(category === 'masteries') arr = db.masteries;
+            if(category === 'tactical_all') arr =[].concat(db.arsenal.tactical, db.arsenal.tactical_eq, db.arsenal.drones_chassis);
+            if(category === 'utility_all') arr =[].concat(db.arsenal.utility_eq);
+            if(category === 'general_all') arr =[].concat(db.arsenal.general_eq);
+            if(category === 'runes') arr = db.arsenal.utility_eq.filter(u => u.name.includes("Runa"));
+            if(category === 'cyber_all') {
+                for(let k in db.arsenal.cyberware) arr = arr.concat(db.arsenal.cyberware[k]);
+            }
+
+            arr.forEach(item => {
+                // Check NF lock
+                let isLocked = (item.nf && activeChar.nf < item.nf);
+                let lockClass = isLocked ? "item-nf-lock" : "";
+                let lockMsg = isLocked ? `<span style="color:var(--red); font-size:0.7rem;">[REQ NF ${item.nf}]</span> ` : "";
+
+                html += `<div class="item-row ${lockClass}">
+                    <div>${lockMsg}<strong style="color:var(--gold);">${item.name}</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">${item.effect || item.traits || ''}</span></div>
+                    <button class="btn btn-small" onclick="pushArrayItem('${(targetArray==='runes'?'runic':'inv_'+targetArray.split('_')[0])}', {name:'${item.name}', effect:'${(item.effect || item.traits).replace(/'/g,"\\'")}', load:'${item.load||0}'})">ADD</button>
+                </div>`;
+            });
+
+            html += `</div>`;
+            openModal(title, html);
+        }
+
+        // Custom Adders (Text input fallbacks for non-db items)
+        function addCustomDomain() {
+            let n = prompt("Nome do Domínio (Ex: Tech, Furtividade):");
+            let v = prompt("Nível (I, II, III):");
+            if(n && v) pushArrayItem('domains', {name: n, val: v});
+        }
+        function addContact() {
+            let n = prompt("Nome / Facção do Contato:");
+            let v = prompt("Descrição / Dívida Atual:");
+            if(n && v) pushArrayItem('contacts', {name: n, effect: v});
+        }
+
+    </script>
+</body>
+</html>

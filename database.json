@@ -1,0 +1,609 @@
+{
+  "origins": {
+    "humano": {
+      "name": "Humano Comum",
+      "esf": 20, "agi": 20, "ard": 20, "cor": 20, "int": 20, "per": 20, "lab": 20, "von": 20, "bal": 20, "con": 20, "hp": 0, "pts": 130,
+      "description": "A maioria da população. Versáteis e adaptáveis.",
+      "traits":[
+        {"name": "Versatilidade", "effect": "Ganha +10% livre para distribuir e 1 Maestria extra na criação."}
+      ]
+    },
+    "jotun": {
+      "name": "Jotun",
+      "esf": 30, "agi": 10, "ard": 20, "cor": 30, "int": 20, "per": 20, "lab": 10, "von": 20, "bal": 20, "con": 20, "hp": 5, "pts": 120,
+      "description": "Gigantes de músculos densos e pele resistente.",
+      "traits":[
+        {"name": "Constituição Titânica", "effect": "Recebem +5 Pontos de Resistência (PR) extras."},
+        {"name": "Mãos Pesadas", "effect": "Sofre uma penalidade permanente de -10% na Essência para qualquer teste que exija coordenação motora fina ou manipulação de objetos pequenos (Ladinagem, Cibernéticos, Biotech, Sequenciador)."}
+      ],
+      "choices":[
+        {"name": "Presença Esmagadora", "effect": "Pode usar Essência Esforço no lugar de Lábia para Intimidação. Em interrogatório físico, recebe Vantagem (+10%)."},
+        {"name": "Imparável", "effect": "Recebe +10% na Essência de Esforço para quebrar objetos ou resistir a ser derrubado, empurrado ou agarrado."},
+        {"name": "Empunhadura de Titã", "effect": "Pode utilizar uma arma primária de Duas Mãos usando apenas uma mão (sem a penalidade de -30%)."}
+      ]
+    },
+    "oni": {
+      "name": "Oni",
+      "esf": 10, "agi": 30, "ard": 20, "cor": 20, "int": 20, "per": 30, "lab": 10, "von": 20, "bal": 20, "con": 20, "hp": 0, "pts": 120,
+      "description": "Esguios, ágeis e marcados por padrões de pele diversos e chifres.",
+      "traits":[
+        {"name": "Miragem", "effect": "Se realizou a ação Mudar de Zona ou se movimentou para buscar cobertura, impõe -10% para ser acertado por ataques à distância até o início do próximo turno."},
+        {"name": "Estigma Visual", "effect": "Sofre penalidade permanente de -10% em Lábia. Em áreas de alta vigilância/classe alta, sempre será o primeiro abordado."}
+      ],
+      "choices":[
+        {"name": "Visão Parcial no Escuro", "effect": "Reduz penalidades de visão em um passo (Escura para Penumbra, Penumbra para Nenhuma)."},
+        {"name": "Movimento Fluido", "effect": "Ignora penalidades de terreno difícil ao se movimentar."},
+        {"name": "Reflexos Relâmpago", "effect": "Joga 2d10 no dado de iniciativa e fica com o melhor resultado."}
+      ]
+    },
+    "dokka": {
+      "name": "Dokka",
+      "esf": 10, "agi": 10, "ard": 20, "cor": 20, "int": 30, "per": 20, "lab": 20, "von": 30, "bal": 20, "con": 20, "hp": 0, "pts": 120,
+      "description": "Atarracados, densos e baixos. Sistema nervoso age como condutor perfeito.",
+      "traits":[
+        {"name": "Sintonização Estável", "effect": "Recebem +2 Pontos de Sobrecarga Estrutural (SE) extras no valor máximo inicial."},
+        {"name": "Inércia Física", "effect": "Lento para reagir. Penalidade permanente de -2 na Iniciativa Base e -10% em Atletismo para saltos/natação/corridas longas."}
+      ],
+      "choices":[
+        {"name": "Mestre das Cargas", "effect": "Uma vez por sessão, pode manipular o fluxo de Éter para recarregar instantaneamente 1 carga de Artefato ou Encaixe Tático sem custo."},
+        {"name": "Diagnóstico Intuitivo", "effect": "Recebe +10% em Intelecto para testes de Engenharia, Mecânica ou Tech realizados sob pressão."},
+        {"name": "Resiliência Neural", "effect": "Instalam qualquer Interface Cibernética com -1 ponto de Sobrecarga Estrutural."}
+      ]
+    }
+  },
+  "histories":[
+    {
+      "name": "Agente de Segurança",
+      "ether": "Ao impor a ordem, proteger a equipe ou usar táticas de autoridade em crise.",
+      "advantages":[
+        { "name": "Instinto de Veterano", "effect": "O Diretor sempre avisa quando 'algo está errado' antes de uma situação hostil, permitindo teste de Percepção mesmo se surpresa fosse automática." },
+        { "name": "Estrategista Nato", "effect": "Pode gastar Ação de Movimento para gritar ordens, concedendo +10% no próximo teste de um aliado." },
+        { "name": "Alerta", "effect": "Você é imune à condição Surpreso." }
+      ]
+    },
+    {
+      "name": "Rato do Submundo",
+      "ether": "Ao usar malandragem, crimes ou furtividade para virar o jogo contra autoridades.",
+      "advantages":[
+        { "name": "Presença Apagada", "effect": "Em multidões ou ambientes urbanos caóticos, inimigos sofrem -20% em testes de Percepção para te rastrear." },
+        { "name": "Sussurros", "effect": "Acesso a rumores do Sindicato sem precisar rolar dados (sucesso automático em Manha para info básica)." },
+        { "name": "Mãos Leves", "effect": "Oculta automaticamente itens pequenos no corpo que não são detectados por revistas físicas." }
+      ]
+    },
+    {
+      "name": "Técnico Especializado",
+      "ether": "Ao resolver problemas complexos através de improviso técnico ou sucata.",
+      "advantages":[
+        { "name": "Criptoanálise", "effect": "Recebe +10% em testes de Tech para quebrar códigos e invadir sistemas antigos." },
+        { "name": "Improvisador de Campo", "effect": "Consegue criar ferramentas temporárias com sucata (duram 1 cena e quebram)." },
+        { "name": "Expertise Geral", "effect": "1x/sessão: Pode usar uma Inversão (Flip) de um Domínio que possui em outro que não possui, com -10% na essência." }
+      ]
+    },
+    {
+      "name": "Trabalhador de Escritório",
+      "ether": "Ao usar burocracia, protocolos corporativos ou lábia para contornar obstáculos sem violência.",
+      "advantages":[
+        { "name": "Foco Inabalável", "effect": "Pode rerolar um teste falho (1x/sessão) se a falha foi causada por distração ou pressão de tempo." },
+        { "name": "Diplomata Habilidoso", "effect": "Recebe +10% em testes de Lábia para negociações pacíficas." },
+        { "name": "Favor", "effect": "Inicia o jogo com um NPC corporativo devendo 3 Pontos de Dívida a você." }
+      ]
+    },
+    {
+      "name": "Andarilho dos Ermos",
+      "ether": "Ao utilizar conhecimentos de sobrevivência ou resistência física para superar o ambiente hostil.",
+      "advantages":[
+        { "name": "Resistência Corporal", "effect": "Recebe +20% em Corpo contra efeitos ambientais e recupera PR normalmente em condições adversas." },
+        { "name": "Andarilho", "effect": "Compreende dialetos da Velha Terra e códigos de gangues nômades." },
+        { "name": "Rede de Informações", "effect": "1x/sessão: Pode solicitar informações à rede de contatos nos Entrepostos sem custo." }
+      ]
+    },
+    {
+      "name": "Estudioso",
+      "ether": "Ao aplicar conhecimento usando Ciências para desvendar segredos ou usá-lo de forma prática.",
+      "advantages":[
+        { "name": "Educação", "effect": "Recebe +10% em testes ao lidar com a elite, acadêmicos ou Administração." },
+        { "name": "Pesquisador Metódico", "effect": "Ao gastar tempo pesquisando no Interlúdio, sempre descobre uma pista extra, mesmo se falhar." },
+        { "name": "Mente Analítica", "effect": "1x/sessão: Pode rerolar qualquer teste baseado em Essência Mental." }
+      ]
+    },
+    {
+      "name": "Falador",
+      "ether": "Ao usar Lábia para evitar conflitos ou obter lucro.",
+      "advantages":[
+        { "name": "Língua Afiada", "effect": "Pode influenciar a atitude geral de um grupo sem testes, desde que tenha tempo para falar." },
+        { "name": "Empatia Única", "effect": "Pode fazer teste de Percepção (Padrão) para ler as intenções exatas de um alvo." },
+        { "name": "Primeira Impressão", "effect": "Recebe +20% no primeiro teste de Lábia contra um NPC que acabou de conhecer." }
+      ]
+    },
+    {
+      "name": "Médico de Rua",
+      "ether": "Ao prestar auxílio médico crítico ou lidar com situações biológicas perigosas.",
+      "advantages":[
+        { "name": "Cyber Médico", "effect": "Reduz em 1 ponto o custo de SE de qualquer manutenção/instalação que fizer em aliados." },
+        { "name": "Açougue", "effect": "Seus tratamentos médicos em Ações de Interlúdio e Descanso recuperam um extra de 3 PRs." },
+        { "name": "Estômago de Aço", "effect": "Recebe +20% em testes de Vontade para resistir a enjoo, choque ou horror biológico." }
+      ]
+    },
+    {
+      "name": "Operário Industrial",
+      "ether": "Ao superar obstáculos usando força bruta ou manuseio de equipamentos pesados.",
+      "advantages":[
+        { "name": "Mula de Carga", "effect": "Aumenta Carga Geral em +5 e ignora a penalidade de Lentidão por carregar objetos pesados." },
+        { "name": "Corpo Fechado", "effect": "1x/sessão: Se seus PRs chegarem a 0, você fica com 1 PR e se mantém consciente." },
+        { "name": "Atleta Nato", "effect": "Ignora penalidade de movimento por Terreno Difícil na Zona atual." }
+      ]
+    },
+    {
+      "name": "Atravessador",
+      "ether": "Ao utilizar veículos ou rotas para escapar de perigos ou chegar onde ninguém consegue.",
+      "advantages":[
+        { "name": "Abrigo Seguro", "effect": "1x/Interlúdio: Pode fazer teste de Sobrevivência para encontrar local seguro temporário para o grupo." },
+        { "name": "Conheço um Cara", "effect": "1x/sessão: Pode declarar a existência de um contato temporário no local (sujeito ao Diretor)." },
+        { "name": "Ás da Direção", "effect": "Pode rerolar um teste de Pilotar ou mecânica uma vez por cena." }
+      ]
+    },
+    {
+      "name": "Caçador de Anomalias",
+      "ether": "Ao interagir de maneira criativa com o Éter, Artefatos ou Anomalias em situações adversas.",
+      "advantages":[
+        { "name": "Percepção Etérea", "effect": "Recebe +10% em Percepção para detectar Éter e sabe a direção da fonte mais próxima." },
+        { "name": "Sintonizado", "effect": "Artefatos usados por você recarregam 2 cargas por dia em vez de 1." },
+        { "name": "Bússola Quebrada", "effect": "Você é imune a efeitos de desorientação geográfica causados por Brisas ou Tempestades." }
+      ]
+    },
+    {
+      "name": "Trabalhador Invisível",
+      "ether": "Ao usar informações sigilosas de bastidores para manipular a situação.",
+      "advantages":[
+        { "name": "Experiência Burocrática", "effect": "Recebe +10% em testes para enganar funcionários de baixo escalão corporativo." },
+        { "name": "Cara Conhecida", "effect": "1x/sessão: Pode declarar que já serviu um NPC de baixo escalão presente, tornando-o amigável." },
+        { "name": "Ouvidos nas Paredes", "effect": "O Diretor lhe concede um segredo/rumor útil ouvido acidentalmente no início de cada missão." }
+      ]
+    }
+  ],
+  "masteries":[
+    { "type": "Curta Distância", "name": "Ataque Poderoso", "effect": "Aceite penalidade de -20% no ataque para causar +5 de Dano. Acerto Crítico Derruba o alvo." },
+    { "type": "Curta Distância", "name": "Combatente de Curta Distância (CQC)", "effect": "Usa Pistolas/Revólveres engajado sem penalidade. Adiciona +2 de dano contra inimigo adjacente." },
+    { "type": "Curta Distância", "name": "Zona Pessoal", "effect": "Usa armas de Duas Mãos contra inimigos adjacentes com apenas -10% de penalidade. Não acumula com CQC." },
+    { "type": "Curta Distância", "name": "Combatente Eficiente", "effect": "Usa Agilidade para dano Melee ignorando 1 Absorção. Se usar Esforço, ignora 2 Absorção." },
+    { "type": "Curta Distância", "name": "Combatente Selvagem", "effect": "Primeira vez que zerar PR de inimigo na rodada: ganha Ação de Movimento extra para engajar e atacar (Ação Livre)." },
+    { "type": "Curta Distância", "name": "Combatente Flexível", "effect": "Recebe +10% no próximo ataque se alternar entre ataque corpo a corpo e ataque à distância." },
+    { "type": "Curta Distância", "name": "Duelista de Aço", "effect": "Engajado com 1 inimigo: +5% Aparar/Esquiva. Inimigo atirando engajado em você sofre -10% extra (-40% duas mãos)." },
+    { "type": "Curta Distância", "name": "Especialista em Manobras", "effect": "Manobras de Combate custam apenas uma Ação Menor para você." },
+    { "type": "Curta Distância", "name": "Execução", "effect": "1x/rodada: Acerto com Arma 2 Mãos causa metade do dano em outro inimigo Engajado com você." },
+    { "type": "Curta Distância", "name": "Furioso", "effect": "Quando Ferido (50% ou menos de PR): +5% em Confronto e +2 Dano corpo a corpo." },
+    { "type": "Curta Distância", "name": "Mestre de Escudo", "effect": "+5% Aparar com escudo. Golpe de Escudo (Ação Maior): Dano=Metade Bônus Esforço + 2. Empurra e Derruba (Teste Esf)." },
+    { "type": "Curta Distância", "name": "Oportunista", "effect": "1x/rodada: Inimigo erra ataque corpo a corpo em você, faça ataque imediato (Livre, -10% Acerto) causando metade do dano." },
+    { "type": "Curta Distância", "name": "Punho Brutal", "effect": "Desarmado/Soqueira: +2 Dano e +5% Aparar. Nocaute (Maior): Dano normal + Teste Esforço (-10%) ou alvo Atordoado." },
+    { "type": "Distância", "name": "Artilheiro de Choque", "effect": "Armas Táticas: Reduz recuo em 10%. Resfriamento de Emergência com arma tática permite Mirar gratuitamente." },
+    { "type": "Distância", "name": "Atirador de Elite", "effect": "Ação Mirar vira Ação de Movimento. Se não se moveu, ganha +2 Dano com rifles de precisão." },
+    { "type": "Distância", "name": "CQB", "effect": "Mover para Engajar + Ataque Distância no mesmo turno: +10% Acerto à queima-roupa." },
+    { "type": "Distância", "name": "Controle de Recuo", "effect": "Disparos causam dano dobrado em coberturas/objetos. Disparo Controle (Maior): Dano + Imobilizado." },
+    { "type": "Distância", "name": "Correr e Atirar", "effect": "Mudar Zona + Atacar = Ação Maior (-10% Acerto, mas ignora penalidades de Lentidão no movimento)." },
+    { "type": "Distância", "name": "Disparos Rápidos", "effect": "Mozambique Drill (Maior): 3 tiros no mesmo alvo (0%, -15%, -30%). 2 acertos = Lentidão. 3 = Atordoado. Dano após 1º é só o bônus." },
+    { "type": "Distância", "name": "Impacto Próximo", "effect": "Escopeta: Acerto engajado empurra alvo para fora do engajamento (Curto). Matar alvo concede 5 Abs temporária." },
+    { "type": "Distância", "name": "Mestre de Arremesso", "effect": "Arremessos ganham +2 Dano. Arremessa p/ Médio sem penalidade. Pode arremessar como Livre (-20%) após ataque melee." },
+    { "type": "Suporte e Tática", "name": "Assassino", "effect": "Alvos Desprevenidos/Escondido: +5 Dano e +30% Acerto. Esconde na Penumbra sem penalidade (-10% se após atacar)." },
+    { "type": "Suporte e Tática", "name": "Combatente Defensivo", "effect": "Se usar armadura: +1 Absorção permanente. Inimigos reduzem Penetrante em -2 contra você." },
+    { "type": "Suporte e Tática", "name": "Controlador de Drones", "effect": "+10% em Tech p/ drones. Penalidade por controlar múltiplos é reduzida pela metade." },
+    { "type": "Suporte e Tática", "name": "Defensor Implacável", "effect": "Aliados na mesma Zona ganham +10% Defesa à Distância. Inimigo que você ataca sofre -10% para atacar os outros." },
+    { "type": "Suporte e Tática", "name": "Especialista em Escudos Etéreos", "effect": "Ação Menor: Recalibra escudo de aliado na Zona. Ele recupera PE igual Taxa Recarga + 5." },
+    { "type": "Suporte e Tática", "name": "Elusivo", "effect": "Ataques de Área: Sucesso no teste reduz dano a Zero. Pode Procurar Abrigo mesmo se falhar (metade dano, Derrubado)." },
+    { "type": "Suporte e Tática", "name": "Granadeiro", "effect": "Joga granada para Longo com apenas -20%. Inimigos sofrem -10% no teste de Agi contra seus explosivos." },
+    { "type": "Suporte e Tática", "name": "Guardião", "effect": "Intercepta ataque de aliado Engajado. Você recebe o dano com +2 Absorção extra." },
+    { "type": "Suporte e Tática", "name": "Jogo de Pés", "effect": "1x/turno: Ação Recuar vira Ação Livre." },
+    { "type": "Suporte e Tática", "name": "Kaboom", "effect": "Explosivos: +2 Dano por nível de Engenharia. Joga em Médio sem teste. Você só sofre metade do dano de seus próprios explosivos." },
+    { "type": "Suporte e Tática", "name": "Liderança Firme", "effect": "+10% Lábia/Tática ao liderar. Comando (Menor, 1x/rod): Dá 1 Ação Menor imediata a aliado." },
+    { "type": "Suporte e Tática", "name": "Médico de Combate", "effect": "Estabilizar vira Ação Menor. Seus Kits Médicos curam +2 PR adicionais." },
+    { "type": "Suporte e Tática", "name": "Anjo da Guarda", "effect": "Requisito: Médico de Combate. Estabilizar ignora fogo cruzado. Aliado curado no mesmo turno recupera +5 PR." },
+    { "type": "Suporte e Tática", "name": "Mestre Defensivo", "effect": "Sua penalidade de Defesa Passiva aumenta em -5%. Ignora condição Flanqueado." },
+    { "type": "Suporte e Tática", "name": "Médico do Fluxo Térmico", "effect": "Arma empunhada ganha +1 Capacidade de Calor. 1x/cena: Resfriar Arma é Ação Livre." },
+    { "type": "Suporte e Tática", "name": "Mestre Rúnico", "effect": "Ganha +1 Slot Rúnico no SIC (Total 3). 1º Uso Forçado (Queimar) da sessão não gera Sobrecarga." },
+    { "type": "Suporte e Tática", "name": "Sintonizador de Fluxo", "effect": "Penalidade p/ forçar Artefato cai de -20% para -10%. Falha não avança Entropia (exceto crítica)." },
+    { "type": "Suporte e Tática", "name": "Provocação Tática", "effect": "Ação Menor: Lábia vs Vontade. Vence: Inimigo sofre -10% em todos os testes até o próximo turno dele." },
+    { "type": "Gerais", "name": "Ambidestria", "effect": "Combate com Duas Armas: Penalidade cai de -30% para -10%. Empunhando duas armas melee: +5% Aparar." },
+    { "type": "Gerais", "name": "Confirmação de Ataque", "effect": "Escolha Categoria de Arma: +5% Acerto. 1x/combate: Inversão (Flip) livre ao atacar com ela." },
+    { "type": "Gerais", "name": "Força de Titã", "effect": "(Req: Esforço 50% ou Jotun). Usa arma de Duas Mãos com uma mão sem penalidade." },
+    { "type": "Gerais", "name": "Reflexos Aprimorados", "effect": "+5% em Resistência/Agi/Esquiva. Surto: 1x/sessão, ganha Ação Menor extra (se ataque, sofre -20%)." },
+    { "type": "Gerais", "name": "Resistência ao Cromo", "effect": "Ignora o custo fixo dos primeiros 2 pontos de SE gastos em Interfaces Cibernéticas." },
+    { "type": "Gerais", "name": "Esforço Extremo", "effect": "1x/cena: Aceite voluntariamente +2 SE para ganhar +20% em um teste Físico ou Combate." }
+  ],
+  "arsenal": {
+    "frames":[
+      { "name": "Pistolas / Revólveres", "range": "Curto", "type": "Primária/Secundária", "slots_1": 2, "slots_2": 3, "slots_3": 4, "effect": "Permite realizar segundo ataque no turno gastando outra Ação Menor (-20%)." },
+      { "name": "Submetralhadora", "range": "Médio", "type": "Primária", "slots_1": 2, "slots_2": 3, "slots_3": 4, "effect": "Duas mãos. Ação Maior: Ataca 2 alvos na mesma Zona (-20%)." },
+      { "name": "Escopeta", "range": "Curto", "type": "Primária", "slots_1": 2, "slots_2": 3, "slots_3": 4, "effect": "Alvos Curto/Engajado: Dezena = Maior valor entre os 2 dados." },
+      { "name": "Rifle de Assalto", "range": "Longo", "type": "Primária", "slots_1": 2, "slots_2": 3, "slots_3": 4, "effect": "Duas mãos. Ignora a primeira penalidade de -10% de tiro no turno." },
+      { "name": "Rifle de Precisão", "range": "Distante", "type": "Primária", "slots_1": 2, "slots_2": 3, "slots_3": 4, "effect": "Duas mãos. Pesada. Se não moveu no turno, +10% p/ atirar." }
+    ],
+    "cores":[
+      { "name": "Sindicato", "dmg_pistol": 3, "dmg_smg": 3, "dmg_shotgun": 4, "dmg_rifle": 5, "dmg_sniper": 7, "heat": 5, "effect": "Núcleo Genérico. Confiável e sem efeitos colaterais." },
+      { "name": "Anything Connected", "dmg_pistol": 3, "dmg_smg": 3, "dmg_shotgun": 5, "dmg_rifle": 5, "dmg_sniper": 7, "heat": 5, "effect": "Ciclo Rápido: +5% Acerto fixo. Remove 1 Calor automaticamente no final do turno." },
+      { "name": "Serovka Heavy Industries", "dmg_pistol": 5, "dmg_smg": 5, "dmg_shotgun": 8, "dmg_rifle": 9, "dmg_sniper": 11, "heat": 3, "effect": "Brutalidade: -5% Acerto permanente. Disparos têm Penetrante 1 e causam Lentidão se dano no PR." },
+      { "name": "Aegis Security", "dmg_pistol": 4, "dmg_smg": 4, "dmg_shotgun": 6, "dmg_rifle": 7, "dmg_sniper": 9, "heat": 4, "effect": "Segurança Tática: Atirar antes de mover dá +10% Acerto. Se dezena do dado for 0, 1 ou 2, considere 3." },
+      { "name": "Beringer Corporation", "dmg_pistol": 3, "dmg_smg": 3, "dmg_shotgun": 5, "dmg_rifle": 5, "dmg_sniper": 7, "heat": 7, "effect": "Conversão Energética: Arma Intensa (+1 Calor). Dano Etéreo (+50% em Escudo). Incendeia orgânicos (3 dano/turno). Crítico Imobiliza." },
+      { "name": "Cyber Reach", "dmg_pistol": 3, "dmg_smg": 3, "dmg_shotgun": 5, "dmg_rifle": 6, "dmg_sniper": 7, "heat": 5, "effect": "Smart Link: Reduz penalidade de Cobertura e Visibilidade em 1 passo." }
+    ],
+    "tactical":[
+      { "name": "Metralhadora Pesada 'Odin'", "corp": "Serovka", "dmg": 8, "range": "Longo", "heat": 6, "load": 2, "nf": 5, "traits": "Pesada, Duas Mãos, Recuo, Penetrante 2, Supressão." },
+      { "name": "Metralhadora Pesada 'Akontia'", "corp": "Aegis", "dmg": 7, "range": "Longo", "heat": 7, "load": 2, "nf": 5, "traits": "Pesada, Duas Mãos, Penetrante 2, Supressão." },
+      { "name": "Canhão de Artilharia Leve 'Surtr'", "corp": "Serovka", "dmg": 12, "range": "Longo", "heat": 4, "load": 2, "nf": 5, "traits": "Pesada, Duas Mãos, Penetrante 4, Impacto Contido." },
+      { "name": "Lança Granadas 'Nidhogg'", "corp": "Serovka", "dmg": 0, "range": "Médio", "heat": 0, "load": 1, "nf": 5, "traits": "Duas Mãos. Usa Granadas (Cap 4). Dispara/Recarrega como Menor." },
+      { "name": "Lança Chamas 'Ignis'", "corp": "Beringer", "dmg": 12, "range": "Médio", "heat": 3, "load": 2, "nf": 7, "traits": "Duas Mãos, Impacto Zona, Nuvem, Teste Agi -10% ou Dano 12 + 5 Incendiário (Sucesso=Metade)." },
+      { "name": "Rifle Anti-Matéria 'Hades'", "corp": "Aegis", "dmg": 10, "range": "Distante", "heat": 3, "load": 2, "nf": 7, "traits": "Duas Mãos, Penetrante 4 (+5 Dano contra matéria)." },
+      { "name": "Lançador Partículas 'Hornet'", "corp": "Anything Connected", "dmg": 6, "range": "Longo", "heat": 2, "load": 1, "nf": 7, "traits": "Duas Mãos, Impacto Zona, Reduz Cobertura em um passo." },
+      { "name": "Disparador de Raios 'Hermes'", "corp": "Aegis", "dmg": 11, "range": "Curto", "heat": 2, "load": 1, "nf": 7, "traits": "Duas Mãos, Impacto de Zona." }
+    ],
+    "melee_primary":[
+      { "name": "Desarmado", "corp": "-", "dmg": 0, "heat": 0, "load": 0, "nf": 0, "traits": "Agarrar" },
+      { "name": "Lâmina de Combate 'Facão'", "corp": "Sindicato", "dmg": 4, "heat": 0, "load": 2, "nf": 0, "traits": "Arremesso (Curto), Defensiva" },
+      { "name": "Espada Etérea 'Swift'", "corp": "Beringer", "dmg": 3, "heat": 4, "load": 2, "nf": 0, "traits": "Versátil, Defensiva. Modo Alt (1 Calor): Penetrante 2." },
+      { "name": "Clava de Combate 'Bjorn'", "corp": "Serovka", "dmg": 5, "heat": 0, "load": 2, "nf": 0, "traits": "Atordoante, Poderosa, Versátil" },
+      { "name": "Lâmina Retrátil 'Omni'", "corp": "Cyber Reach", "dmg": 3, "heat": 3, "load": 2, "nf": 3, "traits": "Retrátil (Oculta)" },
+      { "name": "Lança de Liga 'Ilios'", "corp": "Aegis Security", "dmg": 6, "heat": 0, "load": 2, "nf": 3, "traits": "Duas Mãos, Vigilância, Penetrante 1, Arremesso (Médio)." },
+      { "name": "Machado de Energia 'Hel'", "corp": "Serovka", "dmg": 4, "heat": 3, "load": 2, "nf": 3, "traits": "Arremesso (Curto). Modo Alt: Incendiário (+3 dano extra)." },
+      { "name": "Lança de Aniquilação 'Reaper'", "corp": "Beringer", "dmg": 5, "heat": 4, "load": 2, "nf": 5, "traits": "Duas Mãos, Vigilância. Modo Alt (Ação Maior): Ataca 2 alvos Adj, +3 Dano." },
+      { "name": "Nodachi Etérea 'Desolator'", "corp": "Cyber Reach", "dmg": 7, "heat": 4, "load": 3, "nf": 5, "traits": "Duas Mãos, Vigilância, Defensiva, Penetrante 1, Aparar. Modo Alt: Penetrante 3." },
+      { "name": "Martelo de Combate 'Mjolnir'", "corp": "Serovka", "dmg": 8, "heat": 3, "load": 4, "nf": 7, "traits": "Duas Mãos, Vigilância, Atordoante, Pesada, Poderosa. Modo Alt: +5 Dano e Derrubar." },
+      { "name": "Alabarda 'Njord'", "corp": "Serovka", "dmg": 6, "heat": 2, "load": 3, "nf": 7, "traits": "Duas Mãos, Vigilância, Pesada, Defensiva. Modo Alt: Escudo Etéreo (15 pts) integrado." },
+      { "name": "Bastão de Combate 'King'", "corp": "Anything Connected", "dmg": 7, "heat": 2, "load": 3, "nf": 7, "traits": "Duas Mãos, Vigilância, Atordoante, Defensiva. Modo Alt: +2 Dano e Alcance +2." },
+      { "name": "Machado de Combate 'Executor'", "corp": "Anything Connected", "dmg": 6, "heat": 2, "load": 3, "nf": 7, "traits": "Duas Mãos, Vigilância, Intensa, Penetrante 2, Poderosa. Modo Alt: Penetrante 7." }
+    ],
+    "melee_secondary":[
+      { "name": "Faca de Combate 'Canivete'", "corp": "Sindicato", "dmg": 2, "heat": 0, "load": 1, "nf": 0, "traits": "Arremesso (Curto)" },
+      { "name": "Faca Etérea 'Wind'", "corp": "Beringer", "dmg": 2, "heat": 3, "load": 1, "nf": 0, "traits": "Modo Alt (1 Calor): Penetrante 1." },
+      { "name": "Bastão de Defesa 'Enforce'", "corp": "Anything", "dmg": 3, "heat": 0, "load": 1, "nf": 0, "traits": "Agarrar, Atordoante" },
+      { "name": "Faca de Combate 'Pugio'", "corp": "Aegis", "dmg": 2, "heat": 0, "load": 1, "nf": 1, "traits": "Arremesso (Curto), Defensiva" },
+      { "name": "Bastão Eletrificado 'Ampere'", "corp": "Beringer", "dmg": 2, "heat": 3, "load": 1, "nf": 1, "traits": "Intensa. Modo Alt (1 Calor): Teste Corpo ou Lentidão/Imobilizado." },
+      { "name": "Monofio Etéreo 'Silver'", "corp": "Cyber Reach", "dmg": 1, "heat": 0, "load": 1, "nf": 3, "traits": "Penetrante 1, Vigilância, Alcance 2." },
+      { "name": "Soqueira Reforçada 'Tann'", "corp": "Serovka", "dmg": 3, "heat": 0, "load": 1, "nf": 3, "traits": "Agarrar, Defensiva, Pesada, Poderosa." },
+      { "name": "Soqueira de Energia 'Quasar'", "corp": "Beringer", "dmg": 2, "heat": 3, "load": 1, "nf": 3, "traits": "Intensa. Modo Alt (1 Calor): +2 Dano e Empurrar." }
+    ],
+    "armors":[
+      { "name": "Nível I - Leve", "abs": 1, "broken": 0, "slots": 2, "cost": 0, "nf": 0, "traits": "+5% em testes de Ardil." },
+      { "name": "Nível I - Média", "abs": 2, "broken": 0, "slots": 2, "cost": 0, "nf": 0, "traits": "Padrão." },
+      { "name": "Nível I - Pesada", "abs": 3, "broken": 0, "slots": 2, "cost": 0, "nf": 0, "traits": "-10% em testes de Agilidade e Ardil." },
+      { "name": "Nível II - Leve", "abs": 3, "broken": 0, "slots": 3, "cost": 10, "nf": 3, "traits": "+5% em testes de Agilidade e Ardil." },
+      { "name": "Nível II - Média", "abs": 4, "broken": 1, "slots": 3, "cost": 10, "nf": 3, "traits": "-5% em testes de Agilidade e Ardil." },
+      { "name": "Nível II - Pesada", "abs": 6, "broken": 1, "slots": 3, "cost": 10, "nf": 3, "traits": "-15% em testes de Agilidade e Ardil, Lentidão." },
+      { "name": "Nível III - Leve", "abs": 5, "broken": 1, "slots": 4, "cost": 20, "nf": 7, "traits": "+5% em testes de Agilidade e Ardil." },
+      { "name": "Nível III - Média", "abs": 7, "broken": 2, "slots": 4, "cost": 20, "nf": 7, "traits": "-10% em testes de Agilidade e Ardil." },
+      { "name": "Nível III - Pesada", "abs": 8, "broken": 3, "slots": 4, "cost": 20, "nf": 7, "traits": "-20% em testes de Agilidade e Ardil, Lentidão." },
+      { "name": "Terno Armadurado (Beringer)", "abs": 3, "broken": 0, "slots": 0, "cost": 15, "nf": 5, "traits": "Sutileza. Pode ser usado na Zona A. -10% Agi/Ardil." },
+      { "name": "Traje de Armadura (Organovida)", "abs": 4, "broken": 1, "slots": 0, "cost": 15, "nf": 5, "traits": "Aumenta +3 espaços Utilitários (médico). Capacete respirador imune a gás." },
+      { "name": "Traje de Armadura 'Icarus' (Adm)", "abs": 5, "broken": 1, "slots": 0, "cost": 25, "nf": 7, "traits": "Amortecedor Gravitacional (sem dano de 15m, custa Célula). Vácuo 10m." },
+      { "name": "Traje Pesado 'Solar' (Beringer)", "abs": 6, "broken": 1, "slots": 0, "cost": 25, "nf": 7, "traits": "-10% Agi/Ardil. Escudo 30 (Recarga 5). Traje Vácuo." },
+      { "name": "Armadura Motorizada 'Beowulf' (Serovka)", "abs": 9, "broken": 3, "slots": 0, "cost": 40, "nf": 10, "traits": "Carga +6. Imune a Derrubado/armas melee simples. Escudo 50 (Recarga 1). Requer Célula B. -30% Agi. Sem Furtividade." },
+      { "name": "Armadura Assalto 'Storm MK2' (Aegis)", "abs": 8, "broken": 2, "slots": 0, "cost": 40, "nf": 10, "traits": "Carga +8. Propulsores de salto. Auto-estabiliza se 0 PR. Escudo 30 (Recarga 10). -20% Agi. Sem Furtividade." }
+    ],
+    "mods_weapon":[
+      { "type": "Frame", "name": "Mira de Precisão (Red Dot)", "cost": 2, "nf": 0, "effect": "Reduz penalidade de atirar 1 cat acima para -10%." },
+      { "type": "Frame", "name": "Mira Holográfica", "cost": 3, "nf": 1, "effect": "+5% Balística." },
+      { "type": "Frame", "name": "Mira Telescópica", "cost": 4, "nf": 1, "effect": "Aumenta Alcance em 1 cat. (Incompatível: Pistola/Escopeta)." },
+      { "type": "Frame", "name": "Mira Telescópica Avançada", "cost": 10, "nf": 5, "effect": "Aumenta Alcance + 5% Balística. (Incompatível: Pistola/Escopeta)." },
+      { "type": "Frame", "name": "Mira Visão no Escuro", "cost": 5, "nf": 3, "effect": "Reduz penalidade de escuridão em um passo na mira." },
+      { "type": "Frame", "name": "Mira Visão Térmica", "cost": 6, "nf": 5, "effect": "Ignora fumaça, neblina ou escuridão p/ alvos quentes." },
+      { "type": "Frame", "name": "Mira Híbrida Especial (Cyber)", "cost": 15, "nf": 7, "effect": "Telescópica Avançada + Escuro ou Térmica." },
+      { "type": "Frame", "name": "Barril Estendido", "cost": 2, "nf": 0, "effect": "+1 Dano, -10% Ardil (ocultar arma)." },
+      { "type": "Frame", "name": "Barril Leve", "cost": 3, "nf": 1, "effect": "Remove Pesada de Snipers. -5% Balística." },
+      { "type": "Frame", "name": "Barril Pesado", "cost": 3, "nf": 1, "effect": "+5% Balística, adiciona Pesada." },
+      { "type": "Frame", "name": "Compensador de Recuo", "cost": 4, "nf": 1, "effect": "Ignora a primeira penalidade de -10% vinda de Recuo ou Serovka." },
+      { "type": "Frame", "name": "Freio de Boca", "cost": 5, "nf": 3, "effect": "+5% Balística em disparos simples (só o primeiro tiro)." },
+      { "type": "Frame", "name": "Focinho de Brecha", "cost": 4, "nf": 3, "effect": "+2 Dano em Curto ou Objetos." },
+      { "type": "Frame", "name": "Supressor Leve", "cost": 4, "nf": 1, "effect": "Inimigo sofre -10% Percepção p/ localizar disparo." },
+      { "type": "Frame", "name": "Supressor Integrado", "cost": 10, "nf": 7, "effect": "Inimigo sofre -20% Percepção. Tiro não quebra furtividade aut." },
+      { "type": "Frame", "name": "Lanterna Tática", "cost": 1, "nf": 0, "effect": "Ilumina Zona Atual/Adj (Cone). Revela posição." },
+      { "type": "Frame", "name": "Injetor Acoplado", "cost": 2, "nf": 0, "effect": "Dispara injetor do utilitário em Alcance Curto." },
+      { "type": "Frame", "name": "Apoio de Mão (Grip)", "cost": 2, "nf": 1, "effect": "+5% Balística se mover antes de atirar. (S/ 1 Mão)." },
+      { "type": "Frame", "name": "Bipé Tático", "cost": 3, "nf": 1, "effect": "+10% Balística se apoiado/imóvel." },
+      { "type": "Frame", "name": "Mira Laser", "cost": 2, "nf": 1, "effect": "+5% Balística. Feixe visível." },
+      { "type": "Frame", "name": "Design Compacto", "cost": 4, "nf": 3, "effect": "Equipa SMG/Escopeta no Secundário. -1 Alcance, -2 Dano. 1 Mão." },
+      { "type": "Frame", "name": "Mira Laser Avançada", "cost": 4, "nf": 3, "effect": "+5% Balística. Laser invisível a olho nu." },
+      { "type": "Frame", "name": "Lançador Auxiliar", "cost": 5, "nf": 3, "effect": "Lança granadas em Médio. Recarregar Menor. Arma Pesada." },
+      { "type": "Frame", "name": "Marcador de Alvos", "cost": 5, "nf": 5, "effect": "Acerto pinta alvo digital. +10% Acerto no próximo ataque aliado." },
+      { "type": "Frame", "name": "Projetor Holográfico", "cost": 6, "nf": 5, "effect": "Menor (Gera 1 Calor): Cria Cobertura Leve p/ usuário 1 turno." },
+      { "type": "Frame", "name": "Lâmina de Éter", "cost": 5, "nf": 5, "effect": "Gera 1 Calor p/ ataque Melee (Dano 5 2H / 2 1H)." },
+      { "type": "Núcleo", "name": "Dissipador Térmico", "cost": 6, "nf": 3, "effect": "+2 Capacidade Calor." },
+      { "type": "Núcleo", "name": "Amenizador de Intensidade", "cost": 7, "nf": 3, "effect": "-1 Dano, remove Intensa." },
+      { "type": "Núcleo", "name": "Receptor Térmico Agressivo", "cost": 7, "nf": 3, "effect": "+4 Capacidade Calor. Resfriar vira Ação Maior." },
+      { "type": "Núcleo", "name": "Ciclo de Resfriamento", "cost": 8, "nf": 5, "effect": "Arma não trava imediato se estourar limite; tem até o fim do turno." },
+      { "type": "Núcleo", "name": "Gatilho Sensível", "cost": 2, "nf": 3, "effect": "+2 Iniciativa." },
+      { "type": "Núcleo", "name": "Concentração de Disparo", "cost": 3, "nf": 3, "effect": "Ganha Penetrante 1 (ou +1)." },
+      { "type": "Núcleo", "name": "Lentes de Foco (Escopeta)", "cost": 5, "nf": 3, "effect": "Gera +1 Calor. Tiro vai em Médio sem penalidade." },
+      { "type": "Núcleo", "name": "Scanner Biométrico", "cost": 3, "nf": 3, "effect": "Trava p/ outro usuário (Tech -30%)." },
+      { "type": "Núcleo", "name": "Núcleo Instável", "cost": 7, "nf": 5, "effect": "Crítico: +1d10 Dano, mas gera 1 Calor extra." },
+      { "type": "Núcleo", "name": "Retroalimentação Térmica", "cost": 8, "nf": 7, "effect": "1x/cena: Ignora geração calor na rodada." },
+      { "type": "Núcleo", "name": "Capacitor de Choque", "cost": 8, "nf": 5, "effect": "Elétrico. Crítico=Lentidão. +3 Dano em Escudo/Drone. Intensa." },
+      { "type": "Núcleo", "name": "Câmara Incendiária", "cost": 8, "nf": 5, "effect": "Térmico. Acerto em carne = Incendiar (3 dano). Intensa." },
+      { "type": "Núcleo", "name": "Acelerador de Partículas", "cost": 8, "nf": 7, "effect": "+50% Dano em Escudos Etéreos. Intensa." }
+    ],
+    "mods_armor":[
+      { "name": "Emissor 'Pulso'", "cost": 2, "nf": 0, "effect": "10 PE Escudo / Recarga 3." },
+      { "name": "Emissor 'Bastião'", "cost": 5, "nf": 0, "effect": "20 PE Escudo / Recarga 2." },
+      { "name": "Emissor 'Muralha'", "cost": 10, "nf": 0, "effect": "30 PE Escudo / Recarga 1." },
+      { "name": "Alternador Frequência", "cost": 2, "nf": 0, "effect": "+5 PE Escudo Max." },
+      { "name": "Alimentador Emergência", "cost": 3, "nf": 0, "effect": "Ação de Turno: Recarrega 50% escudo (1x/missão)." },
+      { "name": "Campo Repulsão", "cost": 2, "nf": 0, "effect": "Menor (5 PE): Empurra inimigos Engajados (Teste Esf)." },
+      { "name": "Polarizador Balístico", "cost": 4, "nf": 0, "effect": "Escudo reduz -3 de dano à Distância recebido." },
+      { "name": "Sintonizador Escudos", "cost": 3, "nf": 0, "effect": "Reação (1x/rod): Absorve dano de aliado em Curto." },
+      { "name": "Central Controle Médico", "cost": 1, "nf": 0, "effect": "+10% Biotech no usuário. Alerta equipe se 0 PR." },
+      { "name": "Injetor Automático", "cost": 2, "nf": 0, "effect": "Usa injetor auto se PR<0 ou Ação Livre (1 uso)." },
+      { "name": "Bio-Monitor", "cost": 1, "nf": 0, "effect": "+10% Resistir veneno/gás/doença e alerta." },
+      { "name": "Respirador Ciclo Fechado", "cost": 8, "nf": 0, "effect": "Imune Gás. Vácuo/Água 30m. (2 Slots)." },
+      { "name": "Sistema de Salto", "cost": 4, "nf": 0, "effect": "+20% Pulo. Acessa zona Elevada fácil. -10 Dano queda." },
+      { "name": "Botas Magnetizadas", "cost": 4, "nf": 0, "effect": "Anda em metal vertical (Lento). Imune Derrubado no metal." },
+      { "name": "Disparador Gancho", "cost": 3, "nf": 0, "effect": "Puxa pra zona Elevada/Cruza abismo (Ação Movimento). 3 usos." },
+      { "name": "Reforço Motorizado", "cost": 4, "nf": 0, "effect": "+10% Esforço p/ força bruta. (2 Slots)." },
+      { "name": "Ombreira Impacto", "cost": 2, "nf": 0, "effect": "+10% Investida/Arrombar física." },
+      { "name": "Bolsas de Carga", "cost": 2, "nf": 0, "effect": "+4 Carga Geral." },
+      { "name": "Bolsas Extras", "cost": 3, "nf": 0, "effect": "+2 Utilidade." },
+      { "name": "Otimização Armamentos", "cost": 4, "nf": 0, "effect": "Leva Primária no slot de Secundária." },
+      { "name": "Encaixes Adicionais", "cost": 3, "nf": 0, "effect": "+2 Tático." },
+      { "name": "Sistema Ancoragem Externo", "cost": 4, "nf": 0, "effect": "+15% Acerto com Armas Táticas." },
+      { "name": "Placas Defensivas", "cost": 2, "nf": 0, "effect": "+1 Absorção (compra até 2x)." },
+      { "name": "Proteções Reforçadas", "cost": 4, "nf": 0, "effect": "+2 Absorção, -5% Agi/Ardil." },
+      { "name": "Materiais Densos", "cost": 3, "nf": 0, "effect": "Ignora a 1ª degradação na missão (não de 0 PR)." },
+      { "name": "Núcleo Reforçado", "cost": 5, "nf": 0, "effect": "+1 Absorção em todos os estados. (2 Slots)." },
+      { "name": "Revestimento Ablativo", "cost": 3, "nf": 0, "effect": "O 1º dano à armadura na cena é ignorado. (1 uso)." },
+      { "name": "Sistema Auto-Reparo", "cost": 10, "nf": 0, "effect": "Se Quebrar a 1ª vez, sobe pra Danificada auto." },
+      { "name": "Materiais Otimizados", "cost": 2, "nf": 0, "effect": "Reduz até -10% da penalidade de Agi/Ardil da armadura." },
+      { "name": "Materiais Leves", "cost": 3, "nf": 0, "effect": "Remove penalidade de Lentidão do traje." },
+      { "name": "Aterramento Etéreo", "cost": 3, "nf": 0, "effect": "+15% Vont/Corpo contra radiação/éter." },
+      { "name": "Ocultação Térmica", "cost": 3, "nf": 0, "effect": "+20% Furtividade vs Drones/Sensor Térmico." },
+      { "name": "Camuflagem Mirage (Warlink)", "cost": 12, "nf": 0, "effect": "+20% Furtividade. Visível translúcido se lento. 3 cargas." },
+      { "name": "Interface Drone", "cost": 5, "nf": 0, "effect": "+1 Zona Alcance Drone. +5% Tech pilotar." },
+      { "name": "Cooler Externo", "cost": 4, "nf": 0, "effect": "Resfriar/Emergência vira Ação Turno (1x/cena)." },
+      { "name": "Escudo Balístico (Serovka)", "cost": 2, "nf": 0, "effect": "+10% Esquiva/Aparar. Ocupa mão. Pode ir pro Secundário." },
+      { "name": "Escudo Reativo (Cyber)", "cost": 3, "nf": 0, "effect": "Reação: 15 PE temp pra 1 ataque. 3 usos/cena." }
+    ],
+    "tactical_eq":[
+      { "name": "Gerador Escudo Móvel", "corp": "Aegis", "cost": 0, "nf": 3, "load": 1, "effect": "Menor: Escudo 20PE p/ área. 1x/cena." },
+      { "name": "Pavise", "corp": "Serovka", "cost": 0, "nf": 3, "load": 2, "effect": "Maior p/ criar barreira (Cob Completa, 25 PR, 3 Abs)." },
+      { "name": "Propulsor de Salto", "corp": "Aegis", "cost": 0, "nf": 3, "load": 1, "effect": "Mover p/ Zona Elevada ignorando vertical. 3 usos." },
+      { "name": "Disruptor Sinal", "corp": "Cyber Reach", "cost": 0, "nf": 5, "load": 2, "effect": "Bloqueia Commpads e Drones em Alc Médio. Teste Tech/rod. 1x/cena." },
+      { "name": "Domo Etéreo", "corp": "Anything", "cost": 0, "nf": 5, "load": 2, "effect": "Bolha imóvel 40 PR contra fora. Lentos passam. 1 Cena." }
+    ],
+    "utility_eq":[
+      { "name": "Faca Bee [Anything]", "cost": 0, "nf": 0, "load": 1, "effect": "Silenciosa. Dano 1. Curto. 5 usos/Carga." },
+      { "name": "Flashbang", "cost": 5, "nf": 1, "load": 1, "effect": "Área. Agi -10%. Falha: Atordoado." },
+      { "name": "Granada Caçadora", "cost": 0, "nf": 3, "load": 1, "effect": "Médio. Ignora cobertura. Dano 7 (Restrito)." },
+      { "name": "Carga Penetrante [Serovka]", "cost": 0, "nf": 3, "load": 2, "effect": "Contato. Dano 8, Penetrante 5." },
+      { "name": "Granada Explosiva", "cost": 5, "nf": 0, "load": 1, "effect": "Área. Dano 10. Agi reduz metade." },
+      { "name": "Granada de Fumaça", "cost": 5, "nf": 0, "load": 1, "effect": "Obstruída na Zona." },
+      { "name": "Granada Obstrução Visual", "cost": 5, "nf": 1, "load": 1, "effect": "Cobertura Leve na zona." },
+      { "name": "Granada Emissão Energia [Cyber]", "cost": 0, "nf": 3, "load": 1, "effect": "Cob Leve (10 PE)." },
+      { "name": "Granada Incendiária", "cost": 0, "nf": 3, "load": 1, "effect": "Área 1. Dano 3 + Incendiado (2 dano/turno)." },
+      { "name": "Granada Pacificação [Beringer]", "cost": 0, "nf": 3, "load": 1, "effect": "Área 1. Teste Corpo ou Paralisado (Atordoado se passar)." },
+      { "name": "Mina Explosiva", "cost": 0, "nf": 3, "load": 2, "effect": "Área. Dano 15." },
+      { "name": "Mina Claymore", "cost": 0, "nf": 5, "load": 2, "effect": "Direcional (Impacto Contido). Dano 25." },
+      { "name": "Mina Atordoante", "cost": 0, "nf": 3, "load": 2, "effect": "Área. Corpo -20% ou Atordoa." },
+      { "name": "Mina Contenção", "cost": 0, "nf": 4, "load": 2, "effect": "Área. Imobilizado/Lentidão." },
+      { "name": "Vitalizer (Injetor)", "cost": 1, "nf": 0, "load": 1, "effect": "Cura 3+Biotech PR. +1 SE." },
+      { "name": "Heal Max (Injetor)", "cost": 2, "nf": 3, "load": 1, "effect": "Cura 15 PR. +2 SE." },
+      { "name": "Bio Shield (Injetor)", "cost": 1, "nf": 1, "load": 1, "effect": "Role 1d6. 2-6: +20% Resist. +1 SE." },
+      { "name": "Sistema VITAL", "cost": 4, "nf": 3, "load": 1, "effect": "Estabiliza automático s/ teste. +3 SE." },
+      { "name": "Clear Mind", "cost": 2, "nf": 3, "load": 1, "effect": "Detox total. Remove drogas/confusão. +1 SE." },
+      { "name": "Ritalina Combate", "cost": 0, "nf": 0, "load": 1, "effect": "+10% Confronto/Balística 1min. +1 SE." },
+      { "name": "Bravura", "cost": 0, "nf": 1, "load": 1, "effect": "+30% Vontade. Não pode recuar. +1 SE." },
+      { "name": "Synapse [Cyber]", "cost": 0, "nf": 5, "load": 1, "effect": "+10% Bal/Con/Per. Mirar=Turno. +2 SE." },
+      { "name": "Goliath [Serovka]", "cost": 0, "nf": 3, "load": 1, "effect": "+2 Abs, +15 PR Temp. -20% Agi/Ardil. +3 SE." },
+      { "name": "Hermes[Aegis]", "cost": 0, "nf": 5, "load": 1, "effect": "+5 Init, Status Rápido. 1 Mov extra. +3 SE." },
+      { "name": "Coruja", "cost": 0, "nf": 3, "load": 1, "effect": "Ignora Penumbra. +20% Ouvir. +1 SE." },
+      { "name": "Moon Sugar", "cost": 2, "nf": 0, "load": 0, "effect": "+1 Ponto Éter. Abst: -20% após 10min. +2 SE." },
+      { "name": "Pantera", "cost": 1, "nf": 0, "load": 0, "effect": "Ignora penalidade Ferido. +20% Vontade. -2 Ini/-10% Agi. +1 SE." },
+      { "name": "Névoa Arco-Íris", "cost": 8, "nf": 0, "load": 1, "effect": "+20% Sintonização. Teste Von/rodada ou Alucina. +2 SE." },
+      { "name": "Dust", "cost": 2, "nf": 0, "load": 0, "effect": "+4 Ini, +10% Agi/Bal. Abst/Fim: -20% Láb/Von, toma 5 Dano/Lento. +2 SE." },
+      { "name": "Neuro Void", "cost": 5, "nf": 0, "load": 1, "effect": "Injeta melee. Corpo ou Inconsciente 1h. +3 SE." },
+      { "name": "Runa Uruz", "cost": 0, "nf": 0, "load": 1, "effect": "10 PE Escudo até fim cena." },
+      { "name": "Runa Raido", "cost": 0, "nf": 0, "load": 1, "effect": "Status Rápido até fim próximo turno." },
+      { "name": "Runa Tiwaz", "cost": 0, "nf": 0, "load": 1, "effect": "+20% Resistência até fim próximo turno." },
+      { "name": "Runa Thurisaz", "cost": 0, "nf": 0, "load": 1, "effect": "Onda de choque (Corpo ou Atordoado) adjacentes." },
+      { "name": "Runa Berkana", "cost": 0, "nf": 0, "load": 1, "effect": "Cura 2 PR/rod por 3 rodadas adj." },
+      { "name": "Runa Isa", "cost": 0, "nf": 0, "load": 1, "effect": "Pilar gelo adj. Cobertura Comp 15 PR/2 Abs." },
+      { "name": "Runa Perthro", "cost": 0, "nf": 0, "load": 1, "effect": "+20% Furtividade 1 min." },
+      { "name": "Runa Algiz", "cost": 0, "nf": 0, "load": 1, "effect": "-10% atacantes contra vc (1 turno)." }
+    ],
+    "general_eq":[
+      { "name": "Célula Éter Alpha", "cost": 2, "nf": 0, "load": 1, "effect": "2 Pts energia. Pequeno." },
+      { "name": "Célula Éter Beta", "cost": 5, "nf": 0, "load": 2, "effect": "5 Pts energia. Veículos/bases." },
+      { "name": "Carregador Solar", "cost": 2, "nf": 0, "load": 2, "effect": "Tapete. 1 Alpha/12h sol." },
+      { "name": "Conversor Energia", "cost": 3, "nf": 0, "load": 3, "effect": "Rede elétrica." },
+      { "name": "Conversor Portátil", "cost": 1, "nf": 0, "load": 1, "effect": "Bolso." },
+      { "name": "Pedra Fogo", "cost": 2, "nf": 0, "load": 1, "effect": "3 Cargas. Calor/Chama." },
+      { "name": "Pedra Gélida", "cost": 2, "nf": 0, "load": 1, "effect": "3 Cargas. Congela/Resfria." },
+      { "name": "Pedra Purificadora", "cost": 1, "nf": 0, "load": 1, "effect": "3 Cargas. Purifica água/30cm." },
+      { "name": "Pedra Brilhante", "cost": 1, "nf": 0, "load": 1, "effect": "10 Cargas. Luz fria 1h." },
+      { "name": "Pedra Sonora", "cost": 1, "nf": 0, "load": 1, "effect": "1 Carga. Som agudo 5 min." },
+      { "name": "Pedra Alarme", "cost": 1, "nf": 0, "load": 1, "effect": "1 Carga. Vibra mov em 15m." },
+      { "name": "Pedra Explosiva", "cost": 2, "nf": 0, "load": 1, "effect": "1 Carga. Estrondo, s/ dano." },
+      { "name": "Pedra Abafadora", "cost": 3, "nf": 0, "load": 1, "effect": "3 Cargas. Abafa som 5 min." },
+      { "name": "Scanner Portátil", "cost": 3, "nf": 0, "load": 1, "effect": "Analisa rad/materiais na Zona." },
+      { "name": "Sensor Eletrônicos", "cost": 2, "nf": 0, "load": 1, "effect": "Detecta câmeras/escutas Curto." },
+      { "name": "Sensor Alerta", "cost": 1, "nf": 0, "load": 0, "effect": "Adesivo. Extremo." },
+      { "name": "Sensor Movimento", "cost": 3, "nf": 0, "load": 1, "effect": "Movimento Médio." },
+      { "name": "Commpad", "cost": 1, "nf": 0, "load": 1, "effect": "Celular, GRID, RA." },
+      { "name": "Neurolink", "cost": 2, "nf": 0, "load": 1, "effect": "Capacete RV." },
+      { "name": "Computador Portátil", "cost": 2, "nf": 0, "load": 2, "effect": "Pesquisa e dados." },
+      { "name": "Rádio Campo", "cost": 1, "nf": 0, "load": 1, "effect": "Encriptado (Extremo)." },
+      { "name": "Servidor Com", "cost": 4, "nf": 0, "load": 3, "effect": "Até 100km (Pede Célula B)." },
+      { "name": "Central Computação", "cost": 8, "nf": 0, "load": 6, "effect": "Pesquisa profunda. Energia Ext." },
+      { "name": "Chip Dados", "cost": 0, "nf": 0, "load": 0, "effect": "Picolé/Arquivos." },
+      { "name": "Kit Ferramentas", "cost": 2, "nf": 0, "load": 2, "effect": "Padrão s/ penalidade." },
+      { "name": "Kit Espec", "cost": 4, "nf": 0, "load": 2, "effect": "+10% (Cyber/Mec/Drone)." },
+      { "name": "Kit Reparos", "cost": 2, "nf": 0, "load": 2, "effect": "Sobe nível degradação." },
+      { "name": "Apagador", "cost": 3, "nf": 0, "load": 1, "effect": "Frita eletronicos simples." },
+      { "name": "Arrombador Automático", "cost": 3, "nf": 0, "load": 1, "effect": "Abre mecanica. Barulho." },
+      { "name": "Bloqueador Sinais", "cost": 3, "nf": 0, "load": 1, "effect": "Curto." },
+      { "name": "Burlador Eletrônico", "cost": 4, "nf": 0, "load": 1, "effect": "1 uso auto tranca eletronica." },
+      { "name": "Explosivo Plástico", "cost": 2, "nf": 0, "load": 1, "effect": "3 Cargas. Portas/Paredes." },
+      { "name": "Kit Arrombamento", "cost": 2, "nf": 0, "load": 2, "effect": "Remove pen de trancas. Silencioso." },
+      { "name": "Neutralizador Etéreo", "cost": 8, "nf": 0, "load": 1, "effect": "Ilegal. Frita GRID Curto (1 uso)." },
+      { "name": "Sequenciador", "cost": 3, "nf": 0, "load": 1, "effect": "Hack antigo sem pen -20%." },
+      { "name": "Lentes RA", "cost": 1, "nf": 0, "load": 0, "effect": "HUD." },
+      { "name": "Óculos Aprimoramento", "cost": 3, "nf": 0, "load": 1, "effect": "1 Slot mod visual." },
+      { "name": "Mods Visuais", "cost": 3, "nf": 0, "load": 0, "effect": "IR, Zoom, Escuro." },
+      { "name": "Caixa Suprimentos", "cost": 5, "nf": 0, "load": 0, "effect": "Usada pra descanso exp / ZRA." },
+      { "name": "Máscara Respirador", "cost": 1, "nf": 0, "load": 1, "effect": "Filtra gas." },
+      { "name": "Binóculos", "cost": 3, "nf": 0, "load": 1, "effect": "Zoom 10x/ Noturno." },
+      { "name": "Equip Escalada", "cost": 2, "nf": 0, "load": 2, "effect": "Anula pen. vertical. Barulho." },
+      { "name": "Cubo Brilhante", "cost": 1, "nf": 0, "load": 1, "effect": "Luz Zona Atual." },
+      { "name": "Arma Gancho", "cost": 2, "nf": 0, "load": 2, "effect": "Pula buraco/sobe. 2/cena." },
+      { "name": "Visor Baixa Luz", "cost": 2, "nf": 0, "load": 1, "effect": "Tira penumbra/reduz escuro. -10% Visao." },
+      { "name": "Navegação Offline", "cost": 1, "nf": 0, "load": 1, "effect": "+20% Navegação s/ GPS." },
+      { "name": "Tenda Pressurizada", "cost": 3, "nf": 0, "load": 2, "effect": "4 Pessoas. Célula A 12h." },
+      { "name": "Kit Refeição", "cost": 3, "nf": 0, "load": 3, "effect": "7 dias." },
+      { "name": "Corda Multiuso", "cost": 1, "nf": 0, "load": 1, "effect": "20m, junta dnv." },
+      { "name": "Pacote Sobrevivência", "cost": 2, "nf": 0, "load": 1, "effect": "+10% testes ermos." },
+      { "name": "Sinalizador", "cost": 1, "nf": 0, "load": 1, "effect": "Luz ou Dano 5 (-30% acerto)." },
+      { "name": "Compressor O2", "cost": 3, "nf": 0, "load": 1, "effect": "Enche tanque." },
+      { "name": "Tanque O2", "cost": 2, "nf": 0, "load": 1, "effect": "1h ar." },
+      { "name": "Vacc Suit", "cost": 3, "nf": 0, "load": 1, "effect": "Vácuo/Radiação. Pesado (-20% Fís)." },
+      { "name": "Chip Identificação", "cost": 5, "nf": 0, "load": 0, "effect": "CIB falso." },
+      { "name": "Algemas", "cost": 2, "nf": 0, "load": 1, "effect": "Dif 20 quebrar." },
+      { "name": "Pé de Cabra", "cost": 2, "nf": 0, "load": 2, "effect": "+15% arrombar. Arma 3." },
+      { "name": "Chave Cadeado", "cost": 1, "nf": 0, "load": 1, "effect": "Tranca física." },
+      { "name": "Kit Médico", "cost": 3, "nf": 0, "load": 2, "effect": "Essencial para Biotech sem penalidade." },
+      { "name": "Bioscanner", "cost": 2, "nf": 1, "load": 1, "effect": "+10% Biotech p/ diagnóstico." },
+      { "name": "Mochila de Triagem", "cost": 5, "nf": 3, "load": 3, "effect": "+10% Biotech. Cirurgias em descanso." }
+    ],
+    "drones_chassis":[
+      { "name": "Micro-Esfera (Tier I)", "cost": 3, "nf": 0, "slots": 1, "integ": 10, "abs": 0, "speed": "Rápido", "def": "-20%", "desc": "Tamanho de punho." },
+      { "name": "Leve (Tier II)", "cost": 6, "nf": 1, "slots": 2, "integ": 20, "abs": 1, "speed": "Rápido", "def": "-10%", "desc": "Cão pequeno/Quadricóptero." },
+      { "name": "Médio (Tier III)", "cost": 10, "nf": 3, "slots": 3, "integ": 35, "abs": 2, "speed": "Normal", "def": "0%", "desc": "Humanóides." },
+      { "name": "Pesado (Tier IV)", "cost": 18, "nf": 5, "slots": 4, "integ": 55, "abs": 4, "speed": "Lento", "def": "+10%", "desc": "Mini-tanque." },
+      { "name": "Elite (Tier V)", "cost": 30, "nf": 7, "slots": 5, "integ": 80, "abs": 6, "speed": "Lento", "def": "+10%", "desc": "Fortaleza corporativa." }
+    ],
+    "drones_modules":[
+      { "name": "Emissor Pulso (Ofen)", "cost": 3, "nf": 0, "slots": 1, "effect": "Dano 4, Curto." },
+      { "name": "Mandíbula/Lâmina (Ofen)", "cost": 4, "nf": 1, "slots": 1, "effect": "Dano 5, Adj. +15% Agarrar." },
+      { "name": "Ignis-Mini (Ofen)", "cost": 7, "nf": 3, "slots": 2, "effect": "Dano 5 + Incendiar, Curto Zona." },
+      { "name": "Saturação Scarab (Ofen)", "cost": 6, "nf": 2, "slots": 2, "effect": "Dano 6, Médio." },
+      { "name": "Dardo Biótico (Ofen)", "cost": 4, "nf": 2, "slots": 1, "effect": "Dispara fármacos, Curto." },
+      { "name": "Óptica Hades (Ofen)", "cost": 12, "nf": 5, "slots": 3, "effect": "Dano 10, Distante. +10% se imóvel." },
+      { "name": "Canhão Impacto (Ofen)", "cost": 15, "nf": 6, "slots": 3, "effect": "Dano 12, Longo. Derruba crítico." },
+      { "name": "Pulso Estático (Ofen)", "cost": 8, "nf": 4, "slots": 2, "effect": "Maior. Dano 5 Zona (Dobro escudo)." },
+      { "name": "Micro-Mísseis (Ofen)", "cost": 20, "nf": 7, "slots": 3, "effect": "2/cena. Dano 12 Zona Longo." },
+      { "name": "Nuvem Tóxica (Ofen)", "cost": 6, "nf": 3, "slots": 2, "effect": "Dano 3/turno x 3 rod. Nuvem." },
+      { "name": "Mão Manipuladora (Sup)", "cost": 2, "nf": 0, "slots": 1, "effect": "Interagir com painéis." },
+      { "name": "Scanner Multispec (Sup)", "cost": 3, "nf": 1, "slots": 1, "effect": "Ignora Visibilidade. +20% Vigilância." },
+      { "name": "Amp Sinal (Sup)", "cost": 4, "nf": 2, "slots": 1, "effect": "Alcance controle Longo." },
+      { "name": "Auto-Doc (Sup)", "cost": 8, "nf": 3, "slots": 2, "effect": "Estabilizar (Maior). 3 Injetores." },
+      { "name": "Reparador Aço (Sup)", "cost": 7, "nf": 4, "slots": 2, "effect": "Maior: +15 Integ/sobe abs (3 usos)." },
+      { "name": "Uplink Seq (Sup)", "cost": 10, "nf": 4, "slots": 2, "effect": "Repetidor p/ hacker." },
+      { "name": "Carga (Sup)", "cost": 2, "nf": 0, "slots": 1, "effect": "+5 Carga Geral." },
+      { "name": "Fumaça (Sup)", "cost": 3, "nf": 1, "slots": 1, "effect": "Nuvem Obstruída 2 usos." },
+      { "name": "Faro Químico (Sup)", "cost": 4, "nf": 2, "slots": 1, "effect": "+20% Sobrev/Vig." },
+      { "name": "Bat Emergência (Sup)", "cost": 8, "nf": 5, "slots": 1, "effect": "1x/cena: Menor extra." },
+      { "name": "Ancoragem Mag (Tat)", "cost": 3, "nf": 1, "slots": 1, "effect": "Aderência / Cob Leve." },
+      { "name": "Voo Silencioso (Tat)", "cost": 5, "nf": 2, "slots": 1, "effect": "Voo. +20% Ardil." },
+      { "name": "Detonação (Tat)", "cost": 3, "nf": 2, "slots": 1, "effect": "0 PR: Dano 15 Zona." },
+      { "name": "Micro-Escudo (Tat)", "cost": 6, "nf": 3, "slots": 2, "effect": "15 PE (Rec 3) no Drone." },
+      { "name": "Revest Aço (Tat)", "cost": 5, "nf": 2, "slots": 1, "effect": "+1 Abs / +10 PR Max." },
+      { "name": "Cob Miragem (Tat)", "cost": 12, "nf": 5, "slots": 2, "effect": "Cob Leve livre." },
+      { "name": "Defletor (Tat)", "cost": 8, "nf": 4, "slots": 2, "effect": "Reação: -10% Atq Melee inimigo." },
+      { "name": "Aterramento (Tat)", "cost": 5, "nf": 3, "slots": 1, "effect": "Ignora dano Éter." },
+      { "name": "Chaff/Flare (Tat)", "cost": 4, "nf": 3, "slots": 1, "effect": "Reação: -20% Atq Bal inimigo (2 usos)." },
+      { "name": "Gerador Domo (Tat)", "cost": 15, "nf": 6, "slots": 3, "effect": "Maior: Domo 30 PE p/ 2 adj. 1/cena." }
+    ],
+    "cyberware": {
+      "interfaces":[
+        { "name": "Interface Tier I", "cost": 5, "nf": 0, "slots": 1, "effect": "Custo SE depende do tipo." },
+        { "name": "Interface Tier II", "cost": 10, "nf": 3, "slots": 2, "effect": "Custo SE depende do tipo." },
+        { "name": "Interface Tier III", "cost": 20, "nf": 7, "slots": 3, "effect": "Exige manutenção mensal. Custo SE alto." }
+      ],
+      "neural":[
+        { "name": "Link de Combate", "cost": 3, "nf": 0, "effect": "+2 Iniciativa." },
+        { "name": "Eco de Dados", "cost": 4, "nf": 1, "effect": "Grava eventos/códigos. Bônus memória." },
+        { "name": "Buffer Sequenciamento", "cost": 5, "nf": 2, "effect": "+50% veloc hack / alcance curto." },
+        { "name": "Link Resfriamento", "cost": 6, "nf": 3, "effect": "Turno: Zera arma. +1 SE/3 calor limpo." },
+        { "name": "Acelerador Sinapse", "cost": 8, "nf": 4, "effect": "Reação: -30% Acerto melee inimigo 1x/cena." },
+        { "name": "Sincronizador Rúnico", "cost": 8, "nf": 5, "effect": "Turno (1x/cena): Segura efeito Runa +1 rod." },
+        { "name": "Drive Analítica", "cost": 12, "nf": 6, "effect": "Mirar = Ação Turno (1x/rodada)." },
+        { "name": "Spectre-Omega", "cost": 9, "nf": 5, "effect": "Menor: Invisível a digital/drones (1 rod)." },
+        { "name": "Coprocessador Rúnico", "cost": 15, "nf": 7, "effect": "1º uso Forçado (Runa) s/ custo SE." },
+        { "name": "Simulador Campo", "cost": 11, "nf": 5, "effect": "Interlúdio: +10% em fase Inteligência." }
+      ],
+      "fluxo":[
+        { "name": "Filtro Tolerância", "cost": 3, "nf": 0, "effect": "+20% resistir intox/veneno." },
+        { "name": "Interface Diagnóstica", "cost": 4, "nf": 1, "effect": "+20% p/ te curarem (Biotech/Tratar)." },
+        { "name": "Estabilizador Brisa", "cost": 5, "nf": 2, "effect": "Ignora visibilidade Brisas/ +20% res Rad." },
+        { "name": "Regulador Cicardiano", "cost": 7, "nf": 2, "effect": "+1 Ação Interlúdio por descanso." },
+        { "name": "Injetor Estabilizador", "cost": 6, "nf": 3, "effect": "0 PR: Acorda 1 PR próx turno (1x/sessão)." },
+        { "name": "Sintetizador Biomassa", "cost": 8, "nf": 4, "effect": "Recupera +3 PR extra em descanso." },
+        { "name": "Sangue Ferro", "cost": 7, "nf": 4, "effect": "+2 Abs se Ferido (<50% PR)." },
+        { "name": "Filtro Adrenalina", "cost": 9, "nf": 5, "effect": "1x/Sessão: Droga custa -1 SE na cena." },
+        { "name": "Inibidor Trauma", "cost": 10, "nf": 6, "effect": "Luta a 0 PR (6 rod). Depois desmaia/morre." },
+        { "name": "Válvula Expurgo", "cost": 14, "nf": 7, "effect": "Maior (1x/ses): Limpa 2 SE. Fica Lento 1 rod." }
+      ],
+      "sensorial":[
+        { "name": "Microscopia Campo", "cost": 4, "nf": 0, "effect": "+20% Invest micro." },
+        { "name": "Captador Auditivo", "cost": 5, "nf": 1, "effect": "Ouve Adjacente / porta fina." },
+        { "name": "Mímico Vocal", "cost": 5, "nf": 2, "effect": "+20% Disfarce/Voz." },
+        { "name": "Lente Sobreposição", "cost": 3, "nf": 2, "effect": "Ignora Cob Leve." },
+        { "name": "Rastreador Olfativo", "cost": 5, "nf": 2, "effect": "+20% Sobrev p/ rastreio cheiro." },
+        { "name": "Matriz Corporativa", "cost": 7, "nf": 3, "effect": "+10% Vig (Warlink), Reduz Visao(Cyber) ou +5% Bal(Aegis)." },
+        { "name": "Scanner Fraqueza", "cost": 8, "nf": 4, "effect": "Dano duplo vs Objetos/Cob/Drones." },
+        { "name": "Filtro Frequência", "cost": 13, "nf": 5, "effect": "Escudo recarrega no dano (se dano < bônus Von)." },
+        { "name": "Sensor Anomalia", "cost": 10, "nf": 6, "effect": "Id Anomalia. +20% Notar Éter." },
+        { "name": "Sonar Pulso", "cost": 12, "nf": 7, "effect": "Vê Médio (até cego)." }
+      ],
+      "atuador":[
+        { "name": "Garras Escalamento", "cost": 4, "nf": 0, "effect": "Acessa Zonas Elevadas s/ teste." },
+        { "name": "Reforço Mio", "cost": 5, "nf": 1, "effect": "+2 Carga, +5% Atlet." },
+        { "name": "Pulso Cinético", "cost": 5, "nf": 2, "effect": "Manobra Empurrar auto/Derruba se forte." },
+        { "name": "Servo-Braço Util", "cost": 6, "nf": 2, "effect": "Interagir = Ação Turno." },
+        { "name": "Mão Multi", "cost": 5, "nf": 2, "effect": "Substitui Kit Fer. +10% Reparo." },
+        { "name": "Micro-Prop Juntas", "cost": 8, "nf": 3, "effect": "Turno: Status Rápido 1 rod (1x livre, dps +1 SE)." },
+        { "name": "Estabilizador Sentinel", "cost": 7, "nf": 3, "effect": "Pen Atirar Engajado cai pra -10%." },
+        { "name": "Coluna Atlas", "cost": 8, "nf": 3, "effect": "+5 Carga, +1 Tat/Util, +20% Levantar peso." },
+        { "name": "Aether-Link", "cost": 9, "nf": 4, "effect": "Livre: Gasta 5 PE p/ +5 Dano no ataque." },
+        { "name": "Pistão Impacto", "cost": 12, "nf": 6, "effect": "Se não mover, atq Melee Dano Máximo." }
+      ],
+      "reativa":[
+        { "name": "Isolamento Térmico", "cost": 4, "nf": 0, "effect": "Reduz 5 dano Fogo/Frio." },
+        { "name": "Derme Identidade", "cost": 6, "nf": 1, "effect": "+10% Disfarce físico." },
+        { "name": "Revest Aço", "cost": 7, "nf": 2, "effect": "+1 Abs. Reação: +1 SE p/ +5 Abs 1 atq." },
+        { "name": "Filtro Estático", "cost": 6, "nf": 3, "effect": "Reduz 3 dano Eletr, Imune Atordoar PEM." },
+        { "name": "Emissor Feromônios", "cost": 9, "nf": 4, "effect": "+15% Lábia Sedução." },
+        { "name": "Pele Miragem", "cost": 12, "nf": 5, "effect": "Cob Leve em Penumbra." },
+        { "name": "Revest Bio", "cost": 10, "nf": 5, "effect": "Menor: Identifica toxina no sangue s/ item." },
+        { "name": "Placas Sacrifício", "cost": 10, "nf": 6, "effect": "Reação (1/rod): Metade dano." },
+        { "name": "Sifão Dérmico", "cost": 15, "nf": 7, "effect": "Reação: +1 SE para recuperar PE = metade do dano recebido." },
+        { "name": "Manto Redirecionamento", "cost": 18, "nf": 8, "effect": "Reação: Se dano Éter, testa Sintonização p/ refletir." }
+      ]
+    },
+    "vehicles":[
+      { "name": "Phantom (Moto)", "corp": "Anything", "cost": 5, "nf": 0, "speed": "Rápido", "integ": 25, "abs": 3, "cap": "2 Pessoas, Carga 5", "traits": "Def -10%. Veloc Max = -20% extra p/ ser acertada." },
+      { "name": "Thurisaz (Moto)", "corp": "Serovka", "cost": 7, "nf": 0, "speed": "Rápido", "integ": 35, "abs": 4, "cap": "2 Pessoas, Carga 8", "traits": "Off-Road: Ignora penalidade terra." },
+      { "name": "Lotus (Buggy)", "corp": "Anything", "cost": 9, "nf": 0, "speed": "Rápido", "integ": 45, "abs": 6, "cap": "3 Pessoas, Carga 12", "traits": "+20% Pilotar em terreno acidentado." },
+      { "name": "Quantum (Sedan)", "corp": "Anything", "cost": 13, "nf": 0, "speed": "Rápido", "integ": 55, "abs": 7, "cap": "4 Pessoas, Carga 12", "traits": "Selado Acústico/Gás. Carga oculta." },
+      { "name": "Jotunn (APC)", "corp": "Serovka", "cost": 11, "nf": 0, "speed": "Normal", "integ": 60, "abs": 7, "cap": "6 Pessoas, Carga 20", "traits": "Cobertura Completa passageiros. Imune arma leve." },
+      { "name": "Zenith (Luxo)", "corp": "Cyber", "cost": 16, "nf": 0, "speed": "Rápido", "integ": 50, "abs": 6, "cap": "4 Pessoas, Carga 12", "traits": "Escudo 50/10. Pilota solo (VI 60%)." }
+    ],
+    "ships":[
+      { "name": "Valkyrie (VTOL)", "corp": "Serovka", "cost": 40, "nf": 0, "speed": "N/A", "integ": 90, "abs": 9, "cap": "6 Pessoas. Carga 20. 4 Slots.", "traits": "Ancora ZRA Mk1. 2x Canhão Rotativo." }
+    ],
+    "ship_mods":[
+      { "name": "Scanner Entropia", "cost": 8, "nf": 2, "effect": "Vê Relógio Entropia (ZRA)." },
+      { "name": "Estabilizador Mk2", "cost": 15, "nf": 4, "effect": "Ignora 1º avanço entropia em pulo." },
+      { "name": "Descontaminação", "cost": 10, "nf": 3, "effect": "Limpa rad/parasita. Cura 1 SE no descanso." },
+      { "name": "Scanner Assinatura", "cost": 10, "nf": 2, "effect": "Radar Tipo: Combate/Recurso/Elite." },
+      { "name": "Map Pulso", "cost": 15, "nf": 3, "effect": "Radar vê 2 nós frente." },
+      { "name": "Decodificador Sinais", "cost": 20, "nf": 5, "effect": "Radar vê descrição total do nó." },
+      { "name": "Oficina Campo", "cost": 10, "nf": 3, "effect": "Reparo sem penalidade." },
+      { "name": "Torretas Auto", "cost": 12, "nf": 4, "effect": "Nave atira sozinha (VI 40%)." },
+      { "name": "Baia Drones", "cost": 8, "nf": 3, "effect": "Lança enxame: +20% Intel na área." },
+      { "name": "Cápsulas Drop", "cost": 15, "nf": 5, "effect": "Atira equipe pro próximo setor s/ mover nave." },
+      { "name": "Canhão Retrátil", "cost": 20, "nf": 0, "effect": "Artilharia pesada (1 tiro/cena)." },
+      { "name": "Módulo Habit", "cost": 5, "nf": 0, "effect": "+2 PR e +1 SE em descanso na nave." },
+      { "name": "Camuflagem", "cost": 12, "nf": 5, "effect": "Nave invisível se pousada." },
+      { "name": "Porão Expandido", "cost": 5, "nf": 0, "effect": "+20 Carga." }
+    ]
+  },
+  "artifacts":[
+    { "name": "S&W 500 Dourado", "type": "Especial", "effect": "Munição infinita de energia cinética pura. Zero calor." },
+    { "name": "Venda Negra", "type": "Especial", "effect": "Cega fisicamente. Visão através de paredes/fumaça por km. Preço: perda de memórias afetivas." },
+    { "name": "Megingjord", "type": "Especial", "effect": "Cinto que permite erguer toneladas e ignorar impacto de veículos." },
+    { "name": "Caneta do Auditor", "type": "Menor", "effect": "Obriga quem segura a escrever a verdade absoluta." }
+  ]
+}
