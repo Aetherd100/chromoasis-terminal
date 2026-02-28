@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sindicato OS // Terminal de Operadores v12.5</title>
+    <title>Sindicato OS // Terminal de Operadores v12.6</title>
     <style>
         :root {
             --bg-base: #05070a;
@@ -43,14 +43,13 @@
         .btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #444; color: #444; }
         .btn-red { color: var(--red); border-color: var(--red); }
         .btn-red:hover:not(:disabled) { background: var(--red); color: #fff; }
-        .btn-small { padding: 4px 10px; font-size: 0.7rem; }
+        .btn-small { padding: 4px 10px; font-size: 0.75rem; }
 
-        input, select, textarea { background: #000; color: var(--text-main); border: 1px solid var(--border-dim); padding: 8px; font-family: var(--font-mono); font-size: 0.9rem; width: 100%; }
+        input, select, textarea { background: #000; color: var(--text-main); border: 1px solid var(--border-dim); padding: 8px; font-family: var(--font-mono); font-size: 0.9rem; width: 100%; box-sizing: border-box;}
         input:focus { outline: none; border-color: var(--cyan); }
 
         .view { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.3s; }
         .view.active { display: block; }
-
         .panel { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 20px; margin-bottom: 20px; position: relative; }
         
         /* WIZARD */
@@ -60,9 +59,9 @@
         .prog-node { font-family: var(--font-mono); font-size: 0.7rem; color: #444; }
         .prog-node.active { color: var(--cyan); text-shadow: 0 0 5px var(--cyan); }
 
-        .wiz-attr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+        .wiz-attr-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
         .wiz-attr-box { background: #000; border: 1px solid var(--border-dim); padding: 15px; text-align: center; }
-        .wiz-attr-box strong { font-size: 1.4rem; color: var(--cyan); font-family: var(--font-mono); }
+        .wiz-attr-box strong { font-size: 1.5rem; color: var(--cyan); font-family: var(--font-mono); }
 
         .selectable-item { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 15px; border: 1px solid var(--border-dim); margin-bottom: 8px; text-align: left; }
         .selectable-item:hover { border-color: var(--cyan); }
@@ -80,7 +79,7 @@
 
         .stat-box { background: #000; border: 1px solid var(--border-dim); padding: 10px; text-align: center; }
         .stat-val { font-size: 1.4rem; font-weight: bold; color: #fff; font-family: var(--font-mono); }
-        .stat-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); }
+        .stat-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); margin-top:5px; }
 
         .vitals-row { display: grid; grid-template-columns: 1fr auto; align-items: center; background: #000; padding: 15px; border: 1px solid var(--border-dim); margin-bottom: 10px; }
         .vitals-val { font-size: 1.8rem; font-weight: bold; font-family: var(--font-mono); margin: 0 15px; }
@@ -104,7 +103,7 @@
                 <h1 id="modal-title" style="margin:0; border:none;">DATABASE</h1>
                 <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
             </div>
-            <div id="modal-preview" style="background:#000; padding:15px; border:1px dashed var(--cyan); margin-bottom:20px; color:var(--text-muted); font-size:0.85rem;">Selecione um item...</div>
+            <div id="modal-preview" style="background:#000; padding:15px; border:1px dashed var(--cyan); margin-bottom:20px; color:var(--text-muted); font-size:0.85rem;">Selecione um item para ver detalhes.</div>
             <div id="modal-list"></div>
         </div>
     </div>
@@ -113,7 +112,7 @@
     <div id="view-hub" class="view">
         <div style="text-align:center; margin: 60px 0;">
             <h1 style="font-size: 4rem; border:none; text-shadow: 0 0 20px rgba(0,240,255,0.5);">CHROMOASIS</h1>
-            <p style="color:var(--gold); font-family:var(--font-mono); letter-spacing: 5px;">TERMINAL DE OPERAÇÕES v12.5</p>
+            <p style="color:var(--gold); font-family:var(--font-mono); letter-spacing: 5px;">TERMINAL DE OPERAÇÕES v12.6</p>
         </div>
         <div style="display:flex; justify-content:center; gap:20px; margin-bottom: 50px;">
             <button class="btn" onclick="startWizard()">+ NOVO OPERADOR</button>
@@ -124,11 +123,11 @@
 
     <!-- WIZARD VIEW -->
     <div id="view-wizard" class="view">
-        <div class="wizard-card">
+        <div class="panel" style="max-width: 1000px; margin: 0 auto; box-shadow: 0 0 30px rgba(0,229,255,0.1);">
             <div class="wiz-progress">
                 <div class="prog-node active" id="p1">PERFIL</div>
                 <div class="prog-node" id="p2">ORIGEM</div>
-                <div class="prog-node" id="p3">ATRIBUTOS</div>
+                <div class="prog-node" id="p3">ESSÊNCIAS</div>
                 <div class="prog-node" id="p4">TREINO</div>
                 <div class="prog-node" id="p5">HISTÓRICO</div>
             </div>
@@ -136,39 +135,38 @@
             <!-- STEP 1: PROFILE -->
             <div class="wiz-step active" id="step1">
                 <h2>IDENTIFICAÇÃO</h2>
-                <div class="panel">
-                    <label>NOME E CALLSIGN</label>
-                    <input type="text" id="w_name" placeholder="Ex: Alex 'Viper' Vance">
-                    <label style="margin-top:20px; display:block;">ARQUÉTIPO TÁTICO</label>
-                    <select id="w_arch" onchange="updateWizArchDesc()"></select>
-                    <div id="w_arch_desc" style="margin-top:10px; color:var(--cyan); font-size:0.85rem; padding:10px; background:rgba(0,0,0,0.5); border-left:2px solid var(--cyan);"></div>
-                </div>
-                <div style="text-align:right;"><button class="btn" onclick="nextWizStep(2)">PROSSEGUIR >></button></div>
+                <label>NOME E CALLSIGN</label>
+                <input type="text" id="w_name" placeholder="Ex: Alex 'Viper' Vance" style="margin-bottom:20px;">
+                
+                <label>ARQUÉTIPO TÁTICO</label>
+                <select id="w_arch" onchange="updateWizArchDesc()"></select>
+                <div id="w_arch_desc" style="margin-top:10px; color:var(--cyan); font-size:0.85rem; padding:10px; background:rgba(0,0,0,0.5); border-left:2px solid var(--cyan);"></div>
+                
+                <div style="text-align:right; margin-top:30px;"><button class="btn" onclick="nextWizStep(2)">PROSSEGUIR >></button></div>
             </div>
 
             <!-- STEP 2: ORIGIN -->
             <div class="wiz-step" id="step2">
                 <h2>ORIGEM BIOLÓGICA</h2>
-                <div class="panel">
-                    <select id="w_origin_sel" onchange="renderWizOriginInfo()"></select>
-                    <div id="w_origin_traits" style="margin-top:15px; font-size:0.9rem; color:var(--text-main); border-left: 2px solid var(--gold); padding-left: 10px;"></div>
-                    
-                    <div id="w_racial_choices_box" style="display:none; margin-top:20px;">
-                        <label style="color:var(--gold)">VANTAGEM EXTRA:</label>
-                        <div id="w_racial_choices_list"></div>
-                    </div>
+                <select id="w_origin_sel" onchange="renderWizOriginInfo()"></select>
+                <div id="w_origin_traits" style="margin-top:15px; font-size:0.9rem; color:var(--text-main); border-left: 2px solid var(--gold); padding-left: 10px;"></div>
+                
+                <div id="w_racial_choices_box" style="display:none; margin-top:20px;">
+                    <label style="color:var(--gold)">VANTAGEM EXTRA:</label>
+                    <div id="w_racial_choices_list"></div>
                 </div>
-                <div style="display:flex; justify-content:space-between;">
+                
+                <div style="display:flex; justify-content:space-between; margin-top:30px;">
                     <button class="btn btn-red" onclick="nextWizStep(1)"><< VOLTAR</button>
                     <button class="btn" onclick="nextWizStep(3)">PROSSEGUIR >></button>
                 </div>
             </div>
 
-            <!-- STEP 3: STATS -->
+            <!-- STEP 3: ESSENCES -->
             <div class="wiz-step" id="step3">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <h2>ESSÊNCIAS</h2>
-                    <div style="font-family:var(--font-mono);">PTS: <span id="w_pts_left" style="color:var(--green); font-size:1.5rem;">0</span></div>
+                    <h2>DISTRIBUIÇÃO DE ESSÊNCIAS</h2>
+                    <div style="font-family:var(--font-mono);">PONTOS RESTANTES: <span id="w_pts_left" style="color:var(--green); font-size:1.8rem;">0</span></div>
                 </div>
                 <div class="wiz-attr-grid" id="w_attr_container"></div>
                 <div style="display:flex; justify-content:space-between; margin-top:30px;">
@@ -180,8 +178,8 @@
             <!-- STEP 4: DOMAINS -->
             <div class="wiz-step" id="step4">
                 <h2>DOMÍNIOS INICIAIS (MAX 2)</h2>
-                <div id="w_dom_list" class="panel" style="max-height:400px; overflow-y:auto;"></div>
-                <div style="display:flex; justify-content:space-between;">
+                <div id="w_dom_list" style="max-height:400px; overflow-y:auto; padding-right:10px;"></div>
+                <div style="display:flex; justify-content:space-between; margin-top:30px;">
                     <button class="btn btn-red" onclick="nextWizStep(3)"><< VOLTAR</button>
                     <button class="btn" onclick="nextWizStep(5)">PROSSEGUIR >></button>
                 </div>
@@ -189,14 +187,14 @@
 
             <!-- STEP 5: HISTORY -->
             <div class="wiz-step" id="step5">
-                <h2>HISTÓRICO</h2>
-                <div class="panel">
-                    <select id="w_hist_sel" onchange="renderWizHistAdvs()" style="width:50%;"></select>
-                    <div id="w_hist_pool" style="margin-top:15px; max-height:200px; overflow-y:auto;"></div>
-                </div>
-                <h3 style="color:var(--gold); font-size:0.8rem; margin-bottom:10px;">VANTAGENS SELECIONADAS:</h3>
-                <div id="w_selected_advs" style="min-height:80px; border:1px dashed var(--border-dim); padding:10px; background:#000; margin-bottom: 20px;"></div>
-                <div style="display:flex; justify-content:space-between;">
+                <h2>VANTAGENS DE HISTÓRICO</h2>
+                <select id="w_hist_sel" onchange="renderWizHistAdvs()" style="width:50%; margin-bottom:15px;"></select>
+                <div id="w_hist_pool" style="max-height:250px; overflow-y:auto;"></div>
+                
+                <h3 style="color:var(--gold); font-size:0.8rem; margin-top:20px; margin-bottom:10px;">SELECIONADOS:</h3>
+                <div id="w_selected_advs" style="min-height:80px; border:1px dashed var(--border-dim); padding:10px; background:#000;"></div>
+                
+                <div style="display:flex; justify-content:space-between; margin-top:30px;">
                     <button class="btn btn-red" onclick="nextWizStep(4)"><< VOLTAR</button>
                     <button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeCharacter()">FINALIZAR OPERADOR</button>
                 </div>
@@ -321,7 +319,7 @@
                     <h2>VANTAGENS & HISTÓRICO</h2>
                     <div id="s_adv_list"></div>
                     <button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('masteries', 'adv')">+ ADD MAESTRIA</button>
-                    <label style="margin-top:20px;">TRAÇO NEGATIVO</label>
+                    <label style="margin-top:20px; display:block;">TRAÇO NEGATIVO</label>
                     <textarea id="s_flaw" rows="3" onchange="autoSave()"></textarea>
                 </div>
                 <div class="panel">
@@ -334,40 +332,49 @@
 
     <script>
         let db = null;
-        let roster = [];
+        let roster =[];
         let activeIdx = -1;
         let char = null;
-        const attrKeys = ['esf','agi','ard','cor','int','per','lab','von','bal','con'];
+        const attrMap = { esf: "Esforço", agi: "Agilidade", ard: "Ardil", cor: "Corpo", int: "Intelecto", per: "Percepção", lab: "Lábia", von: "Vontade", bal: "Balística", con: "Confronto" };
+        const attrKeys = Object.keys(attrMap);
 
-        // --- BOOT ---
+        let wizAdvs = [];
+        let wizDoms =[];
+
         window.onload = async () => {
             try {
                 const res = await fetch('database.json');
-                if(!res.ok) throw new Error("Database not found.");
+                if(!res.ok) throw new Error();
                 db = await res.json();
                 roster = JSON.parse(localStorage.getItem('co_roster_v125') || '[]');
                 document.getElementById('loader').style.display = 'none';
                 renderHub();
             } catch(e) {
-                document.getElementById('loader-msg').innerHTML = `<span style="color:var(--red)">ERRO CRÍTICO:database.json não encontrado.</span>`;
+                document.getElementById('loader-msg').innerHTML = `<span style="color:var(--red)">ERRO CRÍTICO: database.json não encontrado. Hospede os 2 arquivos juntos.</span>`;
             }
         };
 
-        // --- HUB ---
         function renderHub() {
             const grid = document.getElementById('roster-grid');
-            grid.innerHTML = '';
-            roster.forEach((c, i) => {
-                grid.innerHTML += `<div class="roster-card" onclick="openChar(${i})"><div style="flex-grow:1"><h3>${c.name}</h3><small style="color:var(--cyan)">${c.origin} // ${c.arch}</small></div><button class="btn btn-red btn-small" onclick="deleteChar(${i}, event)">X</button></div>`;
-            });
+            grid.innerHTML = roster.map((c, i) => `
+            <div class="roster-card" onclick="openChar(${i})">
+                <div style="flex-grow:1">
+                    <h3 style="border:none; margin:0;">${c.name}</h3>
+                    <div style="font-size:0.75rem; color:var(--cyan)">${c.origin.toUpperCase()} // ${c.arch.toUpperCase()}</div>
+                </div>
+                <button class="btn btn-red btn-small" onclick="deleteChar(${i}, event)">X</button>
+            </div>`).join('');
             switchView('view-hub');
         }
 
-        function deleteChar(i, e) { e.stopPropagation(); if(confirm("Remover Operador?")) { roster.splice(i,1); saveRoster(); renderHub(); } }
+        window.deleteChar = function(i, e) {
+            e.stopPropagation();
+            if(confirm("Expulsar Operador?")) { roster.splice(i,1); localStorage.setItem('co_roster_v125', JSON.stringify(roster)); renderHub(); }
+        }
 
-        // --- WIZARD ENGINE ---
-        function startWizard() {
-            activeIdx = -1; wizAdvs = []; wizDoms = [];
+        // --- WIZARD ---
+        window.startWizard = function() {
+            wizAdvs = []; wizDoms =[];
             document.getElementById('w_name').value = '';
             document.getElementById('w_arch').innerHTML = Object.keys(db.archetypes).map(k => `<option value="${k}">${k}</option>`).join('');
             document.getElementById('w_origin_sel').innerHTML = Object.keys(db.origins).map(k => `<option value="${k}">${db.origins[k].name}</option>`).join('');
@@ -378,7 +385,7 @@
             switchView('view-wizard');
         }
 
-        function nextWizStep(n) {
+        window.nextWizStep = function(n) {
             document.querySelectorAll('.wiz-step').forEach(e => e.classList.remove('active'));
             document.querySelectorAll('.prog-node').forEach(e => e.classList.remove('active'));
             document.getElementById('step'+n).classList.add('active');
@@ -387,54 +394,66 @@
             if(n === 4) renderWizDomains();
         }
 
-        function updateWizArchDesc() { document.getElementById('w_arch_desc').innerText = db.archetypes[document.getElementById('w_arch').value]; }
+        window.updateWizArchDesc = function() { document.getElementById('w_arch_desc').innerText = db.archetypes[document.getElementById('w_arch').value]; }
 
-        function renderWizOriginInfo() {
+        window.renderWizOriginInfo = function() {
             const k = document.getElementById('w_origin_sel').value;
-            const o = db.origins[k];
-            document.getElementById('w_origin_traits').innerText = o.traits;
+            document.getElementById('w_origin_traits').innerText = db.origins[k].traits;
             const box = document.getElementById('w_racial_choices_box');
             const list = document.getElementById('w_racial_choices_list');
             list.innerHTML = '';
             if(k !== 'humano') {
                 box.style.display = 'block';
-                o.racial_choices.forEach((c, i) => {
-                    list.innerHTML += `<div class="selectable-item"><div class="item-desc"><strong>${c.name}</strong><br><small>${c.effect}</small></div><input type="radio" name="r_pick" value="${i}" checked></div>`;
+                db.origins[k].racial_choices.forEach((c, i) => {
+                    list.innerHTML += `<div class="selectable-item"><div class="item-desc"><strong>${c.name}</strong><br><small>${c.effect}</small></div><input type="radio" name="r_pick" value="${i}" ${i===0?'checked':''}></div>`;
                 });
             } else { box.style.display = 'none'; }
         }
 
-        function renderWizAttributes() {
-            const k = document.getElementById('w_origin_sel').value;
-            const base = db.origins[k];
-            const grid = document.getElementById('w_attr_container');
-            grid.innerHTML = attrKeys.map(key => `
+        window.renderWizAttributes = function() {
+            const ok = document.getElementById('w_origin_sel').value;
+            const base = db.origins[ok];
+            document.getElementById('w_attr_container').innerHTML = attrKeys.map(k => `
             <div class="wiz-attr-box">
-                <label>${key.toUpperCase()}</label><br>
-                <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-top:5px;">
-                    <button class="btn btn-small" onclick="modWizAttr('${key}', -5)">-</button>
-                    <strong id="wa_${key}">${base[key]}%</strong>
-                    <button class="btn btn-small" onclick="modWizAttr('${key}', 5)">+</button>
+                <label style="color:var(--cyan); font-weight:bold;">${attrMap[k].toUpperCase()}</label>
+                <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin-top:10px;">
+                    <button class="btn btn-red btn-small" onclick="modWizAttr('${k}', -5)">-5</button>
+                    <strong id="wa_${k}">${base[k]}%</strong>
+                    <button class="btn btn-small" onclick="modWizAttr('${k}', 5)">+5</button>
                 </div>
+                <div style="color:var(--text-muted); font-size:0.75rem; margin-top:5px;">Bônus: <span id="wab_${k}">+${Math.floor(base[k]/10)}</span></div>
             </div>`).join('');
             calcWizPoints();
         }
 
-        function modWizAttr(k, a) {
+        window.modWizAttr = function(key, amt) {
             const ok = document.getElementById('w_origin_sel').value;
-            const el = document.getElementById('wa_'+k);
-            let val = parseInt(el.innerText) + a;
-            if(val < db.origins[ok][k]) return;
+            const el = document.getElementById('wa_'+key);
+            let val = parseInt(el.innerText) + amt;
+            
+            if(val < db.origins[ok][key]) return;
+            
             let cap = 50;
-            if(ok==='jotun'&&(k==='esf'||k==='cor')) cap=60;
-            if(ok==='oni'&&(k==='agi'||k==='per')) cap=60;
-            if(ok==='dokka'&&(k==='int'||k==='von')) cap=60;
+            if(ok==='jotun' && (key==='esf'||key==='cor')) cap=60;
+            if(ok==='oni' && (key==='agi'||key==='per')) cap=60;
+            if(ok==='dokka' && (key==='int'||key==='von')) cap=60;
             if(val > cap) return;
+
+            const o = db.origins[ok];
+            let spent = 0;
+            attrKeys.forEach(k => {
+                if(k === key) spent += (val - o[k]);
+                else spent += (parseInt(document.getElementById('wa_'+k).innerText) - o[k]);
+            });
+            
+            if(spent > o.pts) { alert("Pontos insuficientes!"); return; }
+
             el.innerText = val + "%";
+            document.getElementById('wab_'+key).innerText = "+" + Math.floor(val/10);
             calcWizPoints();
         }
 
-        function calcWizPoints() {
+        window.calcWizPoints = function() {
             const ok = document.getElementById('w_origin_sel').value;
             const o = db.origins[ok];
             let spent = 0;
@@ -444,216 +463,230 @@
             document.getElementById('w_pts_left').style.color = rem < 0 ? "var(--red)" : "var(--green)";
         }
 
-        function renderWizDomains() {
-            const list = document.getElementById('w_dom_list');
-            list.innerHTML = db.domains.map(d => `
-            <div class="selectable-item">
+        window.renderWizDomains = function() {
+            if(!db || !db.domains) return;
+            document.getElementById('w_dom_list').innerHTML = db.domains.map(d => `
+            <div class="selectable-item" style="${wizSelectedDoms.includes(d.name) ? 'border-color:var(--cyan); background:#111;' : ''}">
                 <div class="item-desc"><strong>${d.name}</strong><br><small>${d.desc}</small></div>
                 <button class="btn btn-small ${wizSelectedDoms.includes(d.name)?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${wizSelectedDoms.includes(d.name)?'REMOVER':'SELECIONAR'}</button>
             </div>`).join('');
         }
 
-        function toggleWizDom(n) {
-            if(wizSelectedDoms.includes(n)) wizSelectedDoms = wizSelectedDoms.filter(x => x!==n);
-            else if(wizSelectedDoms.length < 2) wizSelectedDoms.push(n);
+        window.toggleWizDom = function(n) {
+            if(wizSelectedDoms.includes(n)) { wizSelectedDoms = wizSelectedDoms.filter(x => x!==n); } 
+            else { if(wizSelectedDoms.length >= 2) { alert("Máximo de 2 domínios iniciais."); return; } wizSelectedDoms.push(n); }
             renderWizDomains();
         }
 
-        function renderWizHistAdvs() {
+        window.renderWizHistAdvs = function() {
             const hIdx = document.getElementById('w_hist_sel').value;
             const pool = document.getElementById('w_hist_pool'); pool.innerHTML = '';
             if(hIdx==="") return;
-            db.histories[hIdx].advantages.forEach((a, i) => {
-                pool.innerHTML += `<div class="wiz-hist-item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;">
-                <div style="text-align:left;"><strong>${a.name}</strong><br><small>${a.effect}</small></div>
-                <button class="btn btn-small" onclick="addWizAdv(${hIdx}, ${i})">ADD</button></div>`;
+            const hist = db.histories[hIdx];
+            if(!hist || !hist.advantages) return;
+            
+            hist.advantages.forEach((a, i) => {
+                const added = wizSelectedAdvs.find(x => x.name === a.name);
+                pool.innerHTML += `
+                <div class="selectable-item" style="${added ? 'opacity:0.4' : ''}">
+                    <div class="item-desc"><strong>${a.name}</strong><br><small>${a.effect}</small></div>
+                    <button class="btn btn-small" ${added?'disabled':''} onclick="addWizAdv(${hIdx}, ${i})">ADD</button>
+                </div>`;
             });
         }
 
-        function addWizAdv(h, a) {
-            const hist = db.histories[h]; const adv = hist.advantages[a];
-            if(wizSelectedAdvs.length >= 3) return;
+        window.addWizAdv = function(hIdx, aIdx) {
+            const hist = db.histories[hIdx]; const adv = hist.advantages[aIdx];
+            if(!hist || !adv) return;
+            
+            const hists =[...new Set(wizSelectedAdvs.map(x => x.h))];
+            if(wizSelectedAdvs.length >= 3) { alert("Limite de 3 vantagens atingido."); return; }
+            if(hists.length === 1 && hists[0] !== hist.name && wizSelectedAdvs.length > 1) { alert("Ao misturar históricos, o limite é 1 de cada (Max 2)."); return; }
+            if(hists.length === 2 && !hists.includes(hist.name)) { alert("Máximo de 2 históricos permitidos."); return; }
+            if(wizSelectedAdvs.find(x => x.name === adv.name)) return;
+
             wizSelectedAdvs.push({h: hist.name, name: adv.name, effect: adv.effect});
-            renderFinalWizAdvs();
+            renderWizHistAdvs(); renderFinalWizAdvs();
         }
 
-        function renderFinalWizAdvs() {
+        window.renderFinalWizAdvs = function() {
             document.getElementById('w_selected_advs').innerHTML = wizSelectedAdvs.map((a, i) => `
-            <div style="display:flex; justify-content:space-between; background:#111; padding:5px; margin-bottom:5px; font-size:0.8rem;">
-                <span><strong>${a.name}</strong> [${a.h}]</span>
-                <button style="color:var(--red); border:none; background:none; cursor:pointer;" onclick="wizSelectedAdvs.splice(${i},1); renderFinalWizAdvs();">X</button>
+            <div style="display:flex; justify-content:space-between; background:#111; padding:10px; margin-bottom:5px; font-size:0.85rem; border-left:2px solid var(--gold);">
+                <span><strong>${a.name}</strong> <span style="color:#888;">[${a.h}]</span></span>
+                <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="wizSelectedAdvs.splice(${i},1); renderFinalWizAdvs(); renderWizHistAdvs();">REMOVER</button>
             </div>`).join('');
         }
 
-        function finalizeCharacter() {
+        window.finalizeCharacter = function() {
+            if(parseInt(document.getElementById('w_pts_left').innerText) < 0) return alert("Pontos negativos!");
             const ok = document.getElementById('w_origin_sel').value;
             const o = db.origins[ok];
-            const n = {
+            
+            const newChar = {
                 name: document.getElementById('w_name').value || "Novo Operador",
                 arch: document.getElementById('w_arch').value,
                 origin: o.name, origin_k: ok,
                 nf: 0, credits: 20, eter: 1, xp: 0, hp_cur: 100, shield_cur: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_broken: 0,
                 ess: {}, dom: wizSelectedDoms.map(d => ({name: d, val: "Nível I"})),
-                adv: [...wizSelectedAdvs], cyber: [], inv_tac: [], inv_uti: [], inv_gen: [], runic: [], contacts: [], flaw: "", notes: ""
+                adv: [...wizSelectedAdvs], cyber: [], inv_tac: [], inv_uti:[], inv_gen: [], runic: [], contacts:[], flaw: "", notes: "", wpn_p: null, wpn_s: null, melee: []
             };
-            attrKeys.forEach(k => n.ess[k] = parseInt(document.getElementById('wa_'+k).innerText));
+            
+            attrKeys.forEach(k => newChar.ess[k] = parseInt(document.getElementById('wa_'+k).innerText));
             if(ok !== 'humano') {
                 const pick = o.racial_choices[document.querySelector('input[name="r_pick"]:checked').value];
-                n.adv.push({h: "Racial", name: pick.name, effect: pick.effect});
+                newChar.adv.push({h: "Racial", name: pick.name, effect: pick.effect});
             }
-            roster.push(n); saveRoster(); renderHub();
+            
+            roster.push(newChar);
+            localStorage.setItem('co_roster_v125', JSON.stringify(roster));
+            activeIdx = roster.length - 1;
+            char = roster[activeIdx];
+            applyCharToSheet();
+            switchView('view-sheet');
         }
 
         // --- SHEET ENGINE ---
-        function applyCharToSheet() {
+        window.openChar = function(i) {
+            activeIdx = i; char = roster[i];
+            applyCharToSheet(); switchView('view-sheet');
+        }
+
+        window.applyCharToSheet = function() {
             document.getElementById('s_name').innerText = char.name.toUpperCase();
             document.getElementById('s_origin').innerText = char.origin.toUpperCase();
-            document.getElementById('s_arch').innerText = char.arch.toUpperCase();
-            document.getElementById('s_nf').value = char.nf;
-            document.getElementById('s_cred').value = char.credits;
-            document.getElementById('s_eter').value = char.eter;
-            document.getElementById('s_xp').value = char.xp;
-            document.getElementById('s_hp_cur').innerText = char.hp_cur;
-            document.getElementById('s_shield_cur').innerText = char.shield_cur;
-            document.getElementById('s_se_cur').innerText = char.se_cur;
-            document.getElementById('s_arm_state').value = char.arm_state;
-            document.getElementById('s_flaw').value = char.flaw;
-            document.getElementById('s_notes').value = char.notes;
-            renderSheetEssences();
-            renderSheetLists();
-            updateCalcs();
-        }
-
-        function renderSheetEssences() {
-            const grid = document.getElementById('s_ess_grid');
-            grid.innerHTML = '<h2>ESSÊNCIAS</h2><div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px;"></div>';
-            const inner = grid.querySelector('div');
-            attrKeys.forEach(k => {
-                const v = char.ess[k];
-                inner.innerHTML += `<div class="stat-box"><label>${k.toUpperCase()}</label><div class="stat-val"><input type="number" value="${v}" style="width:45px; border:none; text-align:center;" onchange="char.ess.${k}=parseInt(this.value); autoSave();">%</div><div class="stat-mod">+${Math.floor(v/10)}</div></div>`;
+            document.getElementById('s_arch').innerText = char.arch.toUpperCase();['nf','cred','eter','xp','hp_cur','shield_cur','se_cur','arm_state','flaw','notes'].forEach(k => {
+                const e = document.getElementById('s_'+k);
+                if(e) { if(e.tagName==='INPUT'||e.tagName==='SELECT'||e.tagName==='TEXTAREA') e.value=char[k]; else e.innerText=char[k]; }
             });
+            renderSheetEssences(); renderSheetLists(); updateCalcs();
         }
 
-        function renderSheetLists() {
-            const r = (id, arr, path) => {
-                document.getElementById(id).innerHTML = arr.map((item, i) => `
-                <div class="selectable-item">
-                    <div class="item-desc"><strong>${item.name || item.n}</strong><br><small>${item.effect || item.traits || item.d || ''}</small></div>
-                    <button class="btn btn-red btn-small" onclick="char.${path}.splice(${i},1); autoSave(); applyCharToSheet();">X</button>
-                </div>`).join('');
-            };
-            r('s_dom_list', char.dom, 'dom');
-            r('s_runes_list', char.runic, 'runic');
-            r('s_tac_list', char.inv_tac, 'inv_tac');
-            r('s_uti_list', char.inv_uti, 'inv_uti');
-            r('s_gen_list', char.inv_gen, 'inv_gen');
-            r('s_cyber_list', char.cyber, 'cyber');
-            r('s_adv_list', char.adv, 'adv');
-            r('s_con_list', char.contacts, 'contacts');
-            
-            const w = (slot) => {
-                const item = char['wpn_'+slot];
-                const div = document.getElementById('s_wpn_'+slot);
-                if(!item) { div.innerHTML = "Vazio."; return; }
-                div.innerHTML = `
-                <div style="display:flex; justify-content:space-between;"><strong>${item.name}</strong><button class="btn btn-red btn-small" onclick="char.wpn_${slot}=null; autoSave(); applyCharToSheet();">X</button></div>
-                <div style="font-size:0.8rem; margin:5px 0;">DANO: <strong>+${item.dmg}</strong> | ALC: <strong>${item.range}</strong> | CALOR: ${item.h_cur}/${item.h_max}</div>
-                <div style="font-size:0.7rem; color:var(--text-muted)">${item.traits}</div>
-                <div style="margin-top:5px;"><button class="btn btn-small" onclick="char.wpn_${slot}.h_cur++; autoSave(); applyCharToSheet();">+ CALOR</button> <button class="btn btn-small" onclick="char.wpn_${slot}.h_cur=0; autoSave(); applyCharToSheet();">RESFRIAR</button></div>`;
-            };
-            w('p'); w('s');
+        window.renderSheetEssences = function() {
+            document.getElementById('s_ess_grid').innerHTML = '<h2>ESSÊNCIAS</h2><div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px;">' + attrKeys.map(k => `
+                <div class="stat-box">
+                    <label>${attrMap[k].toUpperCase()}</label>
+                    <div class="stat-val"><input type="number" value="${char.ess[k]}" style="width:50px; border:none; text-align:center; background:transparent; color:var(--cyan); font-weight:bold; font-size:1.2rem;" onchange="char.ess.${k}=parseInt(this.value); autoSave();">%</div>
+                    <div class="stat-mod">+${Math.floor(char.ess[k]/10)}</div>
+                </div>`).join('') + '</div>';
         }
 
-        function updateCalcs() {
+        window.updateCalcs = function() {
             const b = (k) => Math.floor(char.ess[k]/10);
             const maxHp = 5 + (b('cor')*2) + b('von') + (char.origin_k==='jotun'?5:0);
             document.getElementById('s_hp_max').innerText = maxHp;
             let cst = 0; char.cyber.forEach(u => cst += (u.cost || 0));
             const maxSe = (3 + b('cor') + b('von') + (char.origin_k==='dokka'?2:0)) - cst;
             document.getElementById('s_se_max').innerText = maxSe;
-            const al = document.getElementById('s_se_alert');
+            
+            const al = document.getElementById('se_alert');
             if(char.se_cur > maxSe) { al.innerText = "⚠️ COLAPSO TOTAL"; al.style.color = "var(--red)"; }
             else if(char.se_cur === maxSe) { al.innerText = "⚠️ PENALIDADE -20%"; al.style.color = "var(--gold)"; }
             else al.innerText = "";
+            
             const state = document.getElementById('s_arm_state').value;
             let eff = (state==="Normal") ? char.arm_base : (state==="Danificada" ? Math.floor(char.arm_base/2) : char.arm_broken);
             document.getElementById('s_eff_abs').innerText = eff || 0;
         }
 
-        // --- SELECTORS ---
-        let currentTarget = '';
-        function openSelector(dbKey, path) {
-            currentTarget = path;
-            const list = document.getElementById('modal-list');
-            list.innerHTML = '';
-            let items = db.arsenal[dbKey] || db[dbKey] || [];
-            items.forEach((item, i) => {
-                const locked = (item.nf && char.nf < item.nf);
-                list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.3':''}" onmouseover="showPreview('${item.effect || item.traits || item.d || ''}')">
-                    <div class="item-desc"><strong>${item.name || item.n}</strong> ${item.nf ? '[NF '+item.nf+']' : ''}</div>
-                    <button class="btn btn-small" ${locked?'disabled':''} onclick="addGear('${dbKey}', ${i})">ADICIONAR</button>
-                </div>`;
-            });
-            openModal("DATABASE SELECTION");
+        window.renderSheetLists = function() {
+            const r = (id, arr, path) => {
+                document.getElementById(id).innerHTML = arr.map((item, i) => `
+                <div class="selectable-item">
+                    <div class="item-desc"><strong>${item.name || item.n}</strong><br><small>${item.effect || item.traits || item.d || ''}</small></div>
+                    <button class="btn-red" style="background:transparent; border:none; font-weight:bold; cursor:pointer;" onclick="char.${path}.splice(${i},1); autoSave(); applyCharToSheet();">X</button>
+                </div>`).join('');
+            };
+            r('s_dom_list', char.dom, 'dom'); r('s_runes_list', char.runic, 'runic'); r('s_tac_list', char.inv_tac, 'inv_tac');
+            r('s_uti_list', char.inv_uti, 'inv_uti'); r('s_gen_list', char.inv_gen, 'inv_gen'); r('s_cyber_list', char.cyber, 'cyber');
+            r('s_adv_list', char.adv, 'adv'); r('s_con_list', char.contacts, 'contacts');
+            
+            const w = (s) => {
+                const item = char['wpn_'+s]; const div = document.getElementById('s_wpn_'+s);
+                if(!item) { div.innerHTML = "<span style='color:#555;'>Vazio.</span>"; return; }
+                div.innerHTML = `
+                <div style="display:flex; justify-content:space-between;"><strong>${item.name}</strong><button class="btn btn-red btn-small" onclick="char.wpn_${s}=null; autoSave(); applyCharToSheet();">X</button></div>
+                <div style="font-size:0.85rem; margin:10px 0;">DANO: <strong>+${item.dmg}</strong> | ALC: <strong>${item.range}</strong> | CALOR: <span style="color:var(--gold)">${item.h_cur}/${item.h_max}</span></div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">${item.traits}</div>
+                <button class="btn btn-small" onclick="char.wpn_${s}.h_cur++; autoSave(); applyCharToSheet();">+ CALOR</button>
+                <button class="btn btn-small" onclick="char.wpn_${s}.h_cur=0; autoSave(); applyCharToSheet();">RESFRIAR</button>`;
+            };
+            w('p'); w('s');
         }
 
-        function addGear(key, i) {
+        let currTgt = '';
+        window.openSelector = function(dbKey, path) {
+            currTgt = path;
+            const list = document.getElementById('modal-list'); list.innerHTML = '';
+            let items = db.arsenal[dbKey] || db[dbKey] ||[];
+            items.forEach((item, i) => {
+                const locked = (item.nf && char.nf < item.nf);
+                list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4':''}" onmouseover="document.getElementById('modal-preview').innerText='${item.effect || item.traits || item.d || ''}'">
+                    <div class="item-desc"><strong>${item.name || item.n}</strong> ${item.nf ? '<span style="color:var(--gold);">[NF '+item.nf+']</span>' : ''}</div>
+                    <button class="btn btn-small" ${locked?'disabled':''} onclick="addGear('${dbKey}', ${i})">ADD</button>
+                </div>`;
+            });
+            openModal("BANCO DE DADOS");
+        }
+
+        window.addGear = function(key, i) {
             const item = (db.arsenal[key] || db[key])[i];
-            char[currentTarget].push({...item});
+            char[currTgt].push({...item});
             closeModal(); autoSave(); applyCharToSheet();
         }
 
-        let wSlot = '';
-        function openWeaponBuilder(slot) {
-            wSlot = slot;
+        let wTgt = '';
+        window.openWeaponBuilder = function(slot) {
+            wTgt = slot;
             let h = `
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-                <div>
-                    <label>FRAME</label><select id="m_f" onchange="previewWpn()">` + db.arsenal.frames.map((f,i)=>`<option value="${i}">${f.n}</option>`).join('') + `</select>
-                    <label style="margin-top:15px;">NÚCLEO</label><select id="m_c" onchange="previewWpn()">` + db.arsenal.cores.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('') + `</select>
-                    <button class="btn" style="width:100%; margin-top:20px;" onclick="confirmWpn()">MONTAR BALÍSTICA</button>
-                </div>
-                <div>
-                    <label>COMBATE PRÓXIMO</label><select id="m_m">` + db.arsenal.melee_primary.concat(db.arsenal.melee_secondary).map((m,i)=>`<option value="${i}">${m.n}</option>`).join('') + `</select>
-                    <button class="btn btn-red" style="width:100%; margin-top:20px;" onclick="confirmMelee()">EQUIPAR LÂMINA</button>
-                </div>
+                <div><label>FRAME</label><select id="m_f" onchange="previewWpn()">` + db.arsenal.frames.map((f,i)=>`<option value="${i}">${f.n}</option>`).join('') + `</select>
+                <label style="margin-top:15px; display:block;">NÚCLEO</label><select id="m_c" onchange="previewWpn()">` + db.arsenal.cores.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('') + `</select>
+                <button class="btn" style="width:100%; margin-top:20px;" onclick="confirmWpn()">MONTAR BALÍSTICA</button></div>
+                <div><label>LÂMINA / MELEE</label><select id="m_m">` + db.arsenal.melee_primary.concat(db.arsenal.melee_secondary).map((m,i)=>`<option value="${i}">${m.n}</option>`).join('') + `</select>
+                <button class="btn btn-red" style="width:100%; margin-top:20px;" onclick="confirmMelee()">EQUIPAR MELEE</button></div>
             </div>`;
-            openModal("OFICINA DE ARMAS", h); previewWpn();
+            openModal("S.I.C. ARSENAL", h); previewWpn();
         }
 
-        function previewWpn() {
+        window.previewWpn = function() {
             const f = db.arsenal.frames[document.getElementById('m_f').value];
             const c = db.arsenal.cores[document.getElementById('m_c').value];
             document.getElementById('modal-preview').innerHTML = `<strong>${f.n} // ${c.n}</strong><br><small>${f.eff}<br>${c.eff}</small>`;
         }
 
-        function confirmWpn() {
-            const f = db.arsenal.frames[document.getElementById('m_f').value];
-            const c = db.arsenal.cores[document.getElementById('m_c').value];
+        window.confirmWpn = function() {
+            const f = db.arsenal.frames[document.getElementById('m_f').value]; const c = db.arsenal.cores[document.getElementById('m_c').value];
             let d = c.dmg[3]; if(f.n.includes("Pistola")) d=c.dmg[0]; if(f.n.includes("Subm")) d=c.dmg[1]; if(f.n.includes("Escopeta")) d=c.dmg[2]; if(f.n.includes("Precisão")) d=c.dmg[4];
-            char['wpn_'+wSlot] = { name: f.n+" ("+c.n+")", dmg: d, range: f.r, h_max: c.h, h_cur: 0, traits: f.eff+" // "+c.eff };
+            char['wpn_'+wTgt] = { name: f.n+" ("+c.n+")", dmg: d, range: f.r, h_max: c.heat, h_cur: 0, traits: f.eff+" // "+c.eff };
             closeModal(); autoSave(); applyCharToSheet();
         }
 
-        function confirmMelee() {
+        window.confirmMelee = function() {
             const m = db.arsenal.melee_primary.concat(db.arsenal.melee_secondary)[document.getElementById('m_m').value];
-            char['wpn_'+wSlot] = { name: m.n, dmg: m.dmg, range: "Engajado", h_max: m.heat, h_cur: 0, traits: m.traits };
+            char['wpn_'+wTgt] = { name: m.n, dmg: m.dmg, range: "Engajado", h_max: m.heat, h_cur: 0, traits: m.traits };
             closeModal(); autoSave(); applyCharToSheet();
         }
 
         // --- UTILS ---
-        function switchView(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==='view-hub') renderHub(); }
-        function switchTab(id, e) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); if(e) e.target.classList.add('active'); }
-        function openModal(t, c) { document.getElementById('modal-title').innerText=t; if(c) document.getElementById('modal-list').innerHTML=c; document.getElementById('modal-selector').style.display='flex'; }
-        function closeModal() { document.getElementById('modal-selector').style.display='none'; }
-        function showPreview(t) { document.getElementById('modal-preview').innerText = t; }
-        function modStat(s,a) { char[s+'_cur'] = Math.max(0, char[s+'_cur']+a); applyCharToSheet(); autoSave(); }
-        function autoSave() { if(activeIdx > -1) { roster[activeIdx]=char; saveRoster(); document.getElementById('save_ping').style.opacity=1; setTimeout(()=>document.getElementById('save_ping').style.opacity=0,1000); } }
-        function saveRoster() { localStorage.setItem('co_roster_v125', JSON.stringify(roster)); }
-        function wipeData() { if(confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } }
-        function backToHub() { activeIdx=-1; char=null; renderHub(); }
-        function addContact() { const n = prompt("Nome:"); if(n) { char.contacts.push({name:n, d:""}); applyCharToSheet(); autoSave(); } }
-        function addCustomDomain() { const n = prompt("Domínio:"); if(n) { char.dom.push({name:n, val:"Nível I"}); applyCharToSheet(); autoSave(); } }
+        window.switchView = function(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        window.switchTab = function(id, btn) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
+        window.openModal = function(t, c) { document.getElementById('modal-title').innerText=t; if(c) document.getElementById('modal-list').innerHTML=c; document.getElementById('modal-selector').style.display='flex'; }
+        window.closeModal = function() { document.getElementById('modal-selector').style.display='none'; }
+        window.modStat = function(s,a) { char[s+'_cur'] = Math.max(0, char[s+'_cur']+a); applyCharToSheet(); autoSave(); }
+        window.autoSave = function() {
+            if(activeIdx > -1) {['nf','cred','eter','xp','hp_cur','shield_cur','se_cur','arm_state','flaw','notes'].forEach(k => {
+                    const e = document.getElementById('s_'+k); if(e) { char[k] = (e.tagName==='INPUT' && e.type==='number')?parseInt(e.value)||0 : e.value; }
+                });
+                roster[activeIdx]=char; saveRoster(); 
+                document.getElementById('save_ping').style.opacity=1; setTimeout(()=>document.getElementById('save_ping').style.opacity=0, 1000);
+                updateCalcs();
+            }
+        }
+        window.saveRoster = function() { localStorage.setItem('co_roster_v125', JSON.stringify(roster)); }
+        window.wipeData = function() { if(confirm("FORMATAR BANCO DE DADOS?")) { localStorage.clear(); location.reload(); } }
+        window.backToHub = function() { autoSave(); activeIdx=-1; char=null; renderHub(); }
+        window.addContact = function() { const n = prompt("Nome do Contato:"); if(n) { char.contacts.push({name:n, d:""}); applyCharToSheet(); autoSave(); } }
+        window.addCustomDomain = function() { const n = prompt("Nome do Domínio:"); if(n) { char.dom.push({name:n, val:"Nível I"}); applyCharToSheet(); autoSave(); } }
     </script>
 </body>
 </html>
