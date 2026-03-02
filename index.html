@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sindicato OS // Terminal de Operadores v13.5</title>
-    <!-- Leitor de Arquivo Markdown para o Compêndio de Regras -->
+    <!-- Leitor Markdown para o Compêndio -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
@@ -57,14 +57,14 @@
         
         /* WIZARD */
         .wiz-progress { display: flex; justify-content: space-between; margin-bottom: 30px; background: #000; padding: 10px; border: 1px solid var(--border-dim); }
-        .prog-node { font-family: var(--font-mono); font-size: 0.7rem; color: #444; }
-        .prog-node.active { color: var(--cyan); text-shadow: 0 0 5px var(--cyan); }
+        .prog-node { font-family: var(--font-mono); font-size: 0.75rem; color: #444; }
+        .prog-node.active { color: var(--cyan); text-shadow: 0 0 5px var(--cyan); font-weight: bold;}
         .wiz-step { display: none; }
         .wiz-step.active { display: block; }
 
         .wiz-attr-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
         .wiz-attr-box { background: #000; border: 1px solid var(--border-dim); padding: 15px; text-align: center; }
-        .wiz-attr-box strong { font-size: 1.5rem; color: var(--cyan); font-family: var(--font-mono); }
+        .wiz-attr-box strong { font-size: 1.6rem; color: var(--cyan); font-family: var(--font-mono); }
 
         .selectable-item { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 15px; border: 1px solid var(--border-dim); margin-bottom: 8px; text-align: left; }
         .selectable-item:hover { border-color: var(--cyan); }
@@ -252,7 +252,7 @@
             <button class="tab-btn" onclick="switchTab('t_persona', event)">4. PERSONA</button>
         </div>
 
-        <!-- TAB 1: STATUS & PERICIAS (Misto) -->
+        <!-- TAB 1: STATUS & PERICIAS -->
         <div id="t_status" class="tab-content active">
             <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:20px;">
                 <div>
@@ -289,11 +289,15 @@
                         <div class="vitals-row" style="border-color:var(--accent-gray);">
                             <label style="color:var(--accent-gray)">ARMADURA (ABSORÇÃO)</label>
                             <div style="text-align:right;">
-                                <select id="s_arm_state" style="width:120px;" onchange="autoSave()">
+                                <select id="s_arm_state" style="width:120px; margin-bottom:5px;" onchange="autoSave()">
                                     <option value="Normal">Normal</option>
                                     <option value="Danificada">Danificada</option>
                                     <option value="Quebrada">Quebrada</option>
                                 </select>
+                                <div style="display:flex; gap:5px; margin-bottom:5px;">
+                                    <input type="number" id="s_arm_base" placeholder="Base" onchange="autoSave()">
+                                    <input type="number" id="s_arm_broken" placeholder="Resid" onchange="autoSave()">
+                                </div>
                                 <div style="margin-top:5px; font-family:var(--font-mono);">EFETIVA: <strong id="s_eff_abs" style="font-size:1.5rem;">0</strong></div>
                             </div>
                         </div>
@@ -330,13 +334,13 @@
             <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:20px;">
                 <div>
                     <div class="section-box">
-                        <h2>S.I.C. ARMAMENTO ATIVO</h2>
+                        <h2>S.I.C. ARSENAL</h2>
                         <div class="panel" style="border-left: 4px solid var(--red); background:#080808;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><label style="color:var(--red)">ARMA PRIMÁRIA</label><button class="btn btn-small" onclick="openWeaponBuilder('p')">MONTAR / ALTERAR</button></div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><label style="color:var(--red)">SLOT PRIMÁRIO</label><button class="btn btn-small" onclick="openWeaponBuilder('p')">MONTAR / ALTERAR</button></div>
                             <div id="s_wpn_p"></div>
                         </div>
                         <div class="panel" style="border-left: 4px solid var(--red); background:#080808;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><label style="color:var(--red)">ARMA SECUNDÁRIA</label><button class="btn btn-small" onclick="openWeaponBuilder('s')">MONTAR / ALTERAR</button></div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><label style="color:var(--red)">SLOT SECUNDÁRIO</label><button class="btn btn-small" onclick="openWeaponBuilder('s')">MONTAR / ALTERAR</button></div>
                             <div id="s_wpn_s"></div>
                         </div>
                     </div>
@@ -347,7 +351,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class="section-box"><h2>ENCAIXE TÁTICO (2)</h2><div id="s_tac_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('tactical_items', 'inv_tac')">+ ADD TÁTICO</button></div>
+                    <div class="section-box"><h2>ENCAIXE TÁTICO (2)</h2><div id="s_tac_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('tactical_items,tactical_weapons,drone_chassis', 'inv_tac')">+ ADD TÁTICO</button></div>
                     <div class="section-box"><h2>UTILIDADE (4)</h2><div id="s_uti_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('utility_items', 'inv_uti')">+ ADD UTILIDADE</button></div>
                     <div class="section-box" style="border-color:var(--purple)"><h2>FOCALIZADORES RÚNICOS</h2><div id="s_runes_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('runic_eq', 'runic')">+ SINTONIZAR RUNA</button></div>
                 </div>
@@ -397,8 +401,9 @@
         const attrMap = { esf: "Esforço", agi: "Agilidade", ard: "Ardil", cor: "Corpo", int: "Intelecto", per: "Percepção", lab: "Lábia", von: "Vontade", bal: "Balística", con: "Confronto" };
         const attrKeys = Object.keys(attrMap);
 
-        let wizAdvs = [];
-        let wizDoms =[];
+        // Variaveis globais seguras para o Wizard
+        let wizSelectedAdvs =[];
+        let wizSelectedDoms =[];
 
         // --- BOOT ---
         window.onload = async () => {
@@ -436,10 +441,10 @@
         // --- WIZARD ---
         window.startWizard = function() {
             if(!db) return;
-            wizAdvs = []; wizDoms =[];
+            wizSelectedAdvs = []; 
+            wizSelectedDoms =[];
             document.getElementById('w_name').value = '';
             
-            // Populate selects
             document.getElementById('w_arch').innerHTML = Object.keys(db.archetypes).map(k => `<option value="${k}">${k}</option>`).join('');
             document.getElementById('w_origin_sel').innerHTML = Object.keys(db.origins).map(k => `<option value="${k}">${db.origins[k].name}</option>`).join('');
             document.getElementById('w_hist_sel').innerHTML = '<option value="">-- Selecionar Histórico --</option>' + db.histories.map((h,i) => `<option value="${i}">${h.name}</option>`).join('');
@@ -510,13 +515,15 @@
             let currentVal = parseInt(el.innerText);
             let newVal = currentVal + amt;
             
-            if(newVal < db.origins[ok][key]) return; // Trava base
+            // Floor Check
+            if(newVal < db.origins[ok][key]) return;
             
+            // Ceiling check
             let cap = 50;
             if((ok==='jotun' && (key==='esf'||key==='cor')) || (ok==='oni' && (key==='agi'||key==='per')) || (ok==='dokka' && (key==='int'||key==='von'))) cap = 60;
-            if(newVal > cap) return; // Trava teto
+            if(newVal > cap) return;
 
-            // Verifica se tem pontos sobrando antes de adicionar
+            // Budget check
             if(amt > 0) {
                 let spent = 0;
                 attrKeys.forEach(k => {
@@ -545,7 +552,7 @@
             const list = document.getElementById('w_dom_list');
             if(!db.domains) return;
             list.innerHTML = db.domains.map(d => {
-                const active = wizDoms.includes(d.name);
+                const active = wizSelectedDoms.includes(d.name);
                 return `
                 <div class="selectable-item" style="${active ? 'border-color:var(--cyan); background:#111;' : ''}">
                     <div class="item-desc"><strong style="color:${active?'var(--cyan)':'#fff'}">${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div>
@@ -555,8 +562,8 @@
         }
 
         window.toggleWizDom = function(n) {
-            if(wizDoms.includes(n)) { wizDoms = wizDoms.filter(x => x!==n); } 
-            else { if(wizDoms.length >= 2) return alert("Máximo de 2 domínios iniciais."); wizDoms.push(n); }
+            if(wizSelectedDoms.includes(n)) { wizSelectedDoms = wizSelectedDoms.filter(x => x!==n); } 
+            else { if(wizSelectedDoms.length >= 2) return alert("Máximo de 2 domínios iniciais."); wizSelectedDoms.push(n); }
             renderWizDomains();
         }
 
@@ -566,7 +573,10 @@
             pool.innerHTML = '';
             if(hIdx==="") return;
             
-            db.histories[hIdx].advantages.forEach((a, i) => {
+            const hist = db.histories[hIdx];
+            if(!hist || !hist.advantages) return;
+            
+            hist.advantages.forEach((a, i) => {
                 const isAdded = wizSelectedAdvs.find(x => x.name === a.name);
                 pool.innerHTML += `
                 <div class="selectable-item" style="${isAdded ? 'opacity:0.4' : ''}">
@@ -616,9 +626,9 @@
                 name: document.getElementById('w_name').value || "Novo Operador",
                 arch: document.getElementById('w_arch').value,
                 origin: o.name, origin_k: ok,
-                nf: 0, credits: 20, eter: 1, xp: 0, hp_cur: 100, shield_cur: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_broken: 0,
-                ess: {}, dom: wizDoms.map(d => ({name: d, val: "Nível I"})), adv: [...wizSelectedAdvs],
-                cyber: [], inv_tac: [], inv_uti: [], inv_gen: [], runic:[], contacts:[], flaw: "", notes: "", wpn_p: null, wpn_s: null
+                nf: 0, credits: 20, eter: 1, xp: 0, hp_cur: 100, shield_cur: 0, shield_max:0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_broken: 0,
+                ess: {}, dom: wizSelectedDoms.map(d => ({name: d, val: "Nível I"})), adv: [...wizSelectedAdvs],
+                cyber: [], inv_tac: [], inv_uti: [], inv_gen:[], runic:[], contacts:[], flaw: "", notes: "", wpn_p: null, wpn_s: null
             };
             
             attrKeys.forEach(k => n.ess[k] = parseInt(document.getElementById('wa_'+k).innerText));
@@ -641,7 +651,7 @@
         window.applyCharToSheet = function() {
             document.getElementById('s_name').innerText = char.name.toUpperCase();
             document.getElementById('s_origin').innerText = char.origin.toUpperCase();
-            document.getElementById('s_arch').innerText = char.arch.toUpperCase();['nf','cred','eter','xp','hp_cur','shield_cur','se_cur','arm_state','flaw','notes'].forEach(k => {
+            document.getElementById('s_arch').innerText = char.arch.toUpperCase();['nf','cred','eter','xp','hp_cur','shield_cur','shield_max','se_cur','arm_state','arm_base','arm_broken','flaw','notes'].forEach(k => {
                 const e = document.getElementById('s_'+k);
                 if(e) { if(e.tagName==='INPUT'||e.tagName==='SELECT'||e.tagName==='TEXTAREA') e.value=char[k]; else e.innerText=char[k]; }
             });
@@ -744,15 +754,20 @@
 
         // --- DATABASE SELECTORS ---
         let currentTarget = '';
-        window.openSelector = function(dbKey, path) {
+        window.openSelector = function(dbKeys, path) {
             currentTarget = path;
             const list = document.getElementById('modal-list');
             list.innerHTML = '';
             
-            let items = db.arsenal[dbKey] || db[dbKey] ||[];
+            let items =[];
+            const keys = dbKeys.split(',');
+            keys.forEach(k => {
+                const source = db.arsenal[k] || db[k] ||[];
+                items = items.concat(source);
+            });
+            
             items.forEach((item, i) => {
                 const nfLock = (item.nf && char.nf < item.nf);
-                // Safe extraction for preview text
                 const effText = (item.effect || item.traits || item.d || "").replace(/"/g, "'");
                 
                 list.innerHTML += `
@@ -761,15 +776,17 @@
                         <strong style="color:var(--cyan)">${item.name || item.n}</strong> 
                         ${item.nf ? `<span style="color:var(--gold); font-size:0.75rem;">[NF ${item.nf}]</span>` : ''}
                     </div>
-                    <button class="btn btn-small" ${nfLock?'disabled':''} onclick="addGear('${dbKey}', ${i})">INSERIR</button>
+                    <button class="btn btn-small" ${nfLock?'disabled':''} onclick="addGear('${dbKeys}', ${i})">INSERIR</button>
                 </div>`;
             });
             openModal("TERMINAL DE REQUISIÇÃO");
         }
 
-        window.addGear = function(key, i) {
-            const item = (db.arsenal[key] || db[key])[i];
-            // Clone item safely
+        window.addGear = function(keysStr, i) {
+            let items =[];
+            keysStr.split(',').forEach(k => items = items.concat(db.arsenal[k] || db[k] ||[]));
+            const item = items[i];
+            
             char[currentTarget].push(JSON.parse(JSON.stringify(item)));
             closeModal(); autoSave(); applyCharToSheet();
         }
@@ -831,7 +848,8 @@
         }
 
         window.confirmMelee = function() {
-            const m = db.arsenal.melee_primary.concat(db.arsenal.melee_secondary)[document.getElementById('m_m').value];
+            const mList = db.arsenal.melee_primary.concat(db.arsenal.melee_secondary);
+            const m = mList[document.getElementById('m_m').value];
             char['wpn_'+wTgt] = { 
                 name: (m.name || m.n), 
                 dmg: m.dmg, range: "Engajado", h_max: (m.heat || m.h || 0), h_cur: 0, 
@@ -849,13 +867,10 @@
         window.modStat = function(s,a) { char[s+'_cur'] = Math.max(0, char[s+'_cur']+a); applyCharToSheet(); autoSave(); }
         
         window.autoSave = function() {
-            if(activeIdx > -1) {['nf','cred','eter','xp','hp_cur','shield_cur','se_cur','arm_state','flaw','notes'].forEach(k => {
+            if(activeIdx > -1) {['nf','cred','eter','xp','hp_cur','shield_cur','shield_max','se_cur','arm_state','arm_base','arm_broken','flaw','notes'].forEach(k => {
                     const e = document.getElementById('s_'+k); 
                     if(e) { char[k] = (e.tagName==='INPUT' && e.type==='number')?parseInt(e.value)||0 : e.value; }
                 });
-                // Armadura inputs
-                char.arm_base = parseInt(document.getElementById('arm_base')?.value || 0);
-                char.arm_broken = parseInt(document.getElementById('arm_broken')?.value || 0);
                 
                 roster[activeIdx] = char; saveRoster(); 
                 document.getElementById('save_ping').style.opacity=1; setTimeout(()=>document.getElementById('save_ping').style.opacity=0, 1000);
@@ -878,7 +893,7 @@
                 const text = await res.text();
                 rc.innerHTML = marked.parse(text);
             } catch(e) {
-                rc.innerHTML = "<strong style='color:var(--red)'>Erro 404: Arquivo 'regras.md' não encontrado. Coloque-o na mesma pasta do index.html no GitHub.</strong>";
+                rc.innerHTML = "<strong style='color:var(--red)'>Erro 404: Arquivo 'regras.md' não encontrado. Coloque-o na mesma pasta do index.html no servidor.</strong>";
             }
         }
     </script>
