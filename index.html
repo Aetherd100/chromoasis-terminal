@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChromOasis // Sindicato OS v17.0</title>
+    <title>ChromOasis // Sindicato OS v17.1</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* PALETA CHASSI SLATE */
@@ -150,7 +150,7 @@
     <div id="view-hub" class="view active">
         <div style="text-align:center; margin: 60px 0;">
             <h1 style="font-size: 3.5rem; border:none; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">CHROMOASIS DB</h1>
-            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v17.0</p>
+            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v17.1</p>
         </div>
         <div style="display:flex; justify-content:center; gap:15px; margin-bottom: 50px;">
             <button class="btn" style="border-color:var(--cyan); color:var(--cyan);" onclick="startWizard()">+ RECRUTAR OPERADOR</button>
@@ -466,7 +466,7 @@
                         <select id="mb_c" style="margin-bottom:10px;" onchange="previewBuild()"></select>
                         <label>NÍVEL DO NÚCLEO</label>
                         <select id="mb_c_t" onchange="previewBuild()">
-                            <option value="1">Nível I (Base)[NF 0 | 0¢]</option>
+                            <option value="1">Nível I (Base)[NF 0 | 5¢ Corpos]</option>
                             <option value="2">Nível II (+1 Dano)[NF 3 | 10¢]</option>
                             <option value="3">Nível III (Dano Máx) [NF 7 | 20¢]</option>
                         </select>
@@ -551,12 +551,14 @@
 
         // --- WIZARD ---
         window.startWizard = function() {
-            if(!DB) return;
-            wizAdvs =[]; wizDoms =[]; document.getElementById('w_name').value = '';
-            document.getElementById('w_arch').innerHTML = '<option value="">-- Arquétipo --</option>' + Object.keys(DB.archetypes).map(k => `<option value="${k}">${k}</option>`).join('');
-            document.getElementById('w_origin_sel').innerHTML = Object.keys(DB.origins).map(k => `<option value="${k}">${DB.origins[k].name}</option>`).join('');
-            document.getElementById('w_hist_sel').innerHTML = '<option value="">-- Histórico --</option>' + DB.histories.map((h,i) => `<option value="${i}">${h.name}</option>`).join('');
-            updateWizArchDesc(); renderWizOriginInfo(); nextWizStep(1); switchView('view-wizard');
+            try {
+                if(!DB) return alert("Aguarde o Banco de Dados.");
+                wizAdvs =[]; wizDoms =[]; document.getElementById('w_name').value = '';
+                document.getElementById('w_arch').innerHTML = '<option value="">-- Arquétipo --</option>' + Object.keys(DB.archetypes).map(k => `<option value="${k}">${k}</option>`).join('');
+                document.getElementById('w_origin_sel').innerHTML = Object.keys(DB.origins).map(k => `<option value="${k}">${DB.origins[k].name}</option>`).join('');
+                document.getElementById('w_hist_sel').innerHTML = '<option value="">-- Histórico --</option>' + DB.histories.map((h,i) => `<option value="${i}">${h.name}</option>`).join('');
+                updateWizArchDesc(); renderWizOriginInfo(); nextWizStep(1); switchView('view-wizard');
+            } catch(e) { console.error(e); alert("Erro ao abrir criador."); }
         }
         window.nextWizStep = function(n) { 
             document.querySelectorAll('.wiz-step, .prog-node').forEach(e => e.classList.remove('active')); 
@@ -566,12 +568,29 @@
         window.updateWizArchDesc = function() { document.getElementById('w_arch_desc').innerText = DB.archetypes[document.getElementById('w_arch').value] || ''; }
         
         window.renderWizOriginInfo = function() {
-            const k = document.getElementById('w_origin_sel').value; const o = DB.origins[k];
-            document.getElementById('w_origin_desc').innerHTML = o.traits.replace(/(Constituição Titânica:|Mãos Pesadas:|Miragem:|Estigma Visual:|Sintonização Estável:|Inércia Física:|Versatilidade:)/g, "<br><strong style='color:var(--cyan)'>$1</strong>").substring(4);
-            const box = document.getElementById('w_racial_choices_box'); const list = document.getElementById('w_racial_choices_list');
-            if(k !== 'humano' && o.racial_choices) {
-                box.style.display = 'block'; list.innerHTML = o.racial_choices.map((c, i) => `<div class="selectable-item"><div style="flex-grow:1;"><strong>${c.name}</strong><br><small style="color:var(--text-muted)">${c.effect}</small></div><input type="radio" name="r_pick" value="${i}" ${i===0?'checked':''}></div>`).join('');
-            } else { box.style.display = 'none'; }
+            try {
+                const k = document.getElementById('w_origin_sel').value; 
+                if(!k) return;
+                const o = DB.origins[k];
+                if(!o) return;
+
+                let t = o.traits || "";
+                if(typeof t !== "string") t = JSON.stringify(t);
+                t = t.replace(/(Constituição Titânica:|Mãos Pesadas:|Miragem:|Estigma Visual:|Sintonização Estável:|Inércia Física:|Versatilidade:)/g, "<br><strong style='color:var(--cyan)'>$1</strong>");
+                t = t.replace(/^<br>/, "").trim();
+
+                document.getElementById('w_origin_desc').innerHTML = t;
+                const box = document.getElementById('w_racial_choices_box'); 
+                const list = document.getElementById('w_racial_choices_list');
+                if(k !== 'humano' && o.racial_choices) {
+                    box.style.display = 'block'; 
+                    list.innerHTML = o.racial_choices.map((c, i) => `<div class="selectable-item"><div style="flex-grow:1;"><strong>${c.name}</strong><br><small style="color:var(--text-muted)">${c.effect}</small></div><input type="radio" name="r_pick" value="${i}" ${i===0?'checked':''}></div>`).join('');
+                } else { 
+                    box.style.display = 'none'; 
+                }
+            } catch (e) {
+                console.error("Erro em renderWizOriginInfo:", e);
+            }
         }
         
         window.renderWizAttr = function() {
@@ -643,7 +662,7 @@
                 ex_init:0, ex_dodge:0, ex_parry:0,
                 ess: {}, dom: wizDoms.map(d => ({n: d, lvl: 1, flips: 1})), traits:[...wizAdvs], masteries:[],
                 sic: { armor: null, wpn_p: null, wpn_s: null },
-                inv_tac:[], drones: [], inv_uti:[], inv_gen:[], runic: [],
+                inv_tac:[], drones:[], inv_uti:[], inv_gen:[], runic:[],
                 cromo: { "Neural":{t:0,m:[]}, "Fluxo":{t:0,m:[]}, "Sensorial":{t:0,m:[]}, "Atuadores":{t:0,m:[]}, "Reativa":{t:0,m:[]} },
                 contacts:[], flaw: "", app: "", bg: "", notes: ""
             };
@@ -699,7 +718,8 @@
 
         window.applyToSheet = function() {
             if(!char) return;
-            document.getElementById('s_name').innerText = char.name.toUpperCase(); document.getElementById('s_origin').innerText = char.origin.toUpperCase(); document.getElementById('s_arch').innerText = char.arch.toUpperCase();['nf','cred','eter','xp'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]||(el.type==='number'?0:''); });['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) el.value = char[k]||""; });
+            document.getElementById('s_name').innerText = char.name.toUpperCase(); document.getElementById('s_origin').innerText = char.origin.toUpperCase(); document.getElementById('s_arch').innerText = char.arch.toUpperCase();
+            ['nf','cred','eter','xp'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]||(el.type==='number'?0:''); });['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) el.value = char[k]||""; });
             
             // Retrocompatibility check for sic structure
             if(char.sic.armor && char.sic.armor.a_state === undefined) {
@@ -872,6 +892,7 @@
             `).join('');
         }
 
+        let curBuildSlot = '';
         window.openBuilder = function(slot) {
             curBuildSlot = slot;
             if(slot==='wpn_p' || slot==='wpn_s') {
@@ -1000,7 +1021,9 @@
         let cGenP = '';
         window.openGenericModal = function(dbKey, path, isShield=false) {
             cGenP = path; const list = document.getElementById('mg_list'); list.innerHTML = ''; let items =[];
-            if(dbKey==='masteries') {
+            if(dbKey==='domains') {
+                sysDomains.forEach(d => { const h = char.dom.find(x=>x.n===d.name); list.innerHTML += `<div class="selectable-item ${h?'locked':''}"><div style="flex-grow:1;"><strong>${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div><button class="btn btn-small" ${h?'disabled':''} onclick="char.dom.push({n:'${d.name}', lvl:1, flips:1}); closeModal(); saveDisk(); applyToSheet();">TREINAR</button></div>`; });
+            } else if(dbKey==='masteries') {
                 const cats =[...new Set(DB.masteries.map(m=>m.type))];
                 cats.forEach(cat => {
                     list.innerHTML += `<div class="cat-header">${cat.toUpperCase()}</div>`;
