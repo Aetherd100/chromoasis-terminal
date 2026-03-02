@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sindicato OS // Terminal de Operadores v13.0</title>
-    <!-- Biblioteca para renderizar o Markdown das Regras -->
+    <title>Sindicato OS // Terminal de Operadores v13.5</title>
+    <!-- Leitor de Arquivo Markdown para o Compêndio de Regras -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
@@ -46,10 +46,11 @@
         .btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #444; color: #444; }
         .btn-red { color: var(--red); border-color: var(--red); }
         .btn-red:hover:not(:disabled) { background: var(--red); color: #fff; }
-        .btn-small { padding: 4px 10px; font-size: 0.7rem; }
+        .btn-small { padding: 4px 10px; font-size: 0.75rem; }
 
-        input, select, textarea { background: #000; color: var(--text-main); border: 1px solid var(--border-dim); padding: 8px; font-family: var(--font-mono); font-size: 0.9rem; width: 100%; box-sizing: border-box;}
-        
+        input, select, textarea { background: #000; color: var(--text-main); border: 1px solid var(--border-dim); padding: 8px; font-family: var(--font-mono); font-size: 0.9rem; width: 100%; box-sizing: border-box; }
+        input:focus, select:focus { outline: none; border-color: var(--cyan); }
+
         .view { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.3s; }
         .view.active { display: block; }
         .panel { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 20px; margin-bottom: 20px; position: relative; }
@@ -63,15 +64,14 @@
 
         .wiz-attr-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
         .wiz-attr-box { background: #000; border: 1px solid var(--border-dim); padding: 15px; text-align: center; }
-        .wiz-attr-box strong { font-size: 1.6rem; color: var(--cyan); font-family: var(--font-mono); }
+        .wiz-attr-box strong { font-size: 1.5rem; color: var(--cyan); font-family: var(--font-mono); }
 
-        /* LISTS */
         .selectable-item { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 15px; border: 1px solid var(--border-dim); margin-bottom: 8px; text-align: left; }
         .selectable-item:hover { border-color: var(--cyan); }
         .item-desc { flex-grow: 1; padding-right: 20px; font-size: 0.85rem; }
         
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
-        .modal { background: var(--bg-modal); border: 1px solid var(--cyan); width: 90%; max-width: 950px; max-height: 85vh; overflow-y: auto; padding: 30px; }
+        .modal { background: var(--bg-modal); border: 1px solid var(--cyan); width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; padding: 30px; box-shadow: 0 0 30px rgba(0,229,255,0.2);}
 
         /* SHEET TABS */
         .tab-bar { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 1px solid var(--border-dim); }
@@ -80,14 +80,20 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .vitals-row { display: grid; grid-template-columns: 1fr auto; align-items: center; background: #000; padding: 15px; border: 1px solid var(--border-dim); margin-bottom: 10px; }
+        .stat-box { background: #000; border: 1px solid var(--border-dim); padding: 10px; text-align: center; }
+        .stat-val { font-size: 1.4rem; font-weight: bold; color: #fff; font-family: var(--font-mono); }
+        .stat-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); margin-top:5px;}
+
+        .vitals-row { display: grid; grid-template-columns: 1fr auto; align-items: center; background: #000; padding: 12px; border: 1px solid var(--border-dim); margin-bottom: 10px; }
         .vitals-val { font-size: 1.8rem; font-weight: bold; font-family: var(--font-mono); margin: 0 15px; }
+        .overload-btn { background: #222; border: 1px solid #444; color: #fff; width: 35px; height: 35px; cursor: pointer; font-size: 1.2rem; }
+        .overload-btn:hover { background: #444; border-color: #fff; }
 
         .roster-card { display: flex; gap: 20px; background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 20px; cursor: pointer; transition: 0.2s; border-left: 4px solid var(--cyan); margin-bottom: 15px; }
         .roster-card:hover { border-color: var(--cyan); transform: translateX(10px); }
 
         #rules-content { color: #ccc; line-height: 1.6; font-family: var(--font-ui); }
-        #rules-content h1, #rules-content h2 { color: var(--cyan); margin-top: 20px; border-bottom: 1px solid #333; }
+        #rules-content h1, #rules-content h2, #rules-content h3 { color: var(--cyan); margin-top: 20px; border-bottom: 1px solid #333; padding-bottom:5px; font-family: var(--font-mono); }
         #rules-content strong { color: var(--gold); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -101,26 +107,26 @@
         <p id="loader-msg" style="color:var(--cyan); font-family:var(--font-mono);">Sincronizando com o GRID...</p>
     </div>
 
-    <!-- MODAL SELETOR -->
+    <!-- MODAL SELETOR BANCO DE DADOS -->
     <div id="modal-selector" class="modal-overlay">
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <h1 id="modal-title" style="margin:0; border:none;">DATABASE</h1>
                 <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
             </div>
-            <div id="modal-preview" style="background:#000; padding:15px; border:1px dashed var(--cyan); margin-bottom:20px; color:var(--text-muted); font-size:0.85rem;">Selecione um item para detalhes.</div>
+            <div id="modal-preview" style="background:#000; padding:15px; border:1px dashed var(--cyan); margin-bottom:20px; color:var(--text-muted); font-size:0.85rem;">Passe o mouse sobre um item para ver detalhes.</div>
             <div id="modal-list"></div>
         </div>
     </div>
 
-    <!-- MODAL REGRAS -->
+    <!-- MODAL REGRAS (MD) -->
     <div id="modal-rules" class="modal-overlay">
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <h1 style="margin:0; border:none;">ARQUIVO MESTRE - REGRAS</h1>
                 <button class="btn btn-red btn-small" onclick="document.getElementById('modal-rules').style.display='none'">FECHAR</button>
             </div>
-            <div id="rules-content">Carregando protocolo de regras...</div>
+            <div id="rules-content" style="background:#050505; padding:20px; border:1px solid #333;">Carregando regras.md...</div>
         </div>
     </div>
 
@@ -128,11 +134,11 @@
     <div id="view-hub" class="view">
         <div style="text-align:center; margin: 60px 0;">
             <h1 style="font-size: 4rem; border:none; text-shadow: 0 0 20px rgba(0,240,255,0.5);">CHROMOASIS</h1>
-            <p style="color:var(--gold); font-family:var(--font-mono); letter-spacing: 5px;">TERMINAL DE OPERAÇÕES v13.0</p>
+            <p style="color:var(--gold); font-family:var(--font-mono); letter-spacing: 5px;">TERMINAL DE OPERAÇÕES v13.5</p>
         </div>
         <div style="display:flex; justify-content:center; gap:20px; margin-bottom: 50px;">
             <button class="btn" onclick="startWizard()">+ NOVO OPERADOR</button>
-            <button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="openRules()">📘 REGRAS DO SISTEMA</button>
+            <button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="openRulesModal()">📘 REGRAS DO SISTEMA</button>
             <button class="btn btn-red" onclick="wipeData()">⚠️ FORMAT DB</button>
         </div>
         <div id="roster-grid"></div>
@@ -142,32 +148,36 @@
     <div id="view-wizard" class="view">
         <div class="panel" style="max-width: 1000px; margin: 0 auto;">
             <div class="wiz-progress">
-                <div class="prog-node active" id="p1">PERFIL</div>
-                <div class="prog-node" id="p2">ORIGEM</div>
-                <div class="prog-node" id="p3">ESSÊNCIAS</div>
-                <div class="prog-node" id="p4">TREINO</div>
-                <div class="prog-node" id="p5">HISTÓRICO</div>
+                <div class="prog-node active" id="p1">1. PERFIL</div>
+                <div class="prog-node" id="p2">2. ORIGEM</div>
+                <div class="prog-node" id="p3">3. ESSÊNCIAS</div>
+                <div class="prog-node" id="p4">4. DOMÍNIOS</div>
+                <div class="prog-node" id="p5">5. HISTÓRICO</div>
             </div>
 
+            <!-- WIZARD STEP 1: PERFIL -->
             <div class="wiz-step active" id="step1">
-                <h2>IDENTIFICAÇÃO</h2>
+                <h2>IDENTIFICAÇÃO OPERACIONAL</h2>
                 <div class="panel">
                     <label>NOME E CALLSIGN</label>
-                    <input type="text" id="w_name" placeholder="Ex: Alex 'Viper' Vance">
-                    <label style="margin-top:20px; display:block;">ARQUÉTIPO TÁTICO</label>
+                    <input type="text" id="w_name" placeholder="Ex: Alaric 'Mago' Wood" style="margin-bottom:20px;">
+                    
+                    <label>ARQUÉTIPO TÁTICO</label>
                     <select id="w_arch" onchange="updateWizArchDesc()"></select>
                     <div id="w_arch_desc" style="margin-top:10px; color:var(--cyan); font-size:0.85rem; padding:10px; background:rgba(0,0,0,0.5); border-left:2px solid var(--cyan);"></div>
                 </div>
                 <div style="text-align:right;"><button class="btn" onclick="nextWizStep(2)">PROSSEGUIR >></button></div>
             </div>
 
+            <!-- WIZARD STEP 2: ORIGEM -->
             <div class="wiz-step" id="step2">
                 <h2>ORIGEM BIOLÓGICA</h2>
                 <div class="panel">
                     <select id="w_origin_sel" onchange="renderWizOriginInfo()"></select>
-                    <div id="w_origin_traits" style="margin-top:15px; font-size:0.9rem; color:var(--text-main); border-left: 2px solid var(--gold); padding-left: 10px;"></div>
+                    <div id="w_origin_traits" style="margin-top:15px; font-size:0.9rem; color:var(--text-main); line-height:1.6; background:#000; padding:15px; border:1px solid #333;"></div>
+                    
                     <div id="w_racial_choices_box" style="display:none; margin-top:20px;">
-                        <label style="color:var(--gold)">VANTAGEM DE FILHO DO ÉTER:</label>
+                        <label style="color:var(--gold); border-bottom:1px solid var(--gold); margin-bottom:10px; padding-bottom:5px; display:block;">VANTAGEM EXTRA (FILHOS DO ÉTER):</label>
                         <div id="w_racial_choices_list"></div>
                     </div>
                 </div>
@@ -177,10 +187,11 @@
                 </div>
             </div>
 
+            <!-- WIZARD STEP 3: ESSÊNCIAS -->
             <div class="wiz-step" id="step3">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <h2>DISTRIBUIÇÃO DE ESSÊNCIAS</h2>
-                    <div style="font-family:var(--font-mono);">PONTOS: <span id="w_pts_left" style="color:var(--green); font-size:1.8rem;">0</span></div>
+                    <div style="font-family:var(--font-mono);">PONTOS RESTANTES: <span id="w_pts_left" style="color:var(--green); font-size:1.8rem; font-weight:bold;">0</span></div>
                 </div>
                 <div class="wiz-attr-grid" id="w_attr_container"></div>
                 <div style="display:flex; justify-content:space-between; margin-top:30px;">
@@ -189,26 +200,33 @@
                 </div>
             </div>
 
+            <!-- WIZARD STEP 4: DOMÍNIOS -->
             <div class="wiz-step" id="step4">
                 <h2>DOMÍNIOS INICIAIS (MAX 2)</h2>
-                <div id="w_dom_list" class="panel" style="max-height:400px; overflow-y:auto;"></div>
-                <div style="display:flex; justify-content:space-between; margin-top:30px;">
+                <div class="panel" style="padding:0;">
+                    <div id="w_dom_list" style="max-height:400px; overflow-y:auto; padding:10px;"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:20px;">
                     <button class="btn btn-red" onclick="nextWizStep(3)"><< VOLTAR</button>
                     <button class="btn" onclick="nextWizStep(5)">PROSSEGUIR >></button>
                 </div>
             </div>
 
+            <!-- WIZARD STEP 5: HISTÓRICO -->
             <div class="wiz-step" id="step5">
-                <h2>HISTÓRICO OPERACIONAL</h2>
+                <h2>VANTAGENS DE HISTÓRICO</h2>
                 <div class="panel">
+                    <label>SELECIONE UM HISTÓRICO PARA VER AS VANTAGENS</label>
                     <select id="w_hist_sel" onchange="renderWizHistAdvs()" style="width:50%; margin-bottom:15px;"></select>
-                    <div id="w_hist_pool" style="max-height:200px; overflow-y:auto;"></div>
+                    <div id="w_hist_pool" style="max-height:250px; overflow-y:auto; border:1px solid #333; padding:5px; background:#000;"></div>
                 </div>
-                <h3 style="color:var(--gold); font-size:0.8rem; margin-bottom:10px;">SELECIONADOS:</h3>
+                
+                <h3 style="color:var(--gold); font-size:0.8rem; margin-bottom:10px;">VANTAGENS SELECIONADAS (MÁX 3):</h3>
                 <div id="w_selected_advs" style="min-height:80px; border:1px dashed var(--border-dim); padding:10px; background:#000; margin-bottom: 20px;"></div>
+                
                 <div style="display:flex; justify-content:space-between;">
                     <button class="btn btn-red" onclick="nextWizStep(4)"><< VOLTAR</button>
-                    <button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeCharacter()">FINALIZAR OPERADOR</button>
+                    <button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR OPERADOR</button>
                 </div>
             </div>
         </div>
@@ -218,100 +236,132 @@
     <div id="view-sheet" class="view">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
             <div>
-                <h1 id="s_name" style="border:none; font-size:2.2rem;">CALLSIGN</h1>
+                <h1 id="s_name" style="border:none; font-size:2.5rem;">CALLSIGN</h1>
                 <div style="color:var(--cyan); font-family:var(--font-mono); font-size:0.85rem;"><span id="s_origin"></span> // <span id="s_arch"></span></div>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
-                <span id="save_ping" style="color:var(--green); font-size:0.7rem; opacity:0;">SYNCHRONIZED</span>
-                <button class="btn btn-small" onclick="backToHub()">FECHAR</button>
+                <span id="save_ping" style="color:var(--green); font-size:0.7rem; opacity:0; font-family:var(--font-mono);">SINCRONIZADO</span>
+                <button class="btn btn-small" onclick="backToHub()">FECHAR TERMINAL</button>
             </div>
         </div>
 
         <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchTab('t_combat', event)">1. COMBATE</button>
-            <button class="tab-btn" onclick="switchTab('t_skills', event)">2. PERÍCIAS</button>
-            <button class="tab-btn" onclick="switchTab('t_gear', event)">3. ARSENAL & CROMO</button>
-            <button class="tab-btn" onclick="switchTab('t_persona', event)">4. IDENTIDADE</button>
+            <button class="tab-btn active" onclick="switchTab('t_status', event)">1. STATUS & PERÍCIAS</button>
+            <button class="tab-btn" onclick="switchTab('t_combat', event)">2. ARSENAL (SIC)</button>
+            <button class="tab-btn" onclick="switchTab('t_cyber', event)">3. CROMO</button>
+            <button class="tab-btn" onclick="switchTab('t_persona', event)">4. PERSONA</button>
         </div>
 
-        <!-- TAB 1: COMBATE -->
-        <div id="t_combat" class="tab-content active">
+        <!-- TAB 1: STATUS & PERICIAS (Misto) -->
+        <div id="t_status" class="tab-content active">
             <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:20px;">
                 <div>
-                    <h2>SINAIS VITAIS</h2>
-                    <div class="vitals-row" style="border-color:var(--cyan);">
-                        <label style="color:var(--cyan)">ESCUDO ETÉREO (PE)</label>
-                        <div style="display:flex; align-items:center;">
-                            <button class="btn btn-small" onclick="modStat('shield',-1)">-</button>
-                            <span class="vitals-val" style="color:var(--cyan)"><span id="s_shield_cur">0</span> / <input type="number" id="s_shield_max" style="width:50px; border:none; color:var(--cyan); background:transparent; font-size:1.5rem; text-align:center;" onchange="autoSave()"></span>
-                            <button class="btn btn-small" onclick="modStat('shield',1)">+</button>
-                        </div>
+                    <div class="section-box" style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px;">
+                        <div><label>Nível de Fama (NF)</label><input type="number" id="s_nf" onchange="autoSave()"></div>
+                        <div><label>Créditos (¢)</label><input type="number" id="s_cred" onchange="autoSave()"></div>
+                        <div><label>Pontos de Éter</label><input type="number" id="s_eter" onchange="autoSave()"></div>
+                        <div><label>XP Atual</label><input type="number" id="s_xp" onchange="autoSave()"></div>
                     </div>
-                    <div class="vitals-row" style="border-color:var(--accent-gray);">
-                        <label style="color:var(--accent-gray)">ARMADURA (ABSORÇÃO)</label>
-                        <div style="text-align:right;">
-                            <select id="s_arm_state" style="width:120px;" onchange="autoSave()"><option>Normal</option><option>Danificada</option><option>Quebrada</option></select>
-                            <div style="margin-top:5px;">EFETIVA: <strong id="s_eff_abs" style="font-size:1.5rem;">0</strong></div>
-                        </div>
-                    </div>
-                    <div class="vitals-row" style="border-color:var(--green);">
-                        <label style="color:var(--green)">PR (RESISTÊNCIA)</label>
-                        <div style="display:flex; align-items:center;">
-                            <button class="btn btn-small" onclick="modStat('hp',-1)">-</button>
-                            <span class="vitals-val" style="color:var(--green)"><span id="s_hp_cur">0</span> / <span id="s_hp_max">0</span></span>
-                            <button class="btn btn-small" onclick="modStat('hp',1)">+</button>
-                        </div>
-                    </div>
-                    <div class="vitals-row" style="border-color:var(--gold);">
-                        <label style="color:var(--gold)">SOBRECARGA (SE)</label>
-                        <div style="display:flex; flex-direction:column; align-items:center;">
-                            <div style="display:flex; align-items:center;">
-                                <button class="btn btn-small" onclick="modStat('se',-1)">-</button>
-                                <span class="vitals-val" style="color:var(--gold)"><span id="s_se_cur">0</span> / <span id="s_se_max">0</span></span>
-                                <button class="btn btn-small" onclick="modStat('se',1)">+</button>
-                            </div>
-                            <div id="se_alert" style="font-size:0.65rem; font-weight:bold; margin-top:5px; text-transform:uppercase;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h2>S.I.C. ARSENAL</h2>
-                    <div class="panel" style="border-left: 4px solid var(--red);">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><label>PRIMÁRIA</label><button class="btn btn-small" onclick="openWeaponBuilder('p')">MONTAR</button></div>
-                        <div id="s_wpn_p"></div>
-                    </div>
-                    <div class="panel" style="border-left: 4px solid var(--red);">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><label>SECUNDÁRIA</label><button class="btn btn-small" onclick="openWeaponBuilder('s')">MONTAR</button></div>
-                        <div id="s_wpn_s"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 2: SKILLS -->
-        <div id="t_skills" class="tab-content">
-            <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:20px;">
-                <div class="section-box" id="s_ess_grid"></div>
-                <div>
+                    <div class="section-box" id="s_ess_grid"></div>
                     <div class="section-box">
-                        <div style="display:flex; justify-content:space-between;"><h2>DOMÍNIOS</h2><button class="btn btn-small" onclick="addCustomDomain()">+ NOVO</button></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <h2>DOMÍNIOS (TREINO)</h2><button class="btn btn-small" onclick="addCustomDomain()">+ NOVO</button>
+                        </div>
                         <div id="s_dom_list"></div>
                     </div>
                 </div>
+
+                <div>
+                    <div class="section-box" style="border-color:var(--cyan);">
+                        <h3>SINAIS VITAIS</h3>
+                        
+                        <!-- 1. ESCUDO -->
+                        <div class="vitals-row" style="border-color:var(--cyan);">
+                            <label style="color:var(--cyan)">ESCUDO ETÉREO (PE)</label>
+                            <div style="display:flex; align-items:center;">
+                                <button class="overload-btn" onclick="modStat('shield',-1)">-</button>
+                                <span class="vitals-val" style="color:var(--cyan)"><span id="s_shield_cur">0</span> / <input type="number" id="s_shield_max" style="width:50px; border:none; color:var(--cyan); background:transparent; font-size:1.5rem; text-align:center;" onchange="autoSave()"></span>
+                                <button class="overload-btn" onclick="modStat('shield',1)">+</button>
+                            </div>
+                        </div>
+
+                        <!-- 2. ARMADURA -->
+                        <div class="vitals-row" style="border-color:var(--accent-gray);">
+                            <label style="color:var(--accent-gray)">ARMADURA (ABSORÇÃO)</label>
+                            <div style="text-align:right;">
+                                <select id="s_arm_state" style="width:120px;" onchange="autoSave()">
+                                    <option value="Normal">Normal</option>
+                                    <option value="Danificada">Danificada</option>
+                                    <option value="Quebrada">Quebrada</option>
+                                </select>
+                                <div style="margin-top:5px; font-family:var(--font-mono);">EFETIVA: <strong id="s_eff_abs" style="font-size:1.5rem;">0</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- 3. PR (CARNE) -->
+                        <div class="vitals-row" style="border-color:var(--green);">
+                            <label style="color:var(--green)">PR (RESISTÊNCIA)</label>
+                            <div style="display:flex; align-items:center;">
+                                <button class="overload-btn" onclick="modStat('hp',-1)">-</button>
+                                <span class="vitals-val" style="color:var(--green)"><span id="s_hp_cur">0</span> / <span id="s_hp_max">0</span></span>
+                                <button class="overload-btn" onclick="modStat('hp',1)">+</button>
+                            </div>
+                        </div>
+
+                        <!-- 4. SOBRECARGA -->
+                        <div class="vitals-row" style="border-color:var(--gold); display:block; padding-bottom:10px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <label style="color:var(--gold); margin:0;">SOBRECARGA (SE)</label>
+                                <div style="display:flex; align-items:center;">
+                                    <button class="overload-btn" onclick="modStat('se',-1)">-</button>
+                                    <span class="vitals-val" style="color:var(--gold)"><span id="s_se_cur">0</span> / <span id="s_se_max">0</span></span>
+                                    <button class="overload-btn" onclick="modStat('se',1)">+</button>
+                                </div>
+                            </div>
+                            <div id="se_alert" style="color:var(--gold); font-size:0.75rem; font-weight:bold; margin-top:10px; text-align:center; background:#1a1a1a; padding:5px; display:none;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- TAB 3: GEAR -->
-        <div id="t_gear" class="tab-content">
-            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
-                <div class="panel"><h2>TÁTICO</h2><div id="s_tac_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('tactical_weapons', 'inv_tac')">+ ADD</button></div>
-                <div class="panel"><h2>UTILIDADE</h2><div id="s_uti_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('utility_items', 'inv_uti')">+ ADD</button></div>
-                <div class="panel"><h2>GERAL</h2><div id="s_gen_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('general_load_items', 'inv_gen')">+ ADD</button></div>
+        <!-- TAB 2: ARSENAL -->
+        <div id="t_combat" class="tab-content">
+            <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:20px;">
+                <div>
+                    <div class="section-box">
+                        <h2>S.I.C. ARMAMENTO ATIVO</h2>
+                        <div class="panel" style="border-left: 4px solid var(--red); background:#080808;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><label style="color:var(--red)">ARMA PRIMÁRIA</label><button class="btn btn-small" onclick="openWeaponBuilder('p')">MONTAR / ALTERAR</button></div>
+                            <div id="s_wpn_p"></div>
+                        </div>
+                        <div class="panel" style="border-left: 4px solid var(--red); background:#080808;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><label style="color:var(--red)">ARMA SECUNDÁRIA</label><button class="btn btn-small" onclick="openWeaponBuilder('s')">MONTAR / ALTERAR</button></div>
+                            <div id="s_wpn_s"></div>
+                        </div>
+                    </div>
+                    <div class="section-box">
+                        <h2>CARGA GERAL (MOCHILA)</h2>
+                        <div id="s_gen_list"></div>
+                        <button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('general_load_items', 'inv_gen')">+ ADICIONAR ITEM</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="section-box"><h2>ENCAIXE TÁTICO (2)</h2><div id="s_tac_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('tactical_items', 'inv_tac')">+ ADD TÁTICO</button></div>
+                    <div class="section-box"><h2>UTILIDADE (4)</h2><div id="s_uti_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('utility_items', 'inv_uti')">+ ADD UTILIDADE</button></div>
+                    <div class="section-box" style="border-color:var(--purple)"><h2>FOCALIZADORES RÚNICOS</h2><div id="s_runes_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('runic_eq', 'runic')">+ SINTONIZAR RUNA</button></div>
+                </div>
             </div>
-            <div class="panel" style="border-color:var(--purple);">
-                <h2>CROMO (CIBERNÉTICOS)</h2>
-                <div id="s_cyber_list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
-                <button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('cyber_units', 'cyber')">+ INSTALAR</button>
+        </div>
+
+        <!-- TAB 3: CROMO -->
+        <div id="t_cyber" class="tab-content">
+            <div class="section-box" style="border-color:var(--purple);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h2 style="color:var(--purple); margin:0; border:none;">CIBERNÉTICOS & INTERFACES</h2>
+                    <button class="btn btn-small" onclick="openSelector('cyber_units', 'cyber')">+ INSTALAR CROMO</button>
+                </div>
+                <div id="s_cyber_list" style="display:grid; grid-template-columns:1fr 1fr; gap:15px;"></div>
             </div>
         </div>
 
@@ -319,71 +369,88 @@
         <div id="t_persona" class="tab-content">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
                 <div class="panel">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
-                        <div><label>FAMA (NF)</label><input type="number" id="s_nf" onchange="autoSave()"></div>
-                        <div><label>CRÉDITOS</label><input type="number" id="s_cred" onchange="autoSave()"></div>
-                    </div>
-                    <h2>VANTAGENS</h2>
+                    <h2>VANTAGENS & HISTÓRICO</h2>
                     <div id="s_adv_list"></div>
-                    <button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openSelector('masteries', 'adv')">+ ADD MAESTRIA</button>
+                    <button class="btn btn-small" style="width:100%; margin-top:10px; margin-bottom:20px;" onclick="openSelector('masteries', 'adv')">+ ADD MAESTRIA / TALENTO</button>
+                    
+                    <label>TRAÇO NEGATIVO</label>
+                    <textarea id="s_flaw" rows="4" onchange="autoSave()"></textarea>
                 </div>
                 <div class="panel">
-                    <textarea id="s_notes" rows="15" placeholder="Logs da Missão..." onchange="autoSave()"></textarea>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"><h2>CONTATOS</h2><button class="btn btn-small" onclick="addContact()">+ NOVO CONTATO</button></div>
+                    <div id="s_con_list"></div>
+
+                    <h2 style="margin-top:30px;">LOG DE DADOS DA MISSÃO</h2>
+                    <textarea id="s_notes" rows="8" onchange="autoSave()"></textarea>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- LOGIC -->
     <script>
         let db = null;
-        let roster = [];
+        let roster =[];
         let activeIdx = -1;
         let char = null;
-        const attrKeys = ['esf','agi','ard','cor','int','per','lab','von','bal','con'];
-        const attrNames = { esf:"Esforço", agi:"Agilidade", ard:"Ardil", cor:"Corpo", int:"Intelecto", per:"Percepção", lab:"Lábia", von:"Vontade", bal:"Balística", con:"Confronto" };
+        
+        const attrMap = { esf: "Esforço", agi: "Agilidade", ard: "Ardil", cor: "Corpo", int: "Intelecto", per: "Percepção", lab: "Lábia", von: "Vontade", bal: "Balística", con: "Confronto" };
+        const attrKeys = Object.keys(attrMap);
 
         let wizAdvs = [];
-        let wizDoms = [];
+        let wizDoms =[];
 
+        // --- BOOT ---
         window.onload = async () => {
             try {
                 const res = await fetch('database.json');
+                if(!res.ok) throw new Error("File not found");
                 db = await res.json();
-                roster = JSON.parse(localStorage.getItem('co_roster_v13') || '[]');
+                roster = JSON.parse(localStorage.getItem('co_roster_v135') || '[]');
                 document.getElementById('loader').style.display = 'none';
                 renderHub();
             } catch(e) {
-                document.getElementById('loader-msg').innerHTML = `<span style="color:var(--red)">ERRO: database.json não encontrado.</span>`;
+                document.getElementById('loader-msg').innerHTML = `<span style="color:var(--red)">ERRO CRÍTICO: Não foi possível ler database.json.<br>Certifique-se de que os dois arquivos estão no mesmo servidor/pasta.</span>`;
             }
         };
 
+        // --- HUB ---
         function renderHub() {
             const grid = document.getElementById('roster-grid');
             grid.innerHTML = roster.map((c, i) => `
             <div class="roster-card" onclick="openChar(${i})">
-                <div style="flex-grow:1"><h3>${c.name}</h3><small style="color:var(--cyan)">${c.origin} // ${c.arch}</small></div>
+                <div style="flex-grow:1">
+                    <h3 style="border:none; margin:0;">${c.name}</h3>
+                    <div style="font-size:0.8rem; color:var(--cyan); margin-top:5px; font-family:var(--font-mono);">${c.origin.toUpperCase()} // ${c.arch.toUpperCase()}</div>
+                </div>
                 <button class="btn btn-red btn-small" onclick="deleteChar(${i}, event)">X</button>
             </div>`).join('');
             switchView('view-hub');
         }
 
-        function deleteChar(i, e) { e.stopPropagation(); if(confirm("Remover Operador?")) { roster.splice(i,1); saveRoster(); renderHub(); } }
+        window.deleteChar = function(i, e) {
+            e.stopPropagation();
+            if(confirm("Expulsar Operador do Registro?")) { roster.splice(i,1); saveRoster(); renderHub(); }
+        }
 
         // --- WIZARD ---
-        function startWizard() {
+        window.startWizard = function() {
             if(!db) return;
-            wizAdvs = []; wizDoms = [];
+            wizAdvs = []; wizDoms =[];
             document.getElementById('w_name').value = '';
+            
+            // Populate selects
             document.getElementById('w_arch').innerHTML = Object.keys(db.archetypes).map(k => `<option value="${k}">${k}</option>`).join('');
             document.getElementById('w_origin_sel').innerHTML = Object.keys(db.origins).map(k => `<option value="${k}">${db.origins[k].name}</option>`).join('');
             document.getElementById('w_hist_sel').innerHTML = '<option value="">-- Selecionar Histórico --</option>' + db.histories.map((h,i) => `<option value="${i}">${h.name}</option>`).join('');
+            
             updateWizArchDesc();
             renderWizOriginInfo();
             nextWizStep(1);
             switchView('view-wizard');
         }
 
-        function nextWizStep(n) {
+        window.nextWizStep = function(n) {
             document.querySelectorAll('.wiz-step').forEach(e => e.classList.remove('active'));
             document.querySelectorAll('.prog-node').forEach(e => e.classList.remove('active'));
             document.getElementById('step'+n).classList.add('active');
@@ -392,126 +459,246 @@
             if(n === 4) renderWizDomains();
         }
 
-        function renderWizAttributes() {
+        window.updateWizArchDesc = function() { document.getElementById('w_arch_desc').innerText = db.archetypes[document.getElementById('w_arch').value]; }
+
+        window.renderWizOriginInfo = function() {
+            const k = document.getElementById('w_origin_sel').value;
+            const o = db.origins[k];
+            
+            // Format traits with bullets
+            let t = o.traits;
+            t = t.replace(/(Constituição Titânica:|Mãos Pesadas:|Miragem:|Estigma Visual:|Sintonização Estável:|Inércia Física:|Versatilidade:)/g, "<br>• <strong style='color:var(--cyan)'>$1</strong>");
+            if(t.startsWith("<br>")) t = t.substring(4);
+            document.getElementById('w_origin_traits').innerHTML = t;
+
+            const box = document.getElementById('w_racial_choices_box');
+            const list = document.getElementById('w_racial_choices_list');
+            list.innerHTML = '';
+            
+            if(k !== 'humano' && o.racial_choices) {
+                box.style.display = 'block';
+                o.racial_choices.forEach((c, i) => {
+                    list.innerHTML += `<div class="selectable-item">
+                        <div class="item-desc"><strong>${c.name}</strong><br><small style="color:var(--text-muted)">${c.effect}</small></div>
+                        <input type="radio" name="r_pick" value="${i}" ${i===0?'checked':''}>
+                    </div>`;
+                });
+            } else { box.style.display = 'none'; }
+            
+            if(document.getElementById('step3').classList.contains('active')) renderWizAttributes();
+        }
+
+        window.renderWizAttributes = function() {
             const ok = document.getElementById('w_origin_sel').value;
             const base = db.origins[ok];
             document.getElementById('w_attr_container').innerHTML = attrKeys.map(k => `
             <div class="wiz-attr-box">
-                <label style="color:var(--cyan); font-weight:bold;">${attrNames[k].toUpperCase()}</label>
-                <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px;">
-                    <button class="btn btn-red btn-small" onclick="modWizAttr('${k}', -5)">-</button>
+                <label style="color:var(--cyan); font-weight:bold;">${attrMap[k].toUpperCase()}</label>
+                <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin-top:10px;">
+                    <button class="btn btn-red btn-small" onclick="modWizAttr('${k}', -5)">-5</button>
                     <strong id="wa_${k}">${base[k]}%</strong>
-                    <button class="btn btn-small" onclick="modWizAttr('${k}', 5)">+</button>
+                    <button class="btn btn-small" onclick="modWizAttr('${k}', 5)">+5</button>
                 </div>
-                <div style="color:var(--text-muted); font-size:0.75rem; margin-top:5px;">Bônus: +${Math.floor(base[k]/10)}</div>
+                <div style="color:var(--text-muted); font-size:0.8rem; margin-top:8px;">Bônus Tático: <span id="wab_${k}" style="color:var(--gold);">+${Math.floor(base[k]/10)}</span></div>
             </div>`).join('');
             calcWizPoints();
         }
 
-        function modWizAttr(k, a) {
+        window.modWizAttr = function(key, amt) {
             const ok = document.getElementById('w_origin_sel').value;
-            const el = document.getElementById('wa_'+k);
-            let val = parseInt(el.innerText) + a;
-            if(val < db.origins[ok][k]) return;
+            const el = document.getElementById('wa_'+key);
+            let currentVal = parseInt(el.innerText);
+            let newVal = currentVal + amt;
             
-            let cap = (ok==='jotun' && (k==='esf'||k==='cor')) || (ok==='oni' && (k==='agi'||k==='per')) || (ok==='dokka' && (k==='int'||k==='von')) ? 60 : 50;
-            if(val > cap) return;
+            if(newVal < db.origins[ok][key]) return; // Trava base
+            
+            let cap = 50;
+            if((ok==='jotun' && (key==='esf'||key==='cor')) || (ok==='oni' && (key==='agi'||key==='per')) || (ok==='dokka' && (key==='int'||key==='von'))) cap = 60;
+            if(newVal > cap) return; // Trava teto
 
-            let spent = 0;
-            attrKeys.forEach(key => spent += (parseInt(document.getElementById('wa_'+key).innerText) - db.origins[ok][key]));
-            if(a > 0 && spent + a > db.origins[ok].pts) return alert("Pontos insuficientes.");
+            // Verifica se tem pontos sobrando antes de adicionar
+            if(amt > 0) {
+                let spent = 0;
+                attrKeys.forEach(k => {
+                    let v = (k === key) ? newVal : parseInt(document.getElementById('wa_'+k).innerText);
+                    spent += (v - db.origins[ok][k]);
+                });
+                if(spent > db.origins[ok].pts) return alert("Pontos insuficientes para esta melhoria.");
+            }
 
-            el.innerText = val + "%";
+            el.innerText = newVal + "%";
+            document.getElementById('wab_'+key).innerText = "+" + Math.floor(newVal/10);
             calcWizPoints();
         }
 
-        function calcWizPoints() {
+        window.calcWizPoints = function() {
             const ok = document.getElementById('w_origin_sel').value;
+            const o = db.origins[ok];
             let spent = 0;
-            attrKeys.forEach(k => spent += (parseInt(document.getElementById('wa_'+k).innerText) - db.origins[ok][k]));
-            const rem = db.origins[ok].pts - spent;
+            attrKeys.forEach(k => spent += (parseInt(document.getElementById('wa_'+k).innerText) - o[k]));
+            const rem = o.pts - spent;
             document.getElementById('w_pts_left').innerText = rem;
+            document.getElementById('w_pts_left').style.color = rem < 0 ? "var(--red)" : "var(--green)";
         }
 
-        function renderWizDomains() {
-            document.getElementById('w_dom_list').innerHTML = db.domains.map(d => `
-            <div class="selectable-item">
-                <div class="item-desc"><strong>${d.name}</strong><br><small>${d.desc}</small></div>
-                <button class="btn btn-small ${wizDoms.includes(d.name)?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${wizDoms.includes(d.name)?'REMOVER':'SELECIONAR'}</button>
-            </div>`).join('');
+        window.renderWizDomains = function() {
+            const list = document.getElementById('w_dom_list');
+            if(!db.domains) return;
+            list.innerHTML = db.domains.map(d => {
+                const active = wizDoms.includes(d.name);
+                return `
+                <div class="selectable-item" style="${active ? 'border-color:var(--cyan); background:#111;' : ''}">
+                    <div class="item-desc"><strong style="color:${active?'var(--cyan)':'#fff'}">${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div>
+                    <button class="btn btn-small ${active?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${active?'REMOVER':'SELECIONAR'}</button>
+                </div>`;
+            }).join('');
         }
 
-        function toggleWizDom(n) {
-            if(wizDoms.includes(n)) wizDoms = wizDoms.filter(x => x!==n);
-            else if(wizDoms.length < 2) wizDoms.push(n);
+        window.toggleWizDom = function(n) {
+            if(wizDoms.includes(n)) { wizDoms = wizDoms.filter(x => x!==n); } 
+            else { if(wizDoms.length >= 2) return alert("Máximo de 2 domínios iniciais."); wizDoms.push(n); }
             renderWizDomains();
         }
 
-        function renderWizHistAdvs() {
+        window.renderWizHistAdvs = function() {
             const hIdx = document.getElementById('w_hist_sel').value;
-            const pool = document.getElementById('w_hist_pool'); pool.innerHTML = '';
+            const pool = document.getElementById('w_hist_pool');
+            pool.innerHTML = '';
             if(hIdx==="") return;
+            
             db.histories[hIdx].advantages.forEach((a, i) => {
-                pool.innerHTML += `<div class="wiz-hist-item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;">
-                <div style="text-align:left;"><strong>${a.name}</strong><br><small>${a.effect}</small></div>
-                <button class="btn btn-small" onclick="addWizAdv(${hIdx}, ${i})">ADD</button></div>`;
+                const isAdded = wizSelectedAdvs.find(x => x.name === a.name);
+                pool.innerHTML += `
+                <div class="selectable-item" style="${isAdded ? 'opacity:0.4' : ''}">
+                    <div class="item-desc"><strong>${a.name}</strong><br><small style="color:var(--text-muted)">${a.effect}</small></div>
+                    <button class="btn btn-small" ${isAdded?'disabled':''} onclick="addWizAdv(${hIdx}, ${i})">ADD</button>
+                </div>`;
             });
         }
 
-        function addWizAdv(hIdx, aIdx) {
-            if(wizSelectedAdvs.length >= 3) return;
-            const a = db.histories[hIdx].advantages[aIdx];
-            wizSelectedAdvs.push({h: db.histories[hIdx].name, name: a.name, effect: a.effect});
+        window.addWizAdv = function(hIdx, aIdx) {
+            const hist = db.histories[hIdx];
+            const adv = hist.advantages[aIdx];
+            
+            const currentHists =[...new Set(wizSelectedAdvs.map(x => x.h))];
+            
+            if(wizSelectedAdvs.length >= 3) return alert("Limite máximo de 3 vantagens atingido.");
+            
+            if(currentHists.length === 1 && currentHists[0] !== hist.name && wizSelectedAdvs.length > 1) {
+                return alert("Ao misturar históricos, o limite é de 1 vantagem de cada (Máximo de 2 Vantagens no total).");
+            }
+            
+            if(currentHists.length === 2 && !currentHists.includes(hist.name)) {
+                return alert("Não é possível misturar mais de 2 históricos diferentes.");
+            }
+
+            wizSelectedAdvs.push({h: hist.name, name: adv.name, effect: adv.effect});
+            renderWizHistAdvs();
             renderFinalWizAdvs();
         }
 
-        function renderFinalWizAdvs() {
-            document.getElementById('w_selected_advs').innerHTML = wizSelectedAdvs.map((a, i) => `
-            <div style="display:flex; justify-content:space-between; background:#111; padding:5px; margin-bottom:5px; font-size:0.8rem;">
-                <span><strong>${a.name}</strong> [${a.h}]</span>
-                <button style="color:var(--red); border:none; background:none; cursor:pointer;" onclick="wizSelectedAdvs.splice(${i},1); renderFinalWizAdvs();">X</button>
+        window.renderFinalWizAdvs = function() {
+            const c = document.getElementById('w_selected_advs');
+            c.innerHTML = wizSelectedAdvs.map((a, i) => `
+            <div style="display:flex; justify-content:space-between; background:#111; padding:10px; margin-bottom:5px; border-left:2px solid var(--gold); font-size:0.85rem;">
+                <span><strong style="color:var(--gold)">${a.name}</strong> <span style="color:#888;">[${a.h}]</span></span>
+                <button class="btn-red" style="background:transparent; border:none; cursor:pointer; font-weight:bold;" onclick="wizSelectedAdvs.splice(${i},1); renderFinalWizAdvs(); renderWizHistAdvs();">REMOVER</button>
             </div>`).join('');
         }
 
-        function finalizeCharacter() {
+        window.finalizeOperador = function() {
+            if(parseInt(document.getElementById('w_pts_left').innerText) < 0) return alert("Ajuste os pontos de atributo (não pode ser negativo).");
+            
             const ok = document.getElementById('w_origin_sel').value;
+            const o = db.origins[ok];
+            
             const n = {
                 name: document.getElementById('w_name').value || "Novo Operador",
-                arch: document.getElementById('w_arch').value, origin: db.origins[ok].name, origin_k: ok,
+                arch: document.getElementById('w_arch').value,
+                origin: o.name, origin_k: ok,
                 nf: 0, credits: 20, eter: 1, xp: 0, hp_cur: 100, shield_cur: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_broken: 0,
                 ess: {}, dom: wizDoms.map(d => ({name: d, val: "Nível I"})), adv: [...wizSelectedAdvs],
-                cyber: [], inv_tac: [], inv_uti: [], inv_gen: [], runic: [], contacts: [], flaw: "", notes: "", wpn_p: null, wpn_s: null
+                cyber: [], inv_tac: [], inv_uti: [], inv_gen: [], runic:[], contacts:[], flaw: "", notes: "", wpn_p: null, wpn_s: null
             };
+            
             attrKeys.forEach(k => n.ess[k] = parseInt(document.getElementById('wa_'+k).innerText));
-            roster.push(n); saveRoster(); renderHub();
+            
+            if(ok !== 'humano') {
+                const pickIdx = document.querySelector('input[name="r_pick"]:checked').value;
+                const pick = o.racial_choices[pickIdx];
+                n.adv.push({h: "Vantagem Biológica", name: pick.name, effect: pick.effect});
+            }
+            
+            roster.push(n);
+            saveRoster();
+            activeIdx = roster.length - 1;
+            char = roster[activeIdx];
+            applyCharToSheet();
+            switchView('view-sheet');
         }
 
-        // --- SHEET ---
-        function applyCharToSheet() {
+        // --- SHEET ENGINE ---
+        window.applyCharToSheet = function() {
             document.getElementById('s_name').innerText = char.name.toUpperCase();
             document.getElementById('s_origin').innerText = char.origin.toUpperCase();
-            document.getElementById('s_arch').innerText = char.arch.toUpperCase();
-            document.getElementById('s_hp_cur').innerText = char.hp_cur;
-            document.getElementById('s_shield_cur').innerText = char.shield_cur;
-            document.getElementById('s_se_cur').innerText = char.se_cur;
+            document.getElementById('s_arch').innerText = char.arch.toUpperCase();['nf','cred','eter','xp','hp_cur','shield_cur','se_cur','arm_state','flaw','notes'].forEach(k => {
+                const e = document.getElementById('s_'+k);
+                if(e) { if(e.tagName==='INPUT'||e.tagName==='SELECT'||e.tagName==='TEXTAREA') e.value=char[k]; else e.innerText=char[k]; }
+            });
             
-            document.getElementById('s_ess_grid').innerHTML = '<h2>ESSÊNCIAS</h2><div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px;">' + attrKeys.map(k => `
-                <div class="stat-box">
-                    <label>${attrNames[k].toUpperCase()}</label>
-                    <div class="stat-val">${char.ess[k]}%</div>
-                    <div class="stat-mod">+${Math.floor(char.ess[k]/10)}</div>
-                </div>`).join('') + '</div>';
-            
+            renderSheetEssences();
             renderSheetLists();
             updateCalcs();
         }
 
-        function renderSheetLists() {
+        window.renderSheetEssences = function() {
+            const grid = document.getElementById('s_ess_grid');
+            grid.innerHTML = '<h2>ESSÊNCIAS</h2><div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px;">' + attrKeys.map(k => `
+                <div class="stat-box">
+                    <label>${attrMap[k].toUpperCase()}</label>
+                    <div class="stat-val"><input type="number" value="${char.ess[k]}" style="width:50px; border:none; text-align:center; background:transparent; color:var(--cyan); font-weight:bold; font-size:1.4rem;" onchange="char.ess.${k}=parseInt(this.value); autoSave();">%</div>
+                    <div class="stat-mod">+${Math.floor(char.ess[k]/10)}</div>
+                </div>`).join('') + '</div>';
+        }
+
+        window.updateCalcs = function() {
+            const b = (k) => Math.floor(char.ess[k]/10);
+            
+            // HP
+            const maxHp = 5 + (b('cor')*2) + b('von') + (char.origin_k==='jotun'?5:0);
+            document.getElementById('s_hp_max').innerText = maxHp;
+            
+            // SE
+            let cst = 0; char.cyber.forEach(u => cst += (u.cost || 0));
+            const maxSe = (3 + b('cor') + b('von') + (char.origin_k==='dokka'?2:0)) - cst;
+            document.getElementById('s_se_max').innerText = maxSe;
+            
+            // Alertas de SE
+            const al = document.getElementById('se_alert');
+            if(char.se_cur > maxSe) {
+                al.innerText = "⚠️ COLAPSO TOTAL (INCONSCIENTE)";
+                al.style.color = "var(--red)";
+                al.style.display = "block";
+            } else if(char.se_cur === maxSe) {
+                al.innerText = "⚠️ PENALIDADE ATIVA (-20% TESTES)";
+                al.style.color = "var(--gold)";
+                al.style.display = "block";
+            } else {
+                al.style.display = "none";
+            }
+
+            // Armadura
+            const state = document.getElementById('s_arm_state').value;
+            let eff = (state==="Normal") ? char.arm_base : (state==="Danificada" ? Math.floor(char.arm_base/2) : char.arm_broken);
+            document.getElementById('s_eff_abs').innerText = eff || 0;
+        }
+
+        window.renderSheetLists = function() {
             const r = (id, arr, path) => {
                 document.getElementById(id).innerHTML = arr.map((item, i) => `
                 <div class="selectable-item">
-                    <div class="item-desc"><strong>${item.name || item.n}</strong><br><small>${item.effect || item.d || ''}</small></div>
-                    <button class="btn btn-red btn-small" onclick="char.${path}.splice(${i},1); autoSave(); applyCharToSheet();">X</button>
+                    <div class="item-desc"><strong>${item.name || item.n}</strong><br><small style="color:var(--text-muted)">${item.effect || item.traits || item.d || ''}</small></div>
+                    <button class="btn-red" style="background:transparent; border:none; cursor:pointer; font-weight:bold;" onclick="char.${path}.splice(${i},1); autoSave(); applyCharToSheet();">X</button>
                 </div>`).join('');
             };
             r('s_dom_list', char.dom, 'dom');
@@ -521,39 +708,177 @@
             r('s_gen_list', char.inv_gen, 'inv_gen');
             r('s_cyber_list', char.cyber, 'cyber');
             r('s_adv_list', char.adv, 'adv');
+            
+            // Contatos
+            document.getElementById('s_con_list').innerHTML = char.contacts.map((c, i) => `
+                <div class="selectable-item" style="display:block; border-color:var(--cyan);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <input type="text" value="${c.name}" style="background:transparent; border:none; color:var(--cyan); font-weight:bold; width:80%;" onchange="char.contacts[${i}].name=this.value; autoSave();">
+                        <button class="btn-red" style="background:transparent; border:none; cursor:pointer; font-weight:bold;" onclick="char.contacts.splice(${i},1); autoSave(); applyCharToSheet();">X</button>
+                    </div>
+                    <textarea rows="1" style="font-size:0.8rem;" placeholder="Anotações / Dívidas..." onchange="char.contacts[${i}].d=this.value; autoSave();">${c.d}</textarea>
+                </div>
+            `).join('');
+
+            const w = (s) => {
+                const item = char['wpn_'+s];
+                const div = document.getElementById('s_wpn_'+s);
+                if(!item) { div.innerHTML = "<span style='color:var(--text-muted); font-size:0.85rem;'>Slot Vazio.</span>"; return; }
+                div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong style="color:#fff; font-size:1.1rem;">${item.name}</strong>
+                    <button class="btn btn-red btn-small" onclick="char.wpn_${s}=null; autoSave(); applyCharToSheet();">REMOVER</button>
+                </div>
+                <div style="font-size:0.85rem; margin:10px 0; background:#000; padding:10px; border:1px solid #333;">
+                    DANO: <strong style="color:#fff">+${item.dmg}</strong> | ALCANCE: <strong style="color:#fff">${item.range}</strong><br>
+                    CALOR: <span style="color:var(--gold); font-size:1.2rem; font-weight:bold; margin-left:5px;">${item.h_cur}/${item.h_max}</span>
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px;">${item.traits}</div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-small" onclick="char.wpn_${s}.h_cur++; autoSave(); applyCharToSheet();">+ GERAR CALOR</button>
+                    <button class="btn btn-small" style="border-color:var(--text-muted); color:var(--text-muted);" onclick="char.wpn_${s}.h_cur=0; autoSave(); applyCharToSheet();">RESFRIAR TOTAL</button>
+                </div>`;
+            };
+            w('p'); w('s');
         }
 
-        function updateCalcs() {
-            const b = (k) => Math.floor(char.ess[k]/10);
-            const maxHp = 5 + (b('cor')*2) + b('von') + (char.origin_k==='jotun'?5:0);
-            document.getElementById('s_hp_max').innerText = maxHp;
-            const maxSe = (3 + b('cor') + b('von'));
-            document.getElementById('s_se_max').innerText = maxSe;
-            const al = document.getElementById('s_se_alert');
-            if(char.se_cur > maxSe) { al.innerText="⚠️ COLAPSO TOTAL"; al.style.color="var(--red)"; }
-            else if(char.se_cur === maxSe) { al.innerText="⚠️ PENALIDADE -20%"; al.style.color="var(--gold)"; }
-            else al.innerText = "";
+        // --- DATABASE SELECTORS ---
+        let currentTarget = '';
+        window.openSelector = function(dbKey, path) {
+            currentTarget = path;
+            const list = document.getElementById('modal-list');
+            list.innerHTML = '';
+            
+            let items = db.arsenal[dbKey] || db[dbKey] ||[];
+            items.forEach((item, i) => {
+                const nfLock = (item.nf && char.nf < item.nf);
+                // Safe extraction for preview text
+                const effText = (item.effect || item.traits || item.d || "").replace(/"/g, "'");
+                
+                list.innerHTML += `
+                <div class="selectable-item" style="${nfLock?'opacity:0.3':''}" onmouseover="document.getElementById('modal-preview').innerHTML='${effText}'">
+                    <div class="item-desc">
+                        <strong style="color:var(--cyan)">${item.name || item.n}</strong> 
+                        ${item.nf ? `<span style="color:var(--gold); font-size:0.75rem;">[NF ${item.nf}]</span>` : ''}
+                    </div>
+                    <button class="btn btn-small" ${nfLock?'disabled':''} onclick="addGear('${dbKey}', ${i})">INSERIR</button>
+                </div>`;
+            });
+            openModal("TERMINAL DE REQUISIÇÃO");
         }
 
-        // --- UTILS ---
-        function switchView(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function switchTab(id, e) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); e.target.classList.add('active'); }
-        function modStat(s,a) { char[s+'_cur'] = Math.max(0, char[s+'_cur']+a); applyCharToSheet(); autoSave(); }
-        function autoSave() { if(activeIdx > -1) { roster[activeIdx]=char; saveRoster(); } }
-        function saveRoster() { localStorage.setItem('co_roster_v13', JSON.stringify(roster)); }
-        function wipeData() { if(confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } }
-        function backToHub() { activeIdx=-1; char=null; renderHub(); }
-        function updateWizArchDesc() { document.getElementById('w_arch_desc').innerText = db.archetypes[document.getElementById('w_arch').value]; }
-        function renderWizOriginInfo() { document.getElementById('w_origin_traits').innerText = db.origins[document.getElementById('w_origin_sel').value].traits; }
+        window.addGear = function(key, i) {
+            const item = (db.arsenal[key] || db[key])[i];
+            // Clone item safely
+            char[currentTarget].push(JSON.parse(JSON.stringify(item)));
+            closeModal(); autoSave(); applyCharToSheet();
+        }
 
-        async function openRules() {
+        let wTgt = '';
+        window.openWeaponBuilder = function(slot) {
+            wTgt = slot;
+            let h = `
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+                <div>
+                    <h3 style="color:var(--red); border-bottom:1px solid var(--red); padding-bottom:5px; margin-bottom:15px;">ARMA DE FOGO MODULAR</h3>
+                    <label>FRAME (CARCAÇA)</label>
+                    <select id="m_f" style="margin-bottom:15px;" onchange="previewWpn()">` + db.arsenal.frames.map((f,i)=>`<option value="${i}">${f.name || f.n}</option>`).join('') + `</select>
+                    
+                    <label>NÚCLEO CORPORATIVO</label>
+                    <select id="m_c" onchange="previewWpn()">` + db.arsenal.cores.map((c,i)=>`<option value="${i}">${c.name || c.n}</option>`).join('') + `</select>
+                    
+                    <button class="btn" style="width:100%; margin-top:25px;" onclick="confirmWpn()">CONFIRMAR MONTAGEM</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--accent-gray); border-bottom:1px solid var(--accent-gray); padding-bottom:5px; margin-bottom:15px;">CORPO A CORPO</h3>
+                    <label>LÂMINA / CONTUSÃO</label>
+                    <select id="m_m">` + db.arsenal.melee_primary.concat(db.arsenal.melee_secondary).map((m,i)=>`<option value="${i}">${m.name || m.n}</option>`).join('') + `</select>
+                    
+                    <button class="btn" style="border-color:var(--accent-gray); color:var(--text-main); width:100%; margin-top:25px;" onclick="confirmMelee()">EQUIPAR MELEE</button>
+                </div>
+            </div>`;
+            openModal("OFICINA DE ARMAMENTO", h);
+            previewWpn();
+        }
+
+        window.previewWpn = function() {
+            const f = db.arsenal.frames[document.getElementById('m_f').value];
+            const c = db.arsenal.cores[document.getElementById('m_c').value];
+            document.getElementById('modal-preview').innerHTML = `
+            <strong style="color:var(--cyan); font-size:1.1rem;">${f.name || f.n} // ${c.name || c.n}</strong><br>
+            <div style="margin:10px 0; color:#fff;">ALCANCE: <strong>${f.range || f.r}</strong> | CAPACIDADE DE CALOR: <strong>${c.heat || c.h}</strong></div>
+            <div style="font-size:0.8rem; color:var(--text-muted);"><strong>[FRAME]:</strong> ${f.effect || f.eff}</div>
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;"><strong>[NÚCLEO]:</strong> ${c.effect || c.eff}</div>`;
+        }
+
+        window.confirmWpn = function() {
+            const f = db.arsenal.frames[document.getElementById('m_f').value];
+            const c = db.arsenal.cores[document.getElementById('m_c').value];
+            
+            let d = c.dmg[3]; 
+            const fName = f.name || f.n;
+            if(fName.includes("Pistola")) d = c.dmg[0];
+            if(fName.includes("Subm")) d = c.dmg[1];
+            if(fName.includes("Escopeta")) d = c.dmg[2];
+            if(fName.includes("Precisão")) d = c.dmg[4];
+            
+            char['wpn_'+wTgt] = { 
+                name: fName + " ("+(c.name || c.n)+")", 
+                dmg: d, range: (f.range || f.r), h_max: (c.heat || c.h), h_cur: 0, 
+                traits: (f.effect || f.eff) + " // " + (c.effect || c.eff) 
+            };
+            closeModal(); autoSave(); applyCharToSheet();
+        }
+
+        window.confirmMelee = function() {
+            const m = db.arsenal.melee_primary.concat(db.arsenal.melee_secondary)[document.getElementById('m_m').value];
+            char['wpn_'+wTgt] = { 
+                name: (m.name || m.n), 
+                dmg: m.dmg, range: "Engajado", h_max: (m.heat || m.h || 0), h_cur: 0, 
+                traits: m.traits 
+            };
+            closeModal(); autoSave(); applyCharToSheet();
+        }
+
+        // --- UTILS & RULES RENDERER ---
+        window.switchView = function(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        window.switchTab = function(id, e) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); e.target.classList.add('active'); }
+        window.openModal = function(t, c) { document.getElementById('modal-title').innerText=t; if(c) document.getElementById('modal-list').innerHTML=c; document.getElementById('modal-selector').style.display='flex'; }
+        window.closeModal = function() { document.getElementById('modal-selector').style.display='none'; }
+        
+        window.modStat = function(s,a) { char[s+'_cur'] = Math.max(0, char[s+'_cur']+a); applyCharToSheet(); autoSave(); }
+        
+        window.autoSave = function() {
+            if(activeIdx > -1) {['nf','cred','eter','xp','hp_cur','shield_cur','se_cur','arm_state','flaw','notes'].forEach(k => {
+                    const e = document.getElementById('s_'+k); 
+                    if(e) { char[k] = (e.tagName==='INPUT' && e.type==='number')?parseInt(e.value)||0 : e.value; }
+                });
+                // Armadura inputs
+                char.arm_base = parseInt(document.getElementById('arm_base')?.value || 0);
+                char.arm_broken = parseInt(document.getElementById('arm_broken')?.value || 0);
+                
+                roster[activeIdx] = char; saveRoster(); 
+                document.getElementById('save_ping').style.opacity=1; setTimeout(()=>document.getElementById('save_ping').style.opacity=0, 1000);
+                updateCalcs();
+            }
+        }
+        
+        window.saveRoster = function() { localStorage.setItem('co_roster_v135', JSON.stringify(roster)); }
+        window.wipeData = function() { if(confirm("FORMATAR BANCO DE DADOS LOCAL?")) { localStorage.clear(); location.reload(); } }
+        window.backToHub = function() { autoSave(); activeIdx=-1; char=null; renderHub(); }
+        window.addContact = function() { char.contacts.push({name:"Novo Contato", d:""}); applyCharToSheet(); autoSave(); }
+        window.addCustomDomain = function() { const n = prompt("Nome do Domínio:"); if(n) { char.dom.push({name:n, val:"Nível I"}); applyCharToSheet(); autoSave(); } }
+
+        window.openRulesModal = async function() {
             document.getElementById('modal-rules').style.display = 'flex';
+            const rc = document.getElementById('rules-content');
             try {
                 const res = await fetch('regras.md');
+                if(!res.ok) throw new Error();
                 const text = await res.text();
-                document.getElementById('rules-content').innerHTML = marked.parse(text);
+                rc.innerHTML = marked.parse(text);
             } catch(e) {
-                document.getElementById('rules-content').innerText = "Erro ao carregar regras.md.";
+                rc.innerHTML = "<strong style='color:var(--red)'>Erro 404: Arquivo 'regras.md' não encontrado. Coloque-o na mesma pasta do index.html no GitHub.</strong>";
             }
         }
     </script>
