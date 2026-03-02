@@ -9,7 +9,7 @@
         /* PALETA 'CHASSI SLATE' */
         :root {
             --bg-base: #101014;
-            --bg-panel: #1e1e24;
+            --bg-panel: #1a1a20;
             --border-dim: #33333d;
             --text-main: #e2e2e8;
             --text-muted: #8b8b9e;
@@ -26,7 +26,7 @@
         
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(16, 16, 20, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background: linear-gradient(rgba(16, 16, 20, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
             background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 999; opacity: 0.4;
         }
 
@@ -35,10 +35,10 @@
         h2 { color: var(--cyan); font-size: 1.1rem; border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; margin-bottom: 15px; }
 
         input, select, textarea { 
-            background: #18181c; color: var(--text-main); border: 1px solid var(--border-dim); 
+            background: #101014; color: var(--text-main); border: 1px solid var(--border-dim); 
             padding: 8px 12px; font-family: var(--font-ui); font-size: 0.95rem; width: 100%; box-sizing: border-box; border-radius: 4px;
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); background: #222229; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); background: #1a1a20; }
         input[type=number] { font-family: var(--font-mono); font-weight: bold; }
 
         .btn {
@@ -81,29 +81,29 @@
         .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; }
         .slot-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; }
         
-        .vitals-row { display: flex; justify-content: space-between; align-items: center; background: #141418; padding: 15px; border: 1px solid var(--border-dim); border-radius: 4px; margin-bottom: 10px; }
+        .vitals-row { display: flex; justify-content: space-between; align-items: center; background: #101014; padding: 15px; border: 1px solid var(--border-dim); border-radius: 4px; margin-bottom: 10px; }
         .vitals-val { font-size: 2rem; font-weight: bold; font-family: var(--font-mono); display: flex; align-items: center; gap: 10px; }
-        .btn-vit { background: var(--bg-panel); border: 1px solid var(--border-dim); color: var(--text-main); width: 36px; height: 36px; border-radius: 4px; cursor: pointer; font-size: 1.2rem; }
+        .btn-vit { background: var(--bg-panel); border: 1px solid var(--border-dim); color: var(--text-main); width: 36px; height: 36px; border-radius: 4px; cursor: pointer; font-size: 1.2rem; display:flex; align-items:center; justify-content:center;}
         .btn-vit:hover { background: var(--border-dim); }
 
         .ess-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .ess-box { background: #141418; border: 1px solid var(--border-dim); padding: 10px; text-align: center; border-radius: 4px; }
+        .ess-box { background: #101014; border: 1px solid var(--border-dim); padding: 10px; text-align: center; border-radius: 4px; }
         .ess-val { font-size: 1.4rem; font-weight: bold; color: var(--text-main); font-family: var(--font-mono); display:flex; justify-content:center; align-items:center;}
-        .ess-val input { width: 50px; border: none; background: transparent; color: var(--cyan); font-size: 1.4rem; text-align: center; font-weight: bold; }
+        .ess-val input { width: 70px; border: none; background: transparent; color: var(--cyan); font-size: 1.4rem; text-align: center; font-weight: bold; }
         .ess-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); background: rgba(34, 211, 238, 0.1); padding: 2px 6px; border-radius: 10px; margin-top: 5px; display:inline-block; }
 
         /* MODALS */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
         .modal { background: var(--bg-base); border: 1px solid var(--border-dim); width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .selectable-item { background: #18181c; border: 1px solid var(--border-dim); padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
         .selectable-item:hover:not(.locked) { border-color: var(--cyan); }
         .selectable-item.locked { opacity: 0.4; border-color: var(--red); }
-        .cat-header { color: var(--gold); border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; margin: 15px 0 10px 0; font-family: var(--font-mono); font-size: 0.9rem; }
+        .cat-header { color: var(--gold); border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; margin: 15px 0 10px 0; font-family: var(--font-mono); font-size: 1rem; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body oninput="triggerSave()">
+<body>
 
     <!-- LOADING SCREEN -->
     <div id="loader" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--bg-base); z-index:2000; display:flex; flex-direction:column; justify-content:center; align-items:center;">
@@ -136,7 +136,7 @@
     <!-- HUB VIEW -->
     <div id="view-hub" class="view active">
         <div style="text-align:center; margin: 60px 0;">
-            <h1 style="font-size: 3.5rem; border:none; letter-spacing: 2px;">CHROMOASIS DB</h1>
+            <h1 style="font-size: 3.5rem; border:none; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">CHROMOASIS DB</h1>
             <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v16.0</p>
         </div>
         <div style="display:flex; justify-content:center; gap:15px; margin-bottom: 50px;">
@@ -158,20 +158,21 @@
                 <div class="prog-node" id="p5">5. HISTÓRICO</div>
             </div>
 
+            <!-- STEPS -->
             <div class="wiz-step active" id="step1">
                 <h2>IDENTIFICAÇÃO OPERACIONAL</h2>
                 <label>NOME E CALLSIGN</label>
                 <input type="text" id="w_name" placeholder="Ex: Alaric 'Mago' Wood" style="margin-bottom:20px;">
                 <label>ARQUÉTIPO TÁTICO</label>
                 <select id="w_arch" onchange="updateWizArchDesc()"></select>
-                <div id="w_arch_desc" style="margin-top:10px; color:var(--text-muted); font-size:0.85rem; padding:10px; background:#141418; border-left:2px solid var(--cyan); border-radius:4px; min-height:40px;"></div>
+                <div id="w_arch_desc" style="margin-top:10px; color:var(--text-muted); font-size:0.85rem; padding:10px; background:#101014; border-left:2px solid var(--cyan); border-radius:4px; min-height:40px;"></div>
                 <div style="text-align:right; margin-top:30px;"><button class="btn" onclick="nextWizStep(2)">PROSSEGUIR >></button></div>
             </div>
 
             <div class="wiz-step" id="step2">
                 <h2>ORIGEM BIOLÓGICA</h2>
                 <select id="w_origin_sel" onchange="renderWizOriginInfo()"></select>
-                <div id="w_origin_desc" style="margin-top:15px; font-size:0.9rem; background:#141418; padding:15px; border-radius:4px; line-height: 1.5;"></div>
+                <div id="w_origin_desc" style="margin-top:15px; font-size:0.9rem; background:#101014; padding:15px; border-radius:4px; line-height: 1.5;"></div>
                 <div id="w_racial_choices_box" style="display:none; margin-top:20px;">
                     <label style="color:var(--gold); display:block; border-bottom:1px solid #333; padding-bottom:5px; margin-bottom:10px;">VANTAGEM EXTRA (ESCOLHA 1):</label>
                     <div id="w_racial_choices_list"></div>
@@ -203,8 +204,10 @@
                 <div class="panel" style="padding:0;">
                     <div id="w_hist_pool" style="max-height:250px; overflow-y:auto; padding:10px;"></div>
                 </div>
+                
                 <h3 style="margin-top:20px; font-size:0.85rem; color:var(--cyan);">SELECIONADAS:</h3>
-                <div id="w_selected_advs" style="background:#141418; padding:10px; border-radius:4px; min-height:50px;"></div>
+                <div id="w_selected_advs" style="background:#101014; padding:10px; border-radius:4px; min-height:50px;"></div>
+                
                 <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(4)"><< VOLTAR</button><button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR REGISTRO</button></div>
             </div>
         </div>
@@ -218,7 +221,6 @@
                 <div style="color:var(--text-muted); font-family:var(--font-mono); font-size:0.85rem; margin-top:5px;"><span id="s_origin"></span> // <span id="s_arch"></span></div>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
-                <span id="save_ping" style="color:var(--green); font-size:0.7rem; font-family:var(--font-mono); opacity:0; transition:0.3s;">SALVO</span>
                 <button class="btn" onclick="closeSheet()">⬅ VOLTAR AO HUB</button>
             </div>
         </div>
@@ -232,12 +234,12 @@
 
         <!-- TAB 1: STATUS -->
         <div id="t_status" class="tab-content active">
-            <!-- ECONOMIA TOP -->
+            <!-- ECONOMIA NO TOPO -->
             <div class="panel grid-4" style="padding:15px; border-color:var(--gold); margin-bottom:20px;">
-                <div><label>FAMA (NF)</label><input type="number" id="s_nf" style="font-size:1.2rem; color:var(--gold);"></div>
-                <div><label>CRÉDITOS (¢)</label><input type="number" id="s_cred" style="font-size:1.2rem; color:var(--green);"></div>
-                <div><label>PONTOS ÉTER</label><input type="number" id="s_eter" style="font-size:1.2rem; color:var(--purple);"></div>
-                <div><label>XP</label><input type="number" id="s_xp" style="font-size:1.2rem;"></div>
+                <div><label>FAMA (NF)</label><input type="number" id="s_nf" style="font-size:1.2rem; color:var(--gold);" onchange="updateDirect('nf', this.value); updateCalcs();"></div>
+                <div><label>CRÉDITOS (¢)</label><input type="number" id="s_cred" style="font-size:1.2rem; color:var(--green);" onchange="updateDirect('cred', this.value);"></div>
+                <div><label>PONTOS DE ÉTER</label><input type="number" id="s_eter" style="font-size:1.2rem; color:var(--purple);" onchange="updateDirect('eter', this.value);"></div>
+                <div><label>XP</label><input type="number" id="s_xp" style="font-size:1.2rem;" onchange="updateDirect('xp', this.value);"></div>
             </div>
 
             <div class="grid-2" style="grid-template-columns: 1.5fr 1fr;">
@@ -290,7 +292,7 @@
                         <div class="vitals-row" style="border-left: 3px solid var(--text-muted);">
                             <div>
                                 <div style="color:var(--text-muted); font-family:var(--font-mono); font-weight:bold;">ARMADURA FÍSICA</div>
-                                <select id="s_arm_state" style="margin-top:5px; padding:4px; font-size:0.75rem; width:120px;" onchange="updateCalcs()">
+                                <select id="s_arm_state" style="margin-top:5px; padding:4px; font-size:0.75rem; width:120px;" onchange="updateDirect('arm_state', this.value); updateCalcs();">
                                     <option value="Normal">Normal</option><option value="Danificada">Danificada</option><option value="Quebrada">Quebrada</option>
                                 </select>
                             </div>
@@ -322,11 +324,28 @@
                         </div>
                     </div>
 
-                    <div class="panel" style="padding:15px; display:grid; grid-template-columns:1fr 1fr; gap:10px; text-align:center; font-family:var(--font-mono);">
-                        <div><div style="color:var(--text-muted); font-size:0.7rem;">INICIATIVA</div><strong id="s_init" style="font-size:1.2rem; color:#fff;">1d10 + 0</strong></div>
-                        <div><div style="color:var(--text-muted); font-size:0.7rem;">MOVIMENTO</div><strong id="s_mov" style="font-size:1.2rem; color:#fff;">0 Zonas</strong></div>
-                        <div><div style="color:var(--text-muted); font-size:0.7rem;">ESQUIVA</div><strong id="s_dodge" style="font-size:1.2rem; color:var(--cyan);">+0%</strong></div>
-                        <div><div style="color:var(--text-muted); font-size:0.7rem;">APARAR</div><strong id="s_parry" style="font-size:1.2rem; color:var(--cyan);">+0%</strong></div>
+                    <div class="panel" style="padding:15px; display:flex; flex-direction:column; gap:15px; font-family:var(--font-mono);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #333; padding-bottom:5px;">
+                            <div style="color:var(--text-muted); font-size:0.8rem;">INICIATIVA</div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="number" id="s_ex_init" placeholder="+0" style="width:50px; text-align:center;" onchange="updateDirect('ex_init', this.value); updateCalcs();">
+                                <strong id="s_init" style="font-size:1.2rem; color:#fff; min-width:80px; text-align:right;">1d10+0</strong>
+                            </div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #333; padding-bottom:5px;">
+                            <div style="color:var(--text-muted); font-size:0.8rem;">ESQUIVA</div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="number" id="s_ex_dodge" placeholder="+0" style="width:50px; text-align:center;" onchange="updateDirect('ex_dodge', this.value); updateCalcs();">
+                                <strong id="s_dodge" style="font-size:1.2rem; color:var(--cyan); min-width:80px; text-align:right;">+0%</strong>
+                            </div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div style="color:var(--text-muted); font-size:0.8rem;">APARAR</div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="number" id="s_ex_parry" placeholder="+0" style="width:50px; text-align:center;" onchange="updateDirect('ex_parry', this.value); updateCalcs();">
+                                <strong id="s_parry" style="font-size:1.2rem; color:var(--cyan); min-width:80px; text-align:right;">+0%</strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -340,9 +359,6 @@
                     <div class="slot-box" id="slot_wpn_p"></div>
                     <div class="slot-box" id="slot_wpn_s"></div>
                     <div class="slot-box" id="slot_armor"></div>
-
-                    <h3 style="color:var(--text-muted); margin-top:30px; border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>COMBATE PRÓXIMO (MELEE)</span> <button class="btn btn-small" onclick="openGenericModal('melee', 'melee')">+ ADD</button></h3>
-                    <div id="s_melee_list"></div>
                 </div>
 
                 <!-- COLUNA DIREITA (SLOTS) -->
@@ -351,14 +367,10 @@
 
                     <h3 style="color:var(--gold); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>ENCAIXE TÁTICO</span><span id="load_tac">0 / 2</span></h3>
                     <div style="display:flex; gap:10px; margin-bottom:15px;">
-                        <button class="btn btn-small" style="flex-grow:1" onclick="openGenericModal('tactical_items,tactical_weapons', 'inv_tac')">+ EQUIPAMENTO/ARMA TÁTICA</button>
+                        <button class="btn btn-small" style="flex-grow:1" onclick="openGenericModal('tactical_items,tactical_weapons', 'inv_tac')">+ EQUIP. TÁTICO</button>
+                        <button class="btn btn-small" style="flex-grow:1; border-color:var(--cyan); color:var(--cyan);" onclick="openGenericModal('drone_chassis', 'drones')">+ NOVO DRONE</button>
                     </div>
                     <div id="s_tac_list"></div>
-
-                    <h3 style="color:var(--cyan); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between; margin-top:30px;">
-                        <span>DRONES E MÓDULOS</span>
-                        <button class="btn btn-small" onclick="openGenericModal('drone_chassis', 'drones')">+ NOVO CHASSI</button>
-                    </h3>
                     <div id="s_drones_list"></div>
 
                     <h3 style="color:var(--green); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between; margin-top:30px;"><span>UTILIDADE</span><span id="load_uti">0 / 4</span></h3>
@@ -378,7 +390,7 @@
 
         <!-- TAB 3: CROMO -->
         <div id="t_cromo" class="tab-content">
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Interfaces estruturais reduzem sua Sobrecarga (SE) máxima e concedem bônus passivos nas essências e defesa.</p>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Interfaces estruturais reduzem sua Sobrecarga (SE) máxima e concedem bônus passivos nas essências e defesa. Dokkas instalam interfaces com custo reduzido (-1 SE).</p>
             <div class="grid-2" id="cromo_container"></div>
         </div>
 
@@ -387,10 +399,10 @@
             <div class="grid-2">
                 <div class="panel">
                     <h2>DOSSIÊ OPERACIONAL</h2>
-                    <label>APARÊNCIA FÍSICA</label><textarea id="p_app" rows="3" onchange="triggerSave()"></textarea>
-                    <label style="margin-top:10px;">TRAÇO NEGATIVO / VÍCIO</label><textarea id="p_flaw" rows="2" onchange="triggerSave()"></textarea>
-                    <label style="margin-top:10px;">HISTÓRICO E BACKGROUND</label><textarea id="p_bg" rows="6" onchange="triggerSave()"></textarea>
-                    <label style="margin-top:10px;">ANOTAÇÕES DA MISSÃO</label><textarea id="p_notes" rows="6" onchange="triggerSave()"></textarea>
+                    <label>APARÊNCIA FÍSICA</label><textarea id="p_app" rows="3" onchange="updateDirect('app', this.value)"></textarea>
+                    <label style="margin-top:10px;">TRAÇO NEGATIVO / VÍCIO</label><textarea id="p_flaw" rows="2" onchange="updateDirect('flaw', this.value)"></textarea>
+                    <label style="margin-top:10px;">HISTÓRICO E BACKGROUND</label><textarea id="p_bg" rows="6" onchange="updateDirect('bg', this.value)"></textarea>
+                    <label style="margin-top:10px;">ANOTAÇÕES DA MISSÃO</label><textarea id="p_notes" rows="6" onchange="updateDirect('notes', this.value)"></textarea>
                 </div>
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
@@ -403,7 +415,7 @@
         </div>
     </div>
 
-    <!-- MODAL ARMAS/ARMADURAS (TIERS) -->
+    <!-- MODAL ARMAS (COMPLETO) -->
     <div id="modal-builder" class="modal-overlay">
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-dim); padding-bottom:10px;">
@@ -411,14 +423,20 @@
                 <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
             </div>
             
-            <div id="mb_weapon_fields" style="display:none;">
+            <!-- TABS DO MODAL DE ARMA -->
+            <div id="mb_wpn_tabs" style="display:none; margin-bottom:15px;">
+                <button class="btn btn-small" id="btn_tab_fogo" onclick="switchWeaponTab('fogo')">FOGO MODULAR</button>
+                <button class="btn btn-small" style="background:transparent; color:var(--text-muted);" id="btn_tab_melee" onclick="switchWeaponTab('melee')">ARMA BRANCA (MELEE)</button>
+            </div>
+
+            <div id="mb_weapon_fogo" style="display:none;">
                 <div class="grid-2">
                     <div>
                         <label>FRAME (CARCAÇA)</label>
                         <select id="mb_f" style="margin-bottom:10px;" onchange="previewBuild()"></select>
                         <label>NÍVEL DO FRAME [NF Req]</label>
                         <select id="mb_f_t" onchange="previewBuild()">
-                            <option value="1">Nível I (Básico) - 2 Slots Mod[NF 0 | 0¢]</option>
+                            <option value="1">Nível I (Básico) - 2 Slots Mod [NF 0 | 0¢]</option>
                             <option value="2">Nível II (Tático) - 3 Slots Mod[NF 3 | 10¢]</option>
                             <option value="3">Nível III (Operações) - 4 Slots Mod [NF 7 | 20¢]</option>
                         </select>
@@ -436,12 +454,17 @@
                 </div>
             </div>
 
+            <div id="mb_weapon_melee" style="display:none;">
+                <label>LÂMINA / CONTUSÃO</label>
+                <select id="mb_m" onchange="previewBuild()"></select>
+            </div>
+
             <div id="mb_armor_fields" style="display:none;">
                 <label>MODELO DO TRAJE / ARMADURA</label>
                 <select id="mb_a" onchange="previewBuild()"></select>
             </div>
 
-            <div id="mb_preview" style="background:#141418; border:1px dashed var(--cyan); padding:15px; margin:20px 0; border-radius:4px; font-size:0.9rem; color:var(--text-muted); min-height:60px;"></div>
+            <div id="mb_preview" style="background:#101014; border:1px dashed var(--cyan); padding:15px; margin:20px 0; border-radius:4px; font-size:0.9rem; color:var(--text-muted); min-height:60px;"></div>
             
             <div id="mb_warn" style="color:var(--red); font-family:var(--font-mono); font-weight:bold; text-align:center; margin-bottom:15px;"></div>
             <button class="btn" id="mb_confirm" style="width:100%;" onclick="confirmBuild()">GRAVAR NO SLOT</button>
@@ -462,16 +485,20 @@
     <!-- SCRIPT CORE -->
     <script>
         let DB = null; let roster =[]; let char = null; let activeIdx = -1;
-        const attrMap = { esf: "Esforço", agi: "Agilidade", ard: "Ardil", cor: "Corpo", int: "Intelecto", per: "Percepção", lab: "Lábia", von: "Vontade", bal: "Balística", con: "Confronto" };
+        const attrMap = { esf: "ESFORÇO", agi: "AGILIDADE", ard: "ARDIL", cor: "CORPO", int: "INTELECTO", per: "PERCEPÇÃO", lab: "LÁBIA", von: "VONTADE", bal: "BALÍSTICA", con: "CONFRONTO" };
         const attrKeys = Object.keys(attrMap);
         const cyberCats =["Neural", "Fluxo", "Sensorial", "Atuadores", "Reativa"];
         let wizAdvs =[]; let wizDoms =[];
 
         window.onload = async () => {
             try {
+                // Força recarregar o JSON
                 const res = await fetch('database.json?v=' + new Date().getTime());
                 if(!res.ok) throw new Error();
                 DB = await res.json();
+                
+                if(!DB.domains) { alert("ERRO CRÍTICO: JSON não possui 'domains'. O banco está desatualizado."); return; }
+
                 roster = JSON.parse(localStorage.getItem('co_roster_v16') || '[]');
                 document.getElementById('loader').style.display = 'none';
                 renderHub();
@@ -484,7 +511,7 @@
             grid.innerHTML = roster.map((c, i) => `
             <div class="panel" style="cursor:pointer; border-left:4px solid var(--cyan); transition:0.2s;" onclick="openChar(${i})" onmouseover="this.style.borderColor='var(--cyan)';" onmouseout="this.style.borderColor='var(--border-dim)';">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div><h3 style="margin:0; color:#fff; font-size:1.4rem;">${c.name}</h3><div style="color:var(--text-muted); font-size:0.8rem; font-family:var(--font-mono); margin-top:5px;">${c.origin.toUpperCase()} // ${c.arch.toUpperCase()}</div><div style="color:var(--gold); font-size:0.75rem; font-family:var(--font-mono); margin-top:5px;">NF: ${c.nf} | ¢: ${c.cred}</div></div>
+                    <div><h3 style="margin:0; color:#fff; font-size:1.4rem;">${c.name}</h3><div style="color:var(--text-muted); font-size:0.8rem; font-family:var(--font-mono); margin-top:5px;">${c.origin.toUpperCase()} // ${c.arch.toUpperCase()}</div><div style="color:var(--gold); font-size:0.75rem; font-family:var(--font-mono); margin-top:5px;">NF: ${c.nf||0} | ¢: ${c.cred||0}</div></div>
                     <button class="btn btn-red btn-small" onclick="deleteChar(${i}, event)">X</button>
                 </div>
             </div>`).join('');
@@ -494,7 +521,7 @@
 
         // --- WIZARD ---
         window.startWizard = function() {
-            if(!DB) return alert("Banco de Dados não carregado.");
+            if(!DB) return;
             wizAdvs =[]; wizDoms =[]; document.getElementById('w_name').value = '';
             document.getElementById('w_arch').innerHTML = '<option value="">-- Arquétipo --</option>' + Object.keys(DB.archetypes).map(k => `<option value="${k}">${k}</option>`).join('');
             document.getElementById('w_origin_sel').innerHTML = Object.keys(DB.origins).map(k => `<option value="${k}">${DB.origins[k].name}</option>`).join('');
@@ -521,13 +548,12 @@
             const ok = document.getElementById('w_origin_sel').value; const base = DB.origins[ok];
             document.getElementById('w_attr_grid').innerHTML = attrKeys.map(k => `
             <div class="wiz-attr-box">
-                <label style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem; letter-spacing:1px;">${attrMap[k].toUpperCase()}</label>
+                <label style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem; letter-spacing:1px;">${attrMap[k]}</label>
                 <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin:10px 0;">
                     <button class="btn btn-red" style="padding:4px 8px;" onclick="modWizAttr('${k}', -5)">-</button>
                     <input type="number" id="wa_${k}" value="${base[k]}" readonly>
                     <button class="btn" style="padding:4px 8px;" onclick="modWizAttr('${k}', 5)">+</button>
                 </div>
-                <div style="color:var(--text-muted); font-size:0.75rem;">Bônus: <span id="wab_${k}" style="color:var(--gold);">+${Math.floor(base[k]/10)}</span></div>
             </div>`).join('');
             calcWizPts();
         }
@@ -541,7 +567,7 @@
                 let spent = 0; attrKeys.forEach(key => spent += ((key===k?val:parseInt(document.getElementById('wa_'+key).value)) - DB.origins[ok][key])); 
                 if(spent > DB.origins[ok].pts) return alert("Pontos insuficientes."); 
             }
-            el.value = val; document.getElementById('wab_'+k).innerText = "+" + Math.floor(val/10); calcWizPts();
+            el.value = val; calcWizPts();
         }
         window.calcWizPts = function() {
             const ok = document.getElementById('w_origin_sel').value; let spent = 0;
@@ -584,7 +610,8 @@
             const n = {
                 name: document.getElementById('w_name').value || "Novo Operador", arch: document.getElementById('w_arch').value || "Desconhecido",
                 origin: DB.origins[ok].name, origin_k: ok, nf: 0, cred: 20, eter: 1, xp: 0, hp_cur: 10, shield_cur: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_broken: 0,
-                ess: {}, dom: wizDoms.map(d => ({n: d, lvl: 1, flips: 1})), traits: [...wizAdvs], masteries:[],
+                ex_init:0, ex_dodge:0, ex_parry:0,
+                ess: {}, dom: wizDoms.map(d => ({n: d, lvl: 1, flips: 1})), traits:[...wizAdvs], masteries:[],
                 sic: { armor: null, shield: null, wpn_p: null, wpn_s: null },
                 inv_tac:[], drones: [], inv_uti:[], inv_gen: [], runic: [], melee:[],
                 cromo: { "Neural":{t:0,m:[]}, "Fluxo":{t:0,m:[]}, "Sensorial":{t:0,m:[]}, "Atuadores":{t:0,m:[]}, "Reativa":{t:0,m:[]} },
@@ -603,26 +630,32 @@
         }
 
         // --- SHEET ENGINE ---
-        window.closeSheet = function() { triggerSave(); activeIdx = -1; char = null; renderHub(); }
-        window.triggerSave = function() {
-            if(activeIdx === -1 || !char) return;
-            ['nf','cred','eter','xp','arm_state'].forEach(k => { const el=document.getElementById('s_'+k); if(el) char[k] = (el.type==='number')?parseInt(el.value)||0:el.value; });
-            ['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) char[k] = el.value; });
-            localStorage.setItem('co_roster_v16', JSON.stringify(roster));
-            document.getElementById('save_ping').style.opacity = 1; setTimeout(()=>document.getElementById('save_ping').style.opacity=0, 1000);
-            updateCalcs();
+        // Bind updates directly to char object to prevent crash
+        window.updateDirect = function(key, val) {
+            if(!char) return;
+            if(key==='nf'||key==='cred'||key==='eter'||key==='xp'||key==='ex_init'||key==='ex_dodge'||key==='ex_parry') char[key] = parseInt(val)||0;
+            else char[key] = val;
+            saveDisk();
         }
+
+        window.saveDisk = function() {
+            if(activeIdx === -1 || !char) return;
+            localStorage.setItem('co_roster_v16', JSON.stringify(roster));
+            const p = document.getElementById('save_ping'); p.style.opacity = 1; setTimeout(()=>p.style.opacity=0, 1000);
+        }
+
+        window.closeSheet = function() { activeIdx = -1; char = null; renderHub(); }
+        
         window.modVital = function(v, a) {
             if(v==='hp') char.hp_cur = Math.max(0, char.hp_cur + a);
             if(v==='shield') { const max = parseInt(document.getElementById('s_shield_max').innerText); char.shield_cur = Math.min(max, Math.max(0, char.shield_cur + a)); }
             if(v==='se') char.se_cur = Math.max(0, char.se_cur + a);
-            applyToSheet(); triggerSave();
+            saveDisk(); applyToSheet(); 
         }
+
         window.applyToSheet = function() {
             if(!char) return;
-            document.getElementById('s_name').innerText = char.name.toUpperCase(); document.getElementById('s_origin').innerText = char.origin.toUpperCase(); document.getElementById('s_arch').innerText = char.arch.toUpperCase();
-            ['nf','cred','eter','xp','arm_state'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]||(el.type==='number'?0:''); });
-            ['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) el.value = char[k]||""; });
+            document.getElementById('s_name').innerText = char.name.toUpperCase(); document.getElementById('s_origin').innerText = char.origin.toUpperCase(); document.getElementById('s_arch').innerText = char.arch.toUpperCase();['nf','cred','eter','xp','arm_state','ex_init','ex_dodge','ex_parry'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]||(el.type==='number'?0:''); });['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) el.value = char[k]||""; });
             renderSheetStatus(); renderSheetArsenal(); renderSheetCromo(); renderPersona(); updateCalcs();
         }
 
@@ -636,14 +669,14 @@
             document.getElementById('s_ess_grid').innerHTML = attrKeys.map(k => `
             <div class="ess-box">
                 <label style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">${attrMap[k].toUpperCase()}</label>
-                <div class="ess-val"><input type="number" value="${eB[k]}" readonly>%</div>
+                <div class="ess-val"><input type="number" value="${eB[k]}" onchange="char.ess['${k}']=parseInt(this.value)||0; saveDisk(); applyToSheet();">%</div>
                 <div class="ess-mod">+${Math.floor(eB[k]/10)}</div>
             </div>`).join('');
             
-            document.getElementById('s_dodge').innerText = "+" + (Math.floor(eB.agi/10)*5) + "%";
-            document.getElementById('s_parry').innerText = "+" + (Math.floor(eB.con/10)*5) + "%";
+            document.getElementById('s_dodge').innerText = "+" + ((Math.floor(eB.agi/10)*5) + (char.ex_dodge||0)) + "%";
+            document.getElementById('s_parry').innerText = "+" + ((Math.floor(eB.con/10)*5) + (char.ex_parry||0)) + "%";
 
-            let initB = Math.floor(eB.agi/10);
+            let initB = Math.floor(eB.agi/10) + (char.ex_init||0);
             if(char.cromo['Sensorial'].t === 1) initB += 1;
             if(char.cromo['Sensorial'].t === 2) initB += 2;
             if(char.cromo['Sensorial'].t === 3) initB += 3;
@@ -654,22 +687,22 @@
             document.getElementById('s_dom_list').innerHTML = char.dom.map((d, i) => `
             <div style="display:flex; justify-content:space-between; align-items:center; background:#141418; padding:12px; margin-bottom:8px; border-radius:4px; border:1px solid var(--border-dim);">
                 <strong style="color:var(--cyan); width:30%; font-size:1.1rem;">${d.n}</strong>
-                <select style="width:120px; padding:4px;" onchange="char.dom[${i}].lvl=parseInt(this.value); char.dom[${i}].flips=parseInt(this.value); triggerSave(); applyToSheet();">
+                <select style="width:120px; padding:4px;" onchange="char.dom[${i}].lvl=parseInt(this.value); char.dom[${i}].flips=parseInt(this.value); saveDisk(); applyToSheet();">
                     <option value="1" ${d.lvl===1?'selected':''}>Nível I</option><option value="2" ${d.lvl===2?'selected':''}>Nível II</option><option value="3" ${d.lvl===3?'selected':''}>Nível III</option>
                 </select>
                 <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted); display:flex; align-items:center; gap:8px;">
-                    FLIPS: <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.max(0, char.dom[${i}].flips-1); triggerSave(); applyToSheet();">-</button>
+                    FLIPS: <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.max(0, char.dom[${i}].flips-1); saveDisk(); applyToSheet();">-</button>
                     <strong style="color:#fff; font-size:1.2rem; min-width:35px; text-align:center;">${d.flips}/${d.lvl}</strong>
-                    <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.min(${d.lvl}, char.dom[${i}].flips+1); triggerSave(); applyToSheet();">+</button>
+                    <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.min(${d.lvl}, char.dom[${i}].flips+1); saveDisk(); applyToSheet();">+</button>
                 </div>
-                <button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.dom.splice(${i},1); triggerSave(); applyToSheet();">X</button>
+                <button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.dom.splice(${i},1); saveDisk(); applyToSheet();">X</button>
             </div>`).join('');
 
             // Traits
             document.getElementById('s_traits_list').innerHTML = char.traits.map(a => `<div style="padding:10px; margin-bottom:5px; border-left:2px solid var(--cyan); background:rgba(0,229,255,0.05);"><strong style="color:var(--cyan);">${a.n}</strong> <span style="color:#666; font-size:0.8rem;">[${a.h}]</span><br><div style="font-size:0.85rem; margin-top:5px;">${a.d || a.effect}</div></div>`).join('');
             
             // Masteries
-            document.getElementById('s_mastery_list').innerHTML = char.masteries.map((m,i)=>`<div style="background:#141418; padding:10px; margin-bottom:5px; border-left:3px solid var(--gold);"><div style="display:flex; justify-content:space-between;"><strong style="color:var(--gold)">${m.name}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.masteries.splice(${i},1); triggerSave(); applyToSheet();">X</button></div><div style="font-size:0.85rem; margin-top:5px;">${m.effect}</div></div>`).join('');
+            document.getElementById('s_mastery_list').innerHTML = char.masteries.map((m,i)=>`<div style="background:#141418; padding:10px; margin-bottom:5px; border-left:3px solid var(--gold);"><div style="display:flex; justify-content:space-between;"><strong style="color:var(--gold)">${m.name}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.masteries.splice(${i},1); saveDisk(); applyToSheet();">X</button></div><div style="font-size:0.85rem; margin-top:5px;">${m.effect}</div></div>`).join('');
         }
 
         window.updateCalcs = function() {
@@ -696,55 +729,79 @@
             else if(char.se_cur === maxSe) { al.innerText = "⚠️ PENALIDADE ATIVA (-20% TESTES)"; al.style.color="var(--gold)"; al.style.background="rgba(251, 191, 36, 0.1)"; al.style.display="block"; }
             else al.style.display="none";
 
+            // Armor
             let aBase = char.sic.armor ? char.sic.armor.abs : 0;
             if(char.cromo['Reativa'].t === 1 || char.cromo['Reativa'].t === 2) aBase += 1;
             if(char.cromo['Reativa'].t === 3) aBase += 2;
             let aBrok = char.sic.armor ? char.sic.armor.broken : 0;
+            if(char.sic.armor && char.sic.armor.mods) { char.sic.armor.mods.forEach(m => { let rx = m.effect.match(/\+(\d+) Absorção/i); if(rx) aBase += parseInt(rx[1]); }); }
             
             const state = document.getElementById('s_arm_state').value;
             document.getElementById('s_eff_abs').innerText = (state==="Normal") ? aBase : (state==="Danificada" ? Math.floor(aBase/2) : aBrok);
 
+            // Shield
             let sMax = 0;
-            if(char.sic.shield) { const match = char.sic.shield.effect.match(/\d+/); if(match) sMax = parseInt(match[0]); }
             char.runic.forEach(r => { if(r.n && r.n.includes("Uruz")) sMax += 10; });
+            if(char.sic.armor) { let rx = char.sic.armor.traits.match(/Escudo (\d+)/i); if(rx) sMax += parseInt(rx[1]); }
+            if(char.sic.shield) { let rx = char.sic.shield.effect.match(/(\d+) PE/i); if(rx) sMax += parseInt(rx[1]); }
+            if(char.sic.armor && char.sic.armor.mods) { char.sic.armor.mods.forEach(m => { if(m.effect.includes("Escudo")) { let mx = m.effect.match(/(\d+) PE/i); if(mx) sMax += parseInt(mx[1]); } if(m.effect.includes("+5 PE")) sMax += 5; }); }
+            
             document.getElementById('s_shield_max').innerText = sMax;
             document.getElementById('s_shield_cur').innerText = char.shield_cur;
-            document.getElementById('s_shield_name').innerText = char.sic.shield ? char.sic.shield.n : "Nenhum Gerador";
+            let sName = "Nenhum Gerador";
+            if(char.sic.armor && char.sic.armor.traits.includes("Escudo")) sName = "Escudo do Traje";
+            if(char.sic.shield) sName = char.sic.shield.name;
+            document.getElementById('s_shield_name').innerText = sName;
 
+            // Load
             let lt = 0, lu = 0, lg = 0;
-            char.inv_tac.forEach(i => lt += (i.load||0)); char.inv_uti.forEach(i => lu += (i.load||0)); char.inv_gen.forEach(i => lg += (i.load||0));
+            char.inv_tac.forEach(i => lt += (i.load||0)); lt += char.drones.length;
+            char.inv_uti.forEach(i => lu += (i.load||0)); char.inv_gen.forEach(i => lg += (i.load||0));
             document.getElementById('load_tac').innerText = `${lt} / 2`; document.getElementById('load_uti').innerText = `${lu} / 4`; 
             document.getElementById('load_gen').innerText = `${lg} / ${3+Math.floor(eB.esf/10)}`;
             document.getElementById('load_tac').style.color = lt>2 ? "var(--red)" : "var(--text-muted)"; document.getElementById('load_uti').style.color = lu>4 ? "var(--red)" : "var(--text-muted)";
         }
 
-        // --- ARSENAL / SLOTS ---
+        // --- ARSENAL SLOTS ---
         window.renderSheetArsenal = function() {
-            const bSlot = (id, t, i, p, tp) => {
+            const bSlot = (id, t, i, p) => {
                 const el = document.getElementById(id);
                 if(!i) { el.className = "slot-box"; el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><button class="btn btn-small" onclick="openBuilder('${p}')">EQUIPAR</button></div><div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:10px 0;">[ VAZIO ]</div>`; } 
                 else {
                     el.className = "slot-box filled";
-                    let x = ""; if(i.h_max !== undefined) x = `<div style="font-family:var(--font-mono); margin-top:10px; display:flex; align-items:center; gap:10px; color:var(--gold);">CALOR: <button class="btn-vit" onclick="char.sic.${p}.h_cur=Math.max(0,char.sic.${p}.h_cur-1); triggerSave(); applyToSheet();">-</button><span style="font-size:1.2rem; font-weight:bold;">${i.h_cur}/${i.h_max}</span><button class="btn-vit" onclick="char.sic.${p}.h_cur++; triggerSave(); applyToSheet();">+</button> <button class="btn-small" style="background:transparent; border:1px solid var(--border-dim); color:var(--text-muted);" onclick="char.sic.${p}.h_cur=0; triggerSave(); applyToSheet();">Zerar</button></div>`;
-                    let mBtn = (p==='wpn_p'||p==='wpn_s'||p==='armor') ? `<button class="btn btn-small" style="margin-right:10px; border-color:var(--gold); color:var(--gold);" onclick="openModSelector('${p}')">+ MOD (${i.mods?i.mods.length:0}/${i.slots||0})</button>` : '';
-                    let mList = (i.mods && i.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + i.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name||md.n}</span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.${p}.mods.splice(${midx},1); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
-                    el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><div>${mBtn}<button class="btn btn-small" onclick="openBuilder('${p}')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; triggerSave(); applyToSheet();">X</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name || i.n} ${i.dmg? `<span style="color:var(--red); margin-left:10px;">[DANO +${i.dmg} | ALC ${i.range}]</span>`:''}</div><div class="slot-desc">${i.traits || i.effect || i.desc}</div>${x}${mList}`;
+                    let x = ""; 
+                    if(i.is_melee) {
+                        el.innerHTML = `<div class="slot-header"><span class="slot-title">${t} (MELEE)</span><div><button class="btn btn-small" onclick="openBuilder('${p}')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; saveDisk(); applyToSheet();">X</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name} <span style="color:var(--red); margin-left:10px;">[DANO +${i.dmg} | ALC Engajado]</span></div><div class="slot-desc">${i.traits}</div>`;
+                    } else if(p==='armor') {
+                        let mBtn = `<button class="btn btn-small" style="margin-right:10px; border-color:var(--gold); color:var(--gold);" onclick="openModSelector('${p}')">+ MOD (${i.mods?i.mods.length:0}/${i.slots||0})</button>`;
+                        let mList = (i.mods && i.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + i.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name}</span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.${p}.mods.splice(${midx},1); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
+                        el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><div>${mBtn}<button class="btn btn-small" onclick="openBuilder('${p}')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; saveDisk(); applyToSheet();">X</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name} <span style="color:var(--text-muted); margin-left:10px;">[ABS ${i.abs}]</span></div><div class="slot-desc">${i.traits}</div>${mList}`;
+                    } else if (p==='shield') {
+                        el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><div><button class="btn btn-small" onclick="openBuilder('${p}')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; saveDisk(); applyToSheet();">X</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name}</div><div class="slot-desc">${i.effect}</div>`;
+                    } else {
+                        // Ranged Weapon
+                        let hB = i.h_bonus || 0; let totalH = i.h_max + hB;
+                        x = `<div style="font-family:var(--font-mono); margin-top:10px; display:flex; align-items:center; gap:10px; color:var(--gold);">CALOR: <button class="btn-vit" onclick="char.sic.${p}.h_cur=Math.max(0,char.sic.${p}.h_cur-1); saveDisk(); applyToSheet();">-</button><span style="font-size:1.2rem; font-weight:bold;">${i.h_cur}/${totalH}</span><button class="btn-vit" onclick="char.sic.${p}.h_cur++; saveDisk(); applyToSheet();">+</button> <button class="btn-small" style="background:transparent; border:1px solid var(--border-dim); color:var(--text-muted);" onclick="char.sic.${p}.h_cur=0; saveDisk(); applyToSheet();">Zerar</button> <input type="number" value="${hB}" placeholder="+Max" style="width:45px; padding:2px; font-size:0.75rem;" onchange="char.sic.${p}.h_bonus=parseInt(this.value)||0; saveDisk(); applyToSheet();" title="Bônus no Limite de Calor"></div>`;
+                        let mBtn = `<button class="btn btn-small" style="margin-right:10px; border-color:var(--gold); color:var(--gold);" onclick="openModSelector('${p}')">+ MOD (${i.mods?i.mods.length:0}/${i.slots||0})</button>`;
+                        let mList = (i.mods && i.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + i.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name} <span style="color:#666">[${md.type}]</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.${p}.mods.splice(${midx},1); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
+                        el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><div>${mBtn}<button class="btn btn-small" onclick="openBuilder('${p}')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; saveDisk(); applyToSheet();">X</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name} <span style="color:var(--red); margin-left:10px;">[DANO +${i.dmg} | ALC ${i.range}]</span></div><div class="slot-desc">${i.desc}</div>${x}${mList}`;
+                    }
                 }
             };
-            bSlot('slot_wpn_p', 'SLOT PRIMÁRIO', char.sic.wpn_p, 'wpn_p', 'builder');
-            bSlot('slot_wpn_s', 'SLOT SECUNDÁRIO', char.sic.wpn_s, 'wpn_s', 'builder_sec');
-            bSlot('slot_armor', 'TRAJE / ARMADURA', char.sic.armor, 'armor', 'armors');
+            bSlot('slot_wpn_p', 'SLOT PRIMÁRIO', char.sic.wpn_p, 'wpn_p');
+            bSlot('slot_wpn_s', 'SLOT SECUNDÁRIO', char.sic.wpn_s, 'wpn_s');
+            bSlot('slot_armor', 'TRAJE / ARMADURA', char.sic.armor, 'armor');
+            bSlot('slot_shield', 'GERADOR DE ESCUDO', char.sic.shield, 'shield');
             
             const rList = (id, arr, path) => {
-                document.getElementById(id).innerHTML = arr.map((a,i) => `<div class="selectable-item" style="padding:10px;"><div style="flex-grow:1;"><strong>${a.name || a.n}</strong><br><small style="color:var(--text-muted)">${a.d || a.traits || a.effect || ''}</small></div><button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.${path}.splice(${i},1); triggerSave(); applyToSheet();">X</button></div>`).join('');
+                document.getElementById(id).innerHTML = arr.map((a,i) => `<div class="selectable-item" style="padding:10px;"><div style="flex-grow:1;"><strong>${a.name || a.n}</strong> <span style="color:#666; font-size:0.75rem;">${a.load?`[Carga ${a.load}]`:''}</span><br><small style="color:var(--text-muted)">${a.d || a.traits || a.effect || ''}</small></div><button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.${path}.splice(${i},1); saveDisk(); applyToSheet();">X</button></div>`).join('');
             };
-            rList('s_melee_list', char.melee, 'melee'); rList('s_tac_list', char.inv_tac, 'inv_tac'); rList('s_uti_list', char.inv_uti, 'inv_uti'); rList('s_runic_list', char.runic, 'runic'); rList('s_gen_list', char.inv_gen, 'inv_gen');
+            rList('s_tac_list', char.inv_tac, 'inv_tac'); rList('s_uti_list', char.inv_uti, 'inv_uti'); rList('s_runic_list', char.runic, 'runic'); rList('s_gen_list', char.inv_gen, 'inv_gen');
             
-            // Drones Render
             if(!char.drones) char.drones =[];
             document.getElementById('s_drones_list').innerHTML = char.drones.map((d, i) => `
                 <div class="slot-box filled" style="border-left-color:var(--cyan); margin-bottom:10px;">
-                    <div class="slot-header"><strong style="color:#fff;">${d.n}</strong><div><button class="btn btn-small" style="margin-right:10px; color:var(--cyan);" onclick="openModSelector('drone_${i}')">+ MOD (${d.mods.length}/${d.slots})</button><button class="btn-red" style="background:none;border:none;cursor:pointer;" onclick="char.drones.splice(${i},1); applyToSheet();">X</button></div></div>
+                    <div class="slot-header"><strong style="color:#fff;">${d.name}</strong> <span style="color:#666; font-size:0.75rem;">[Tático +1]</span><div><button class="btn btn-small" style="margin-right:10px; color:var(--cyan);" onclick="openModSelector('drone_${i}')">+ MOD (${d.mods.length}/${d.slots})</button><button class="btn-red" style="background:none;border:none;cursor:pointer;" onclick="char.drones.splice(${i},1); applyToSheet();">X</button></div></div>
                     <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">INT: ${d.integ} | ABS: ${d.abs} | VEL: ${d.spd} | DEF: ${d.def}</div>
                     ${d.mods.length>0 ? `<div style="border-top:1px dashed #333; padding-top:5px;">` + d.mods.map((md, midx)=>`<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name} <span style="color:#666;">[${md.slots} slot]</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.drones[${i}].mods.splice(${midx},1); applyToSheet();">x</button></div>`).join('') + `</div>` : ''}
                 </div>
@@ -756,72 +813,106 @@
             curBuildSlot = slot;
             if(slot==='wpn_p' || slot==='wpn_s') {
                 document.getElementById('mb_title').innerText = slot==='wpn_p' ? "MONTAR PRIMÁRIA" : "MONTAR SECUNDÁRIA";
-                document.getElementById('mb_armor_fields').style.display = 'none'; document.getElementById('mb_weapon_fields').style.display = 'block';
+                document.getElementById('mb_armor_fields').style.display = 'none'; document.getElementById('mb_weapon_fields').style.display = 'block'; document.getElementById('mb_wpn_tabs').style.display = 'block';
+                
                 document.getElementById('mb_f').innerHTML = '<option value="">[ FRAME ]</option>' + DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.n}</option>`).join('');
                 document.getElementById('mb_c').innerHTML = '<option value="">[ NÚCLEO ]</option>' + DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('');
                 
-                if(char.sic[slot]) {
-                    document.getElementById('mb_f_t').value = char.sic[slot].frame_lvl; document.getElementById('mb_c_t').value = char.sic[slot].core_lvl;
-                }
+                const mList = slot==='wpn_p' ? DB.arsenal.melee_primary : DB.arsenal.melee_secondary;
+                document.getElementById('mb_m').innerHTML = '<option value="">[ LÂMINA/CONTUSÃO ]</option>' + mList.map((m,i)=>`<option value="${i}">${m.n}</option>`).join('');
+
+                if(char.sic[slot] && char.sic[slot].is_melee) switchWeaponTab('melee'); else switchWeaponTab('fogo');
+                
+                if(char.sic[slot] && !char.sic[slot].is_melee) { document.getElementById('mb_f_t').value = char.sic[slot].frame_lvl||1; document.getElementById('mb_c_t').value = char.sic[slot].core_lvl||1; }
                 previewBuild(); document.getElementById('modal-builder').style.display = 'flex';
             } else if(slot==='armor') {
                 document.getElementById('mb_title').innerText = "EQUIPAR TRAJE/ARMADURA";
-                document.getElementById('mb_weapon_fields').style.display = 'none'; document.getElementById('mb_armor_fields').style.display = 'block';
-                document.getElementById('mb_a').innerHTML = '<option value="">[ SELECIONAR ]</option>' + DB.arsenal.armors.map((a,i)=>`<option value="${i}">${a.n} [NF ${a.nf} | ${a.cost}¢]</option>`).join('');
+                document.getElementById('mb_weapon_fields').style.display = 'none'; document.getElementById('mb_wpn_tabs').style.display = 'none'; document.getElementById('mb_weapon_melee').style.display = 'none'; document.getElementById('mb_armor_fields').style.display = 'block';
+                document.getElementById('mb_a').innerHTML = '<option value="">[ SELECIONAR ]</option>' + DB.arsenal.armors.map((a,i)=>`<option value="${i}">${a.n}[NF ${a.nf} | ${a.cost}¢]</option>`).join('');
                 previewBuild(); document.getElementById('modal-builder').style.display = 'flex';
+            } else if (slot==='shield') {
+                openGenericModal('mods_armor', 'shield', true); // Open generic but filtered
             }
+        }
+
+        let wpnTab = 'fogo';
+        window.switchWeaponTab = function(t) {
+            wpnTab = t;
+            if(t==='fogo') { document.getElementById('mb_weapon_fogo').style.display='block'; document.getElementById('mb_weapon_melee').style.display='none'; document.getElementById('btn_tab_fogo').style.color='var(--cyan)'; document.getElementById('btn_tab_melee').style.color='var(--text-muted)'; }
+            else { document.getElementById('mb_weapon_fogo').style.display='none'; document.getElementById('mb_weapon_melee').style.display='block'; document.getElementById('btn_tab_fogo').style.color='var(--text-muted)'; document.getElementById('btn_tab_melee').style.color='var(--cyan)'; }
+            previewBuild();
         }
 
         window.previewBuild = function() {
             const btn = document.getElementById('mb_confirm'); const warn = document.getElementById('mb_warn'); warn.innerText = ''; btn.disabled = true;
             if(curBuildSlot==='wpn_p' || curBuildSlot==='wpn_s') {
-                const fi = document.getElementById('mb_f').value; const ci = document.getElementById('mb_c').value;
-                if(fi==="" || ci==="") return document.getElementById('mb_preview').innerHTML = "";
-                const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
-                const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
-                
-                let reqNfF = ft===1?0:(ft===2?3:7); let reqNfC = ct===1?0:(ct===2?3:7);
-                if(char.nf < reqNfF || char.nf < reqNfC) { warn.innerText = "NÍVEL DE FAMA (NF) INSUFICIENTE PARA ESTAS PEÇAS."; } else btn.disabled = false;
+                if(wpnTab==='fogo') {
+                    const fi = document.getElementById('mb_f').value; const ci = document.getElementById('mb_c').value;
+                    if(fi==="" || ci==="") return document.getElementById('mb_preview').innerHTML = "";
+                    const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
+                    const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
+                    
+                    let reqNfF = ft===1?0:(ft===2?3:7); let reqNfC = ct===1?0:(ct===2?3:7);
+                    if(char.nf < reqNfF || char.nf < reqNfC) { warn.innerText = "NÍVEL DE FAMA INSUFICIENTE PARA O TIER DA ARMA."; } else btn.disabled = false;
 
-                let baseD = c.dmg[3]; if(f.n.includes("Pistola")) baseD=c.dmg[0]; if(f.n.includes("Subm")) baseD=c.dmg[1]; if(f.n.includes("Escopeta")) baseD=c.dmg[2]; if(f.n.includes("Precisão")) baseD=c.dmg[4];
-                let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(f.n.includes("Pistola") || f.n.includes("Subm")) d += 1; else d += 2; }
-                let slots = ft + 1;
-                
-                document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${f.n} T${ft} // ${c.n} T${ct}</strong><br><div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${d}</span> | ALCANCE: <strong>${f.r}</strong> | CALOR: <strong>${c.h}</strong> | SLOTS MOD: <strong>${slots}</strong></div><div style="font-size:0.8rem; color:var(--text-muted);"><strong>[FRAME]:</strong> ${f.eff}</div><div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;"><strong>[NÚCLEO]:</strong> ${c.eff}</div>`;
+                    let baseD = c.dmg[3]; if(f.n.includes("Pistola")) baseD=c.dmg[0]; if(f.n.includes("Subm")) baseD=c.dmg[1]; if(f.n.includes("Escopeta")) baseD=c.dmg[2]; if(f.n.includes("Precisão")) baseD=c.dmg[4];
+                    let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(f.n.includes("Pistola") || f.n.includes("Subm")) d += 1; else d += 2; }
+                    
+                    document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${f.n} T${ft} // ${c.n} T${ct}</strong><br><div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${d}</span> | ALCANCE: <strong>${f.r}</strong> | CALOR: <strong>${c.h}</strong> | SLOTS: <strong>${ft+1}</strong></div><div style="font-size:0.8rem; color:var(--text-muted);"><strong>[FRAME]:</strong> ${f.eff}</div><div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;"><strong>[NÚCLEO]:</strong> ${c.eff}</div>`;
+                } else {
+                    const mi = document.getElementById('mb_m').value; if(mi==="") return document.getElementById('mb_preview').innerHTML = "";
+                    const mList = curBuildSlot==='wpn_p' ? DB.arsenal.melee_primary : DB.arsenal.melee_secondary;
+                    const m = mList[mi];
+                    if(char.nf < m.nf) { warn.innerText = "NÍVEL DE FAMA INSUFICIENTE."; } else btn.disabled = false;
+                    document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${m.n}</strong><br><div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${m.dmg}</span> | ALCANCE: <strong>Engajado</strong></div><div style="font-size:0.8rem; color:var(--text-muted);">${m.traits}</div>`;
+                }
             } else if(curBuildSlot==='armor') {
                 const ai = document.getElementById('mb_a').value; if(ai==="") return document.getElementById('mb_preview').innerHTML = "";
                 const a = DB.arsenal.armors[ai];
                 if(char.nf < a.nf) { warn.innerText = "NÍVEL DE FAMA INSUFICIENTE."; } else btn.disabled = false;
-                document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${a.n}</strong><br><div style="margin:10px 0; color:#fff;">ABSORÇÃO: <strong>${a.abs}</strong> (Quebrada: ${a.broken}) | SLOTS MOD: <strong>${a.slots}</strong></div><div style="font-size:0.8rem; color:var(--text-muted);">${a.traits}</div>`;
+                document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${a.n}</strong><br><div style="margin:10px 0; color:#fff;">ABSORÇÃO: <strong>${a.abs}</strong> (Quebrada: ${a.broken}) | SLOTS: <strong>${a.slots}</strong></div><div style="font-size:0.8rem; color:var(--text-muted);">${a.traits}</div>`;
             }
         }
 
         window.confirmBuild = function() {
             if(curBuildSlot==='wpn_p' || curBuildSlot==='wpn_s') {
-                const f = DB.arsenal.frames[document.getElementById('mb_f').value]; const c = DB.arsenal.cores[document.getElementById('mb_c').value];
-                const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
-                let baseD = c.dmg[3]; if(f.n.includes("Pistola")) baseD=c.dmg[0]; if(f.n.includes("Subm")) baseD=c.dmg[1]; if(f.n.includes("Escopeta")) baseD=c.dmg[2]; if(f.n.includes("Precisão")) baseD=c.dmg[4];
-                let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(f.n.includes("Pistola") || f.n.includes("Subm")) d += 1; else d += 2; }
-                const oldMods = char.sic[curBuildSlot] ? char.sic[curBuildSlot].mods :[];
-                char.sic[curBuildSlot] = { name: `${f.n} T${ft} (${c.n} T${ct})`, dmg: d, range: f.r, h_max: c.h, h_cur: 0, desc: `${f.eff} // ${c.eff}`, frame_lvl: ft, core_lvl: ct, slots: ft+1, mods: oldMods };
+                if(wpnTab==='fogo') {
+                    const f = DB.arsenal.frames[document.getElementById('mb_f').value]; const c = DB.arsenal.cores[document.getElementById('mb_c').value];
+                    const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
+                    let baseD = c.dmg[3]; if(f.n.includes("Pistola")) baseD=c.dmg[0]; if(f.n.includes("Subm")) baseD=c.dmg[1]; if(f.n.includes("Escopeta")) baseD=c.dmg[2]; if(f.n.includes("Precisão")) baseD=c.dmg[4];
+                    let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(f.n.includes("Pistola") || f.n.includes("Subm")) d += 1; else d += 2; }
+                    const oldMods = (char.sic[curBuildSlot] && !char.sic[curBuildSlot].is_melee) ? char.sic[curBuildSlot].mods :[];
+                    char.sic[curBuildSlot] = { is_melee: false, name: `${f.n} T${ft} (${c.n} T${ct})`, dmg: d, range: f.r, h_max: c.h, h_cur: 0, h_bonus: 0, desc: `${f.eff} // ${c.eff}`, frame_lvl: ft, core_lvl: ct, slots: ft+1, mods: oldMods };
+                } else {
+                    const mList = curBuildSlot==='wpn_p' ? DB.arsenal.melee_primary : DB.arsenal.melee_secondary;
+                    const m = mList[document.getElementById('mb_m').value];
+                    char.sic[curBuildSlot] = { is_melee: true, name: m.n, dmg: m.dmg, traits: m.traits };
+                }
             } else if(curBuildSlot==='armor') {
                 const a = DB.arsenal.armors[document.getElementById('mb_a').value];
                 const oldMods = char.sic.armor ? char.sic.armor.mods :[];
                 char.sic.armor = { name: a.n, abs: a.abs, broken: a.broken, traits: a.traits, slots: a.slots, mods: oldMods };
             }
-            closeModal(); triggerSave(); applyToSheet();
+            closeModal(); saveDisk(); applyToSheet();
         }
 
         // --- CROMO ---
         window.renderSheetCromo = function() {
             document.getElementById('cromo_container').innerHTML = cyberCats.map(c => {
                 const data = char.cromo[c];
-                let html = `<div class="panel" style="border-top: 3px solid var(--purple);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"><h3 style="color:var(--purple); margin:0;">${c.toUpperCase()}</h3><select style="width:auto;" onchange="char.cromo['${c}'].t=parseInt(this.value); char.cromo['${c}'].m=[]; triggerSave(); applyToSheet();"><option value="0" ${data.t===0?'selected':''}>Offline</option><option value="1" ${data.t===1?'selected':''}>Tier I (1 Slot)[NF 0 | 5¢]</option><option value="2" ${data.t===2?'selected':''}>Tier II (2 Slots) [NF 3 | 10¢]</option><option value="3" ${data.t===3?'selected':''}>Tier III (3 Slots) [NF 7 | 20¢]</option></select></div>`;
+                let passivo = "";
+                if(data.t > 0) {
+                    let ref = DB.arsenal.cyber.find(x => x.name.includes(c) && x.name.includes("Tier"));
+                    if(ref) passivo = ref.d.split(".")[0] + ".";
+                }
+                
+                let html = `<div class="panel" style="border-top: 3px solid var(--purple);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"><h3 style="color:var(--purple); margin:0;">${c.toUpperCase()}</h3><select style="width:auto;" onchange="char.cromo['${c}'].t=parseInt(this.value); char.cromo['${c}'].m=[]; saveDisk(); applyToSheet();"><option value="0" ${data.t===0?'selected':''}>Offline</option><option value="1" ${data.t===1?'selected':''}>Tier I [NF 0 | 5¢]</option><option value="2" ${data.t===2?'selected':''}>Tier II[NF 3 | 10¢]</option><option value="3" ${data.t===3?'selected':''}>Tier III [NF 7 | 20¢]</option></select></div>`;
                 if(data.t > 0) {
                     let reqNf = data.t===1?0:(data.t===2?3:7);
                     if(char.nf < reqNf) html += `<div style="color:var(--red); font-size:0.8rem; margin-bottom:10px;">⚠️ NF insuficiente para manter este Tier.</div>`;
+                    html += `<div style="font-size:0.8rem; color:var(--cyan); margin-bottom:10px;">Passiva: ${passivo}</div>`;
                     for(let i=0; i<data.t; i++) {
-                        if(data.m[i]) html += `<div class="slot-box filled" style="border-left-color:var(--purple); padding:10px; margin-bottom:10px;"><div style="display:flex; justify-content:space-between;"><strong>${data.m[i].name}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.cromo['${c}'].m.splice(${i},1); triggerSave(); applyToSheet();">X</button></div><div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${data.m[i].d}</div></div>`;
+                        if(data.m[i]) html += `<div class="slot-box filled" style="border-left-color:var(--purple); padding:10px; margin-bottom:10px;"><div style="display:flex; justify-content:space-between;"><strong>${data.m[i].name}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.cromo['${c}'].m.splice(${i},1); saveDisk(); applyToSheet();">X</button></div><div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${data.m[i].d}</div></div>`;
                         else html += `<div class="slot-box" style="padding:15px; text-align:center; cursor:pointer;" onclick="openCromoSelector('${c}')"><span style="color:var(--text-muted); font-family:var(--font-mono); font-size:0.8rem;">[ SOQUETE VAZIO ]</span></div>`;
                     }
                 } else { html += `<div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:20px 0;">[ OFFLINE ]</div>`; }
@@ -832,9 +923,9 @@
         let cCromo = '';
         window.openCromoSelector = function(cat) {
             cCromo = cat; const list = document.getElementById('mg_list'); list.innerHTML = '';
-            DB.arsenal.cyber_units.filter(u => u.cat === cat).forEach((item, i) => {
+            DB.arsenal.cyber.filter(u => u.name.includes(cat) && !u.name.includes("Tier")).forEach((item, i) => {
                 const locked = char.nf < item.nf;
-                list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red);':''}"><div style="flex-grow:1;"><strong style="color:var(--purple)">${item.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${item.nf} | ${item.cost} ¢]</span><br><small style="color:var(--text-muted)">${item.d}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.cromo['${cat}'].m.push(${JSON.stringify(item).replace(/"/g, '&quot;')}); closeModal(); triggerSave(); applyToSheet();">INSTALAR</button></div>`;
+                list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--purple)">${item.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${item.nf} | ${item.cost} ¢]</span><br><small style="color:var(--text-muted)">${item.d}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.cromo['${cat}'].m.push(${JSON.stringify(item).replace(/"/g, '&quot;')}); closeModal(); saveDisk(); applyToSheet();">INSTALAR</button></div>`;
             });
             document.getElementById('mg_title').innerText = "UNIDADES CIBERNÉTICAS: " + cat.toUpperCase();
             document.getElementById('modal-generic').style.display = 'flex';
@@ -842,30 +933,49 @@
 
         // --- GENERIC MODALS ---
         let cGenP = '';
-        window.openGenericModal = function(dbKey, path) {
+        window.openGenericModal = function(dbKey, path, isShield=false) {
             cGenP = path; const list = document.getElementById('mg_list'); list.innerHTML = ''; let items =[];
             if(dbKey==='domains') {
-                DB.domains.forEach(d => { const h = char.dom.find(x=>x.n===d.name); list.innerHTML += `<div class="selectable-item" style="${h?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${d.name}</strong><br><small>${d.desc}</small></div><button class="btn btn-small" ${h?'disabled':''} onclick="char.dom.push({n:'${d.name}', lvl:1, flips:1}); closeModal(); triggerSave(); applyToSheet();">TREINAR</button></div>`; });
+                DB.domains.forEach(d => { const h = char.dom.find(x=>x.n===d.name); list.innerHTML += `<div class="selectable-item ${h?'locked':''}"><div style="flex-grow:1;"><strong>${d.name}</strong><br><small>${d.desc}</small></div><button class="btn btn-small" ${h?'disabled':''} onclick="char.dom.push({n:'${d.name}', lvl:1, flips:1}); closeModal(); saveDisk(); applyToSheet();">TREINAR</button></div>`; });
             } else if(dbKey==='masteries') {
                 const cats =[...new Set(DB.masteries.map(m=>m.type))];
                 cats.forEach(cat => {
-                    list.innerHTML += `<div class="cat-header">${cat}</div>`;
+                    list.innerHTML += `<div class="cat-header">${cat.toUpperCase()}</div>`;
                     DB.masteries.filter(m=>m.type===cat).forEach(m => {
-                        const has = char.masteries.find(x=>x.name===m.name);
-                        list.innerHTML += `<div class="selectable-item" style="${has?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${m.name}</strong><br><small>${m.effect}</small></div><button class="btn btn-small" ${has?'disabled':''} onclick="char.masteries.push({name:'${m.name}', effect:'${m.effect}'}); closeModal(); triggerSave(); applyToSheet();">ADD</button></div>`;
+                        const has = char.adv.find(x=>x.n===m.name);
+                        list.innerHTML += `<div class="selectable-item ${has?'locked':''}"><div style="flex-grow:1;"><strong>${m.name}</strong><br><small>${m.effect}</small></div><button class="btn btn-small" ${has?'disabled':''} onclick="char.adv.push({n:'${m.name}', d:'${m.effect}'}); closeModal(); saveDisk(); applyToSheet();">ADD</button></div>`;
                     });
                 });
             } else if(dbKey==='drone_chassis') {
                 DB.arsenal.drone_chassis.forEach(ch => {
                     const locked = char.nf < ch.nf;
-                    list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red)':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${ch.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${ch.nf} | ${ch.cost} ¢]</span><br><small style="color:var(--text-muted)">Slots: ${ch.slots} | Integ: ${ch.integ} | Abs: ${ch.abs} | Vel: ${ch.spd}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="addDrone(${JSON.stringify(ch).replace(/"/g, '&quot;')})">COMPRAR</button></div>`;
+                    list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${ch.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${ch.nf} | ${ch.cost} ¢]</span><br><small style="color:var(--text-muted)">Slots: ${ch.slots} | Integ: ${ch.integ} | Abs: ${ch.abs} | Vel: ${ch.spd}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.drones.push({name:'${ch.name}', slots:${ch.slots}, integ:${ch.integ}, abs:${ch.abs}, spd:'${ch.spd}', def:'${ch.def}', mods:[]}); closeModal(); saveDisk(); applyToSheet();">COMPRAR</button></div>`;
                 });
             } else {
                 dbKey.split(',').forEach(k => { items = items.concat(DB.arsenal[k] || DB[k] ||[]); });
+                if(isShield) items = items.filter(i=>i.name.includes("Emissor"));
+                
+                // Category Grouping Logic
+                let cats = {"Equipamento":[]};
+                if(dbKey==='general_load_items') cats = {"Energia & Luz":[], "Sobrevivência":[], "Ferramentas & Infiltração":[], "Sensores":[]};
+                
                 items.forEach((item, i) => { 
-                    const locked = (item.nf !== undefined && char.nf < item.nf);
-                    let meta = ''; if(item.nf!==undefined) meta+=` [NF ${item.nf}]`; if(item.cost!==undefined) meta+=`[${item.cost} ¢]`;
-                    list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red)':''}"><div style="flex-grow:1;"><strong>${item.name || item.n}</strong><span style="color:var(--gold); font-size:0.75rem;">${meta}</span><br><small style="color:var(--text-muted)">${item.effect || item.d || item.traits || ''}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="installGenItem('${dbKey}', ${i})">ADD</button></div>`; 
+                    item._originalIndex = i;
+                    if(dbKey==='general_load_items') {
+                        if(item.name.includes("Célula") || item.name.includes("Pedra") || item.name.includes("Cubo")) cats["Energia & Luz"].push(item);
+                        else if(item.name.includes("Kit de") || item.name.includes("Sequenciador") || item.name.includes("Explosivo")) cats["Ferramentas & Infiltração"].push(item);
+                        else if(item.name.includes("Scanner") || item.name.includes("Sensor") || item.name.includes("Commpad")) cats["Sensores"].push(item);
+                        else cats["Sobrevivência"].push(item);
+                    } else cats["Equipamento"].push(item);
+                });
+
+                Object.keys(cats).forEach(cat => {
+                    if(cats[cat].length > 0 && dbKey==='general_load_items') list.innerHTML += `<div class="cat-header">${cat.toUpperCase()}</div>`;
+                    cats[cat].forEach(item => {
+                        const locked = (item.nf !== undefined && char.nf < item.nf);
+                        let meta = ''; if(item.nf!==undefined) meta+=` [NF ${item.nf}]`; if(item.cost!==undefined) meta+=`[${item.cost} ¢]`;
+                        list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong>${item.name || item.n}</strong><span style="color:var(--gold); font-size:0.75rem; margin-left:10px;">${meta}</span><br><small style="color:var(--text-muted)">${item.effect || item.d || item.traits || ''}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="installGenItem('${dbKey}', ${item._originalIndex})">ADD</button></div>`; 
+                    });
                 });
             }
             document.getElementById('mg_title').innerText = "BASE DE DADOS DO SINDICATO"; document.getElementById('modal-generic').style.display = 'flex';
@@ -873,12 +983,9 @@
         
         window.installGenItem = function(dbKey, idx) {
             let items =[]; dbKey.split(',').forEach(k => items = items.concat(DB.arsenal[k] || DB[k] ||[]));
-            char[cGenP].push(JSON.parse(JSON.stringify(items[idx]))); closeModal(); triggerSave(); applyToSheet();
-        }
-
-        window.addDrone = function(ch) {
-            char.drones.push({ n: ch.name, integ: ch.integ, abs: ch.abs, spd: ch.spd, def: ch.def, slots: ch.slots, mods:[] });
-            closeModal(); triggerSave(); applyToSheet();
+            if(cGenP === 'shield') char.sic.shield = JSON.parse(JSON.stringify(items[idx]));
+            else char[cGenP].push(JSON.parse(JSON.stringify(items[idx])));
+            closeModal(); saveDisk(); applyToSheet();
         }
 
         window.openModSelector = function(target) {
@@ -886,18 +993,30 @@
             let src =[]; let currSlots = 0; let maxSlots = 0;
             if(target.startsWith('drone_')) {
                 const dIdx = parseInt(target.split('_')[1]); const dr = char.drones[dIdx];
-                src = DB.arsenal.drone_modules; maxSlots = dr.slots; dr.mods.forEach(m=> currSlots += m.slots);
-                src.forEach((m, i) => {
-                    const locked = (char.nf < m.nf) || (currSlots + m.slots > maxSlots);
-                    list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red)':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${m.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢ | ${m.slots} Slot]</span><br><small style="color:var(--text-muted)">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.drones[${dIdx}].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); triggerSave(); applyToSheet();">ADD</button></div>`;
+                src = DB.arsenal.drone_modules; maxSlots = dr.slots; dr.mods.forEach(m=> currSlots += m.slots||1);
+                
+                let dCats = {"Ofensivo":[], "Suporte":[], "Tático":[]};
+                src.forEach((m,i)=> { m._i = i; if(m.name.includes("Ofensivo")) dCats["Ofensivo"].push(m); else if(m.name.includes("Tático")) dCats["Tático"].push(m); else dCats["Suporte"].push(m); });
+                
+                Object.keys(dCats).forEach(c => {
+                    list.innerHTML += `<div class="cat-header">${c.toUpperCase()}</div>`;
+                    dCats[c].forEach(m => {
+                        const locked = (char.nf < m.nf) || (currSlots + (m.slots||1) > maxSlots);
+                        list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${m.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢ | ${m.slots||1} Slot]</span><br><small style="color:var(--text-muted)">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.drones[${dIdx}].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); saveDisk(); applyToSheet();">ADD</button></div>`;
+                    });
                 });
             } else {
+                let mCats = {"Frame":[], "Núcleo":[]};
                 if(target==='armor') { src = DB.arsenal.mods_armor; maxSlots = char.sic.armor.slots; char.sic.armor.mods.forEach(m=> currSlots++); }
                 else { src = DB.arsenal.mods_weapon; maxSlots = char.sic[target].slots; char.sic[target].mods.forEach(m=> currSlots++); }
                 
                 src.forEach((m, i) => {
                     const locked = (char.nf < m.nf) || (currSlots >= maxSlots);
-                    list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red)':''}"><div style="flex-grow:1;"><strong>${m.name} ${m.type?`(${m.type})`:''}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢]</span><br><small style="color:var(--text-muted)">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.sic['${target}'].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); triggerSave(); applyToSheet();">ADD</button></div>`;
+                    if(m.type) {
+                        list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong>${m.name} <span style="color:#666">[${m.type}]</span></strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢]</span><br><small style="color:var(--text-muted)">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.sic['${target}'].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); saveDisk(); applyToSheet();">ADD</button></div>`;
+                    } else {
+                        list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong>${m.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢]</span><br><small style="color:var(--text-muted)">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.sic['${target}'].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); saveDisk(); applyToSheet();">ADD</button></div>`;
+                    }
                 });
             }
             document.getElementById('mg_title').innerText = "INSTALAR MODIFICAÇÃO"; document.getElementById('modal-generic').style.display = 'flex';
@@ -909,20 +1028,20 @@
             char.contacts.forEach((c, i) => {
                 list.innerHTML += `<div style="background:#141418; padding:15px; margin-bottom:10px; border-left:3px solid var(--cyan); border-radius:4px;">
                     <div style="display:flex; justify-content:space-between; margin-bottom:10px; gap:10px;">
-                        <input type="text" value="${c.n}" placeholder="Nome" style="font-weight:bold; color:var(--cyan); flex-grow:1;" onchange="char.contacts[${i}].n=this.value; triggerSave();">
-                        <select style="width:120px;" onchange="char.contacts[${i}].cat=this.value; triggerSave();"><option ${c.cat==='Amigo'?'selected':''}>Amigo</option><option ${c.cat==='Conhecido'?'selected':''}>Conhecido</option></select>
-                        <select style="width:140px;" onchange="char.contacts[${i}].sph=this.value; triggerSave();"><option ${c.sph==='Corporativa'?'selected':''}>Corporativa</option><option ${c.sph==='Militar'?'selected':''}>Militar</option><option ${c.sph==='Submundo'?'selected':''}>Submundo</option><option ${c.sph==='Tecnologia'?'selected':''}>Tecnologia</option><option ${c.sph==='Biotech'?'selected':''}>Biotech</option><option ${c.sph==='Logística'?'selected':''}>Logística</option><option ${c.sph==='Sintonização'?'selected':''}>Sintonização</option></select>
+                        <input type="text" value="${c.name || c.n}" placeholder="Nome" style="font-weight:bold; color:var(--cyan); flex-grow:1;" onchange="char.contacts[${i}].n=this.value; saveDisk();">
+                        <select style="width:120px;" onchange="char.contacts[${i}].cat=this.value; saveDisk();"><option ${c.cat==='Amigo'?'selected':''}>Amigo</option><option ${c.cat==='Conhecido'?'selected':''}>Conhecido</option></select>
+                        <select style="width:140px;" onchange="char.contacts[${i}].sph=this.value; saveDisk();"><option ${c.sph==='Corporativa'?'selected':''}>Corporativa</option><option ${c.sph==='Militar'?'selected':''}>Militar</option><option ${c.sph==='Submundo'?'selected':''}>Submundo</option><option ${c.sph==='Tecnologia'?'selected':''}>Tecnologia</option><option ${c.sph==='Biotech'?'selected':''}>Biotech</option><option ${c.sph==='Logística'?'selected':''}>Logística</option><option ${c.sph==='Sintonização'?'selected':''}>Sintonização</option></select>
                     </div>
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-                        <label style="color:var(--gold); margin:0;">DÍVIDA (0-5):</label>
-                        <input type="number" min="0" max="5" value="${c.debt||0}" style="width:60px;" onchange="char.contacts[${i}].debt=parseInt(this.value); triggerSave();">
+                        <label style="color:var(--gold); margin:0;">PONTOS DE DÍVIDA (0-5):</label>
+                        <input type="number" min="0" max="5" value="${c.debt||0}" style="width:60px;" onchange="char.contacts[${i}].debt=parseInt(this.value); saveDisk();">
                     </div>
-                    <textarea rows="2" placeholder="Anotações / Favores..." onchange="char.contacts[${i}].d=this.value; triggerSave();">${c.d}</textarea>
-                    <div style="text-align:right; margin-top:5px;"><button class="btn-red" style="background:none; border:none; cursor:pointer;" onclick="char.contacts.splice(${i},1); triggerSave(); applyToSheet();">REMOVER CONTATO</button></div>
+                    <textarea rows="2" placeholder="Anotações / Favores..." onchange="char.contacts[${i}].d=this.value; saveDisk();">${c.d}</textarea>
+                    <div style="text-align:right; margin-top:5px;"><button class="btn-red" style="background:none; border:none; cursor:pointer;" onclick="char.contacts.splice(${i},1); saveDisk(); applyToSheet();">REMOVER CONTATO</button></div>
                 </div>`;
             });
         }
-        window.addContact = function() { char.contacts.push({n:"Novo", cat:"Conhecido", sph:"Submundo", debt:0, d:""}); renderPersona(); triggerSave(); }
+        window.addContact = function() { char.contacts.push({n:"Novo", cat:"Conhecido", sph:"Submundo", debt:0, d:""}); renderPersona(); saveDisk(); }
         
         window.switchView = function(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
         window.switchTab = function(id, btn) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
