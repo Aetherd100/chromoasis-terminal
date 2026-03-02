@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChromOasis // Sindicato OS v15.0</title>
+    <title>ChromOasis // Sindicato OS v15.1</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* PALETA 'CHASSI SLATE' */
         :root {
             --bg-base: #18181b;
             --bg-panel: #27272a;
-            --bg-panel-hover: #3f3f46;
             --border-dim: #3f3f46;
             --text-main: #e4e4e7;
             --text-muted: #a1a1aa;
@@ -65,7 +64,7 @@
         .prog-node.active { color: var(--cyan); font-weight: bold; border-bottom: 2px solid var(--cyan); padding-bottom: 13px; margin-bottom: -15px; }
         .wiz-step { display: none; }
         .wiz-step.active { display: block; }
-        .wiz-attr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 20px 0; }
+        .wiz-attr-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
 
         /* TABS */
         .tab-bar { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid var(--border-dim); }
@@ -89,13 +88,14 @@
 
         .ess-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
         .ess-box { background: #18181b; border: 1px solid var(--border-dim); padding: 10px; text-align: center; border-radius: 4px; }
-        .ess-val { font-size: 1.4rem; font-weight: bold; color: var(--text-main); font-family: var(--font-mono); }
+        .ess-val { font-size: 1.4rem; font-weight: bold; color: var(--text-main); font-family: var(--font-mono); display:flex; justify-content:center; align-items:center;}
+        .ess-val input { width: 50px; border: none; background: transparent; color: var(--cyan); font-size: 1.4rem; text-align: center; font-weight: bold; }
         .ess-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); background: rgba(34, 211, 238, 0.1); padding: 2px 6px; border-radius: 10px; margin-top: 5px; display:inline-block; }
 
         /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
         .modal { background: var(--bg-base); border: 1px solid var(--border-dim); width: 90%; max-width: 850px; max-height: 85vh; overflow-y: auto; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .selectable-item { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .selectable-item { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -108,11 +108,34 @@
         <p id="loader-msg" style="color:var(--cyan); font-family:var(--font-mono);">Sincronizando com o GRID...</p>
     </div>
 
+    <!-- MODAL DATABASE -->
+    <div id="modal-selector" class="modal-overlay">
+        <div class="modal">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h1 id="modal-title" style="margin:0; border:none;">DATABASE</h1>
+                <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
+            </div>
+            <div id="modal-preview" style="background:#000; padding:15px; border:1px dashed var(--cyan); margin-bottom:20px; color:var(--text-muted); font-size:0.85rem;">Passe o mouse sobre um item para ver detalhes.</div>
+            <div id="modal-list"></div>
+        </div>
+    </div>
+
+    <!-- MODAL REGRAS (MD) -->
+    <div id="modal-rules" class="modal-overlay">
+        <div class="modal">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h1 style="margin:0; border:none;">ARQUIVO MESTRE - REGRAS</h1>
+                <button class="btn btn-red btn-small" onclick="document.getElementById('modal-rules').style.display='none'">FECHAR</button>
+            </div>
+            <div id="rules-content" style="background:#050505; padding:20px; border:1px solid #333; line-height: 1.6;">Carregando regras...</div>
+        </div>
+    </div>
+
     <!-- HUB VIEW -->
     <div id="view-hub" class="view active">
         <div style="text-align:center; margin: 60px 0;">
             <h1 style="font-size: 3rem; border:none; letter-spacing: 2px;">CHROMOASIS DB</h1>
-            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v15.0</p>
+            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v15.1</p>
         </div>
         <div style="display:flex; justify-content:center; gap:15px; margin-bottom: 50px;">
             <button class="btn" style="border-color:var(--cyan); color:var(--cyan);" onclick="startWizard()">+ RECRUTAR OPERADOR</button>
@@ -147,12 +170,12 @@
             <div class="wiz-step" id="step2">
                 <h2>ORIGEM BIOLÓGICA</h2>
                 <select id="w_origin_sel" onchange="renderWizOriginInfo()"></select>
-                <div id="w_origin_desc" style="margin-top:15px; font-size:0.9rem; background:#18181b; padding:15px; border-radius:4px;"></div>
+                <div id="w_origin_desc" style="margin-top:15px; font-size:0.9rem; background:#18181b; padding:15px; border-radius:4px; line-height: 1.5;"></div>
                 <div id="w_racial_choices_box" style="display:none; margin-top:20px;">
-                    <label style="color:var(--gold); display:block;">VANTAGEM DE MUTAÇÃO (ESCOLHA 1):</label>
+                    <label style="color:var(--gold); display:block; border-bottom:1px solid #333; padding-bottom:5px; margin-bottom:10px;">VANTAGEM EXTRA (ESCOLHA 1):</label>
                     <div id="w_racial_choices_list"></div>
                 </div>
-                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn" onclick="nextWizStep(1)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(3)">PROSSEGUIR >></button></div>
+                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(1)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(3)">PROSSEGUIR >></button></div>
             </div>
 
             <div class="wiz-step" id="step3">
@@ -161,25 +184,29 @@
                     <div style="font-family:var(--font-mono); color:var(--text-muted);">PONTOS RESTANTES: <span id="w_pts_left" style="color:var(--green); font-size:1.5rem; font-weight:bold;">0</span></div>
                 </div>
                 <div class="wiz-attr-grid" id="w_attr_grid"></div>
-                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn" onclick="nextWizStep(2)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(4)">PROSSEGUIR >></button></div>
+                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(2)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(4)">PROSSEGUIR >></button></div>
             </div>
 
             <div class="wiz-step" id="step4">
                 <h2>TREINAMENTO DE DOMÍNIOS (MÁX 2 - NÍVEL I)</h2>
-                <div id="w_dom_list" style="max-height:350px; overflow-y:auto;"></div>
-                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn" onclick="nextWizStep(3)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(5)">PROSSEGUIR >></button></div>
+                <div class="panel" style="padding:0;">
+                    <div id="w_dom_list" style="max-height:350px; overflow-y:auto; padding:10px;"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:20px;"><button class="btn btn-red" onclick="nextWizStep(3)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(5)">PROSSEGUIR >></button></div>
             </div>
 
             <div class="wiz-step" id="step5">
                 <h2>VANTAGENS DE HISTÓRICO</h2>
-                <p style="font-size:0.85rem; color:var(--text-muted);">Regra: 3 vantagens do mesmo histórico, ou 1 de cada de 2 históricos diferentes (Total 2).</p>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Regra: Até 3 do mesmo histórico OU 1 de cada de 2 históricos diferentes.</p>
                 <select id="w_hist_sel" onchange="renderWizHistAdvs()" style="margin-bottom:15px;"></select>
-                <div id="w_hist_pool" style="max-height:200px; overflow-y:auto;"></div>
+                <div class="panel" style="padding:0;">
+                    <div id="w_hist_pool" style="max-height:250px; overflow-y:auto; padding:10px;"></div>
+                </div>
                 
                 <h3 style="margin-top:20px; font-size:0.85rem; color:var(--cyan);">SELECIONADAS:</h3>
                 <div id="w_selected_advs" style="background:#18181b; padding:10px; border-radius:4px; min-height:50px;"></div>
                 
-                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn" onclick="nextWizStep(4)"><< VOLTAR</button><button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR REGISTRO</button></div>
+                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(4)"><< VOLTAR</button><button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR REGISTRO</button></div>
             </div>
         </div>
     </div>
@@ -227,7 +254,7 @@
                         <div class="vitals-row" style="border-left: 3px solid var(--text-muted);">
                             <div>
                                 <div style="color:var(--text-muted); font-family:var(--font-mono); font-weight:bold;">ARMADURA FÍSICA</div>
-                                <select id="s_arm_state" style="margin-top:5px; padding:4px; font-size:0.75rem; width:120px;" onchange="updateCalcs()">
+                                <select id="s_arm_state" style="margin-top:5px; padding:4px; font-size:0.75rem; width:120px;" onchange="triggerSave()">
                                     <option value="Normal">Normal</option><option value="Danificada">Danificada</option><option value="Quebrada">Quebrada</option>
                                 </select>
                             </div>
@@ -276,7 +303,7 @@
 
                     <div class="panel" style="padding:15px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <h2 style="margin:0; border:none;">DOMÍNIOS</h2>
+                            <h2 style="margin:0; border:none;">DOMÍNIOS (TREINO)</h2>
                             <button class="btn btn-small" onclick="openGenericModal('domains', 'dom')">+ ADICIONAR</button>
                         </div>
                         <div id="s_dom_list"></div>
@@ -328,7 +355,7 @@
 
         <!-- TAB 3: CROMO -->
         <div id="t_cromo" class="tab-content">
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Interfaces estruturais reduzem sua Sobrecarga (SE) máxima e concedem bônus passivos nas essências e defesa.</p>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Interfaces estruturais reduzem sua Sobrecarga (SE) máxima e concedem bônus passivos nas essências e defesa. Dokkas instalam interfaces com custo reduzido (-1 SE).</p>
             <div class="grid-2" id="cromo_container"></div>
         </div>
 
@@ -407,34 +434,29 @@
         </div>
     </div>
 
-    <!-- MODAL REGRAS -->
-    <div id="modal-rules" class="modal-overlay">
-        <div class="modal" style="background:#18181b; color:#ccc;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
-                <h2 style="margin:0; border:none;">ARQUIVO MESTRE</h2>
-                <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
-            </div>
-            <div id="rules-content" style="line-height:1.6;">Carregando regras...</div>
-        </div>
-    </div>
-
+    <!-- SCRIPT CORE -->
     <script>
-        // --- CORE LÓGICA E DADOS ---
         let DB = null; let roster =[]; let char = null; let activeIdx = -1;
-        const attrMap = { esf: "Esforço", agi: "Agilidade", ard: "Ardil", cor: "Corpo", int: "Intelecto", per: "Percepção", lab: "Lábia", von: "Vontade", bal: "Balística", con: "Confronto" };
+        const attrMap = { esf: "ESFORÇO", agi: "AGILIDADE", ard: "ARDIL", cor: "CORPO", int: "INTELECTO", per: "PERCEPÇÃO", lab: "LÁBIA", von: "VONTADE", bal: "BALÍSTICA", con: "CONFRONTO" };
         const attrKeys = Object.keys(attrMap);
         const cyberCats =["Neural", "Fluxo", "Sensorial", "Atuadores", "Reativa"];
         let wizAdvs =[]; let wizDoms =[];
 
         window.onload = async () => {
             try {
-                const res = await fetch('database.json');
+                // CACHE BUSTER! Garante que o navegador puxe a versão mais atualizada do database.json
+                const res = await fetch('database.json?v=' + new Date().getTime());
                 if(!res.ok) throw new Error();
                 DB = await res.json();
+                
+                if(!DB.archetypes || !DB.histories) {
+                    alert("ATENÇÃO: O database.json parece corrompido ou incompleto. Atualize a página com Ctrl+F5.");
+                }
+
                 roster = JSON.parse(localStorage.getItem('co_roster_v15') || '[]');
                 document.getElementById('loader').style.display = 'none';
                 renderHub();
-            } catch(e) { document.getElementById('loader-msg').innerHTML = `<span style="color:var(--red)">ERRO: database.json não encontrado.</span>`; }
+            } catch(e) { document.getElementById('loader-msg').innerHTML = `<span style="color:var(--red)">ERRO: database.json não encontrado ou inválido.<br>Verifique se os arquivos estão na mesma pasta.</span>`; }
         };
 
         // --- HUB ---
@@ -453,14 +475,22 @@
 
         // --- WIZARD ---
         window.startWizard = function() {
-            wizAdvs = []; wizDoms =[]; document.getElementById('w_name').value = '';
+            if(!DB || !DB.archetypes) return alert("Banco de Dados não carregado.");
+            wizAdvs =[]; wizDoms =[]; document.getElementById('w_name').value = '';
             document.getElementById('w_arch').innerHTML = '<option value="">-- Arquétipo --</option>' + Object.keys(DB.archetypes).map(k => `<option value="${k}">${k}</option>`).join('');
             document.getElementById('w_origin_sel').innerHTML = Object.keys(DB.origins).map(k => `<option value="${k}">${DB.origins[k].name}</option>`).join('');
             document.getElementById('w_hist_sel').innerHTML = '<option value="">-- Histórico --</option>' + DB.histories.map((h,i) => `<option value="${i}">${h.name}</option>`).join('');
             updateWizArchDesc(); renderWizOriginInfo(); nextWizStep(1); switchView('view-wizard');
         }
-        window.nextWizStep = function(n) { document.querySelectorAll('.wiz-step, .prog-node').forEach(e => e.classList.remove('active')); document.getElementById('step'+n).classList.add('active'); document.getElementById('p'+n).classList.add('active'); if(n===3) renderWizAttr(); if(n===4) renderWizDomains(); }
+        window.nextWizStep = function(n) { 
+            document.querySelectorAll('.wiz-step, .prog-node').forEach(e => e.classList.remove('active')); 
+            document.getElementById('step'+n).classList.add('active'); 
+            document.getElementById('p'+n).classList.add('active'); 
+            if(n===3) renderWizAttr(); 
+            if(n===4) renderWizDomains(); 
+        }
         window.updateWizArchDesc = function() { document.getElementById('w_arch_desc').innerText = DB.archetypes[document.getElementById('w_arch').value] || ''; }
+        
         window.renderWizOriginInfo = function() {
             const k = document.getElementById('w_origin_sel').value; const o = DB.origins[k];
             document.getElementById('w_origin_desc').innerHTML = o.traits.replace(/(Constituição Titânica:|Mãos Pesadas:|Miragem:|Estigma Visual:|Sintonização Estável:|Inércia Física:|Versatilidade:)/g, "<br><strong style='color:var(--cyan)'>$1</strong>").substring(4);
@@ -469,20 +499,34 @@
                 box.style.display = 'block'; list.innerHTML = o.racial_choices.map((c, i) => `<div class="selectable-item"><div style="flex-grow:1;"><strong>${c.name}</strong><br><small style="color:var(--text-muted)">${c.effect}</small></div><input type="radio" name="r_pick" value="${i}" ${i===0?'checked':''}></div>`).join('');
             } else { box.style.display = 'none'; }
         }
+        
         window.renderWizAttr = function() {
             const ok = document.getElementById('w_origin_sel').value; const base = DB.origins[ok];
             document.getElementById('w_attr_grid').innerHTML = attrKeys.map(k => `
-            <div class="wiz-attr-box"><label style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem;">${attrMap[k].toUpperCase()}</label><div style="display:flex; justify-content:center; align-items:center; gap:5px; margin:10px 0;"><button class="btn btn-red" style="padding:4px 8px;" onclick="modWizAttr('${k}', -5)">-</button><input type="number" id="wa_${k}" value="${base[k]}" readonly><button class="btn" style="padding:4px 8px;" onclick="modWizAttr('${k}', 5)">+</button></div></div>`).join('');
+            <div class="wiz-attr-box">
+                <label style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem; letter-spacing:1px;">${attrMap[k]}</label>
+                <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin:10px 0;">
+                    <button class="btn btn-red" style="padding:4px 8px;" onclick="modWizAttr('${k}', -5)">-</button>
+                    <input type="number" id="wa_${k}" value="${base[k]}" readonly>
+                    <button class="btn" style="padding:4px 8px;" onclick="modWizAttr('${k}', 5)">+</button>
+                </div>
+                <div style="color:var(--text-muted); font-size:0.75rem; margin-top:8px;">Bônus: <span id="wab_${k}" style="color:var(--gold);">+${Math.floor(base[k]/10)}</span></div>
+            </div>`).join('');
             calcWizPts();
         }
         window.modWizAttr = function(k, amt) {
             const ok = document.getElementById('w_origin_sel').value; const el = document.getElementById('wa_'+k);
             let val = parseInt(el.value) + amt;
-            if(val < DB.origins[ok][k]) return;
+            if(val < DB.origins[ok][k]) return; // Impede descer além da base
+            
             let cap = 50; if((ok==='jotun' && (k==='esf'||k==='cor')) || (ok==='oni' && (k==='agi'||k==='per')) || (ok==='dokka' && (k==='int'||k==='von'))) cap = 60;
-            if(val > cap) return;
-            if(amt > 0) { let spent = 0; attrKeys.forEach(key => spent += ((key===k?val:parseInt(document.getElementById('wa_'+key).value)) - DB.origins[ok][key])); if(spent > DB.origins[ok].pts) return alert("Pontos insuficientes."); }
-            el.value = val; calcWizPts();
+            if(val > cap) return; // Impede subir além do limite
+
+            if(amt > 0) { 
+                let spent = 0; attrKeys.forEach(key => spent += ((key===k?val:parseInt(document.getElementById('wa_'+key).value)) - DB.origins[ok][key])); 
+                if(spent > DB.origins[ok].pts) return alert("Pontos insuficientes para esta melhoria."); 
+            }
+            el.value = val; document.getElementById('wab_'+k).innerText = "+" + Math.floor(val/10); calcWizPts();
         }
         window.calcWizPts = function() {
             const ok = document.getElementById('w_origin_sel').value; let spent = 0;
@@ -490,13 +534,15 @@
             const rem = DB.origins[ok].pts - spent;
             document.getElementById('w_pts_left').innerText = rem; document.getElementById('w_pts_left').style.color = rem < 0 ? "var(--red)" : "var(--green)";
         }
+        
         window.renderWizDomains = function() {
             document.getElementById('w_dom_list').innerHTML = DB.domains.map(d => {
                 const sel = wizDoms.includes(d.name);
                 return `<div class="selectable-item" style="${sel?'border-color:var(--cyan); background:#111;':''}"><div style="flex-grow:1;"><strong>${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div><button class="btn btn-small ${sel?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${sel?'REMOVER':'SELECIONAR'}</button></div>`;
             }).join('');
         }
-        window.toggleWizDom = function(n) { if(wizDoms.includes(n)) wizDoms = wizDoms.filter(x=>x!==n); else { if(wizDoms.length>=2) return alert("Máx 2."); wizDoms.push(n); } renderWizDomains(); }
+        window.toggleWizDom = function(n) { if(wizDoms.includes(n)) wizDoms = wizDoms.filter(x=>x!==n); else { if(wizDoms.length>=2) return alert("Máximo de 2 Domínios iniciais."); wizDoms.push(n); } renderWizDomains(); }
+        
         window.renderWizHistAdvs = function() {
             const hIdx = document.getElementById('w_hist_sel').value; const pool = document.getElementById('w_hist_pool'); pool.innerHTML = '';
             if(hIdx==="") return;
@@ -508,9 +554,9 @@
         window.addWizAdv = function(hIdx, aIdx) {
             const hName = DB.histories[hIdx].name; const adv = DB.histories[hIdx].advantages[aIdx];
             const hists =[...new Set(wizAdvs.map(x => x.h))];
-            if(wizAdvs.length >= 3) return alert("Máximo 3 vantagens.");
-            if(hists.length===1 && hists[0]!==hName && wizAdvs.length>1) return alert("Limite 1 de cada se misturar.");
-            if(hists.length===2 && !hists.includes(hName)) return alert("Máximo 2 históricos.");
+            if(wizAdvs.length >= 3) return alert("Máximo de 3 vantagens atingido.");
+            if(hists.length===1 && hists[0]!==hName && wizAdvs.length>1) return alert("Ao misturar históricos, o limite é de 1 vantagem de cada.");
+            if(hists.length===2 && !hists.includes(hName)) return alert("Máximo de 2 históricos diferentes permitidos.");
             wizAdvs.push({h: hName, n: adv.name, d: adv.effect}); renderWizHistAdvs(); renderWizSelAdvs();
         }
         window.renderWizSelAdvs = function() {
@@ -521,14 +567,14 @@
             </div>`).join('');
         }
         window.finalizeOperador = function() {
-            if(parseInt(document.getElementById('w_pts_left').innerText) < 0) return alert("Ajuste os pontos.");
+            if(parseInt(document.getElementById('w_pts_left').innerText) < 0) return alert("Ajuste os pontos antes de prosseguir.");
             const ok = document.getElementById('w_origin_sel').value;
             const n = {
-                name: document.getElementById('w_name').value || "Novo Operador", arch: document.getElementById('w_arch').value || "Especialista",
-                origin: DB.origins[ok].name, origin_k: ok, nf: 0, cred: 20, eter: 1, xp: 0, hp_cur: 10, shield_cur: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_broken: 0,
+                name: document.getElementById('w_name').value || "Novo Operador", arch: document.getElementById('w_arch').value || "Desconhecido",
+                origin: DB.origins[ok].name, origin_k: ok, nf: 0, cred: 20, eter: 1, xp: 0, hp_cur: 10, shield_cur: 0, se_cur: 0, arm_state: "Normal",
                 ess: {}, dom: wizDoms.map(d => ({n: d, lvl: 1, flips: 1})), adv: [...wizAdvs],
                 sic: { armor: null, shield: null, wpn_p: null, wpn_s: null },
-                inv_tac: [], inv_uti:[], inv_gen: [], runic: [], melee:[],
+                inv_tac:[], inv_uti:[], inv_gen: [], runic: [], melee:[],
                 cromo: { "Neural":{t:0,m:[]}, "Fluxo":{t:0,m:[]}, "Sensorial":{t:0,m:[]}, "Atuadores":{t:0,m:[]}, "Reativa":{t:0,m:[]} },
                 contacts:[], flaw: "", app: "", bg: "", notes: ""
             };
@@ -537,7 +583,7 @@
             if(ok !== 'humano') {
                 const p = document.querySelector('input[name="r_pick"]:checked').value;
                 n.adv.push({h: "Mutação Genética", n: DB.origins[ok].racial_choices[p].name, d: DB.origins[ok].racial_choices[p].effect});
-            } else { n.adv.push({h: "Ancestral", n: "Versatilidade", d: "Ganha +1 Maestria Extra na criação."}); }
+            } else { n.adv.push({h: "Ancestral", n: "Versatilidade", d: "Ganha +1 Maestria Extra na criação de personagem."}); }
             
             roster.push(n); localStorage.setItem('co_roster_v15', JSON.stringify(roster));
             activeIdx = roster.length - 1; char = roster[activeIdx];
@@ -547,7 +593,8 @@
         // --- SHEET ENGINE ---
         window.closeSheet = function() { triggerSave(); activeIdx = -1; char = null; renderHub(); }
         window.triggerSave = function() {
-            if(activeIdx === -1 || !char) return;['nf','cred','eter','xp','arm_state','arm_base','arm_broken'].forEach(k => { const el=document.getElementById('s_'+k); if(el) char[k] = (el.type==='number')?parseInt(el.value)||0:el.value; });
+            if(activeIdx === -1 || !char) return;
+            ['nf','cred','eter','xp','arm_state'].forEach(k => { const el=document.getElementById('s_'+k); if(el) char[k] = (el.type==='number')?parseInt(el.value)||0:el.value; });
             char.app = document.getElementById('p_app').value; char.flaw = document.getElementById('p_flaw').value;
             char.bg = document.getElementById('p_bg').value; char.notes = document.getElementById('p_notes').value;
             localStorage.setItem('co_roster_v15', JSON.stringify(roster));
@@ -562,13 +609,13 @@
         }
         window.applyToSheet = function() {
             if(!char) return;
-            document.getElementById('s_name').innerText = char.name.toUpperCase(); document.getElementById('s_origin').innerText = char.origin.toUpperCase(); document.getElementById('s_arch').innerText = char.arch.toUpperCase();['nf','cred','eter','xp','arm_state','arm_base','arm_broken'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]; });
+            document.getElementById('s_name').innerText = char.name.toUpperCase(); document.getElementById('s_origin').innerText = char.origin.toUpperCase(); document.getElementById('s_arch').innerText = char.arch.toUpperCase();
+            ['nf','cred','eter','xp','arm_state'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]; });
             document.getElementById('p_app').value = char.app||""; document.getElementById('p_flaw').value = char.flaw||""; document.getElementById('p_bg').value = char.bg||""; document.getElementById('p_notes').value = char.notes||"";
             renderSheetStatus(); renderSheetArsenal(); renderSheetCromo(); renderPersona(); updateCalcs();
         }
 
         window.renderSheetStatus = function() {
-            // Base + Cyber Math
             let eB = {...char.ess};
             if(char.cromo['Neural'].t > 0) { eB.int += 5; eB.von += 5; }
             if(char.cromo['Fluxo'].t > 0) { eB.cor += 5; }
@@ -577,8 +624,8 @@
 
             document.getElementById('s_ess_grid').innerHTML = attrKeys.map(k => `
             <div class="ess-box">
-                <label>${attrMap[k].toUpperCase()}</label>
-                <div class="ess-val">${eB[k]}%</div>
+                <label style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">${attrMap[k].toUpperCase()}</label>
+                <div class="ess-val"><input type="number" value="${eB[k]}" readonly>%</div>
                 <div class="ess-mod">+${Math.floor(eB[k]/10)}</div>
             </div>`).join('');
             
@@ -592,7 +639,6 @@
             document.getElementById('s_init').innerText = "1d10 + " + initB;
             document.getElementById('s_mov').innerText = (4 + Math.floor(Math.floor(eB.agi/10)/3)) + " Zonas";
 
-            // Domains
             document.getElementById('s_dom_list').innerHTML = char.dom.map((d, i) => `
             <div style="display:flex; justify-content:space-between; align-items:center; background:#18181b; padding:15px; margin-bottom:10px; border-radius:4px; border:1px solid var(--border-dim);">
                 <strong style="color:var(--cyan); width:30%; font-size:1.1rem;">${d.n}</strong>
@@ -600,17 +646,16 @@
                     <option value="1" ${d.lvl===1?'selected':''}>Nível I</option><option value="2" ${d.lvl===2?'selected':''}>Nível II</option><option value="3" ${d.lvl===3?'selected':''}>Nível III</option>
                 </select>
                 <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted); display:flex; align-items:center; gap:10px;">
-                    FLIPS: <button class="btn-vit" onclick="char.dom[${i}].flips=Math.max(0, char.dom[${i}].flips-1); triggerSave(); applyToSheet();">-</button>
+                    FLIPS: <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.max(0, char.dom[${i}].flips-1); triggerSave(); applyToSheet();">-</button>
                     <strong style="color:#fff; font-size:1.3rem; min-width:40px; text-align:center;">${d.flips}/${d.lvl}</strong>
-                    <button class="btn-vit" onclick="char.dom[${i}].flips=Math.min(${d.lvl}, char.dom[${i}].flips+1); triggerSave(); applyToSheet();">+</button>
+                    <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.min(${d.lvl}, char.dom[${i}].flips+1); triggerSave(); applyToSheet();">+</button>
                 </div>
                 <button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer; font-size:1.2rem;" onclick="char.dom.splice(${i},1); triggerSave(); applyToSheet();">X</button>
             </div>`).join('');
 
-            // Adv
             document.getElementById('s_adv_list').innerHTML = char.adv.map((a,i)=>`
             <div style="background:#18181b; border-left:3px solid var(--gold); padding:10px; margin-bottom:5px;">
-                <div style="display:flex; justify-content:space-between;"><strong style="color:var(--gold)">${a.n} ${a.h?`[${a.h}]`:''}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.adv.splice(${i},1); triggerSave(); applyToSheet();">X</button></div>
+                <div style="display:flex; justify-content:space-between;"><strong style="color:var(--gold)">${a.name || a.n} ${a.h?`[${a.h}]`:''}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.adv.splice(${i},1); triggerSave(); applyToSheet();">X</button></div>
                 <div style="font-size:0.85rem; color:var(--text-main); margin-top:5px;">${a.d || a.effect}</div>
             </div>`).join('');
         }
@@ -619,43 +664,34 @@
             let eB = {...char.ess}; if(char.cromo['Fluxo'].t > 0) eB.cor += 5; if(char.cromo['Neural'].t > 0) eB.von += 5;
             const bC = Math.floor(eB.cor/10); const bV = Math.floor(eB.von/10);
             
-            // HP
             let maxHp = 5 + (bC*2) + bV + (char.origin_k==='jotun'?5:0);
-            if(char.cromo['Fluxo'].t === 1) maxHp += 2;
-            if(char.cromo['Fluxo'].t === 2) maxHp += 4;
-            if(char.cromo['Fluxo'].t === 3) maxHp += 6;
-            document.getElementById('s_hp_max').innerText = maxHp;
-            document.getElementById('s_hp_cur').innerText = char.hp_cur;
+            if(char.cromo['Fluxo'].t === 1) maxHp += 2; if(char.cromo['Fluxo'].t === 2) maxHp += 4; if(char.cromo['Fluxo'].t === 3) maxHp += 6;
+            document.getElementById('s_hp_max').innerText = maxHp; document.getElementById('s_hp_cur').innerText = char.hp_cur;
 
-            // SE 
             let cst = 0; 
             cyberCats.forEach(c => {
                 let tc = 0;
                 if(c==='Neural'||c==='Fluxo') { if(char.cromo[c].t===1) tc=2; else if(char.cromo[c].t===2) tc=2; else if(char.cromo[c].t===3) tc=3; }
                 else { if(char.cromo[c].t===1) tc=1; else if(char.cromo[c].t===2) tc=1; else if(char.cromo[c].t===3) tc=2; }
-                if(char.origin_k === 'dokka') tc = Math.max(0, tc - 1);
+                if(char.origin_k === 'dokka' && char.cromo[c].t > 0) tc = Math.max(0, tc - 1);
                 cst += tc;
             });
             const maxSe = Math.max(1, (3 + bC + bV + (char.origin_k==='dokka'?2:0)) - cst);
-            document.getElementById('s_se_max').innerText = maxSe;
-            document.getElementById('s_se_cur').innerText = char.se_cur;
+            document.getElementById('s_se_max').innerText = maxSe; document.getElementById('s_se_cur').innerText = char.se_cur;
 
             const al = document.getElementById('se_alert');
             if(char.se_cur > maxSe) { al.innerText = "⚠️ COLAPSO TOTAL (INCONSCIENTE)"; al.style.color="var(--red)"; al.style.background="rgba(244, 63, 94, 0.1)"; al.style.display="block"; }
             else if(char.se_cur === maxSe) { al.innerText = "⚠️ PENALIDADE ATIVA (-20% TESTES)"; al.style.color="var(--gold)"; al.style.background="rgba(251, 191, 36, 0.1)"; al.style.display="block"; }
             else al.style.display="none";
 
-            // Armor Efetiva (Base + Reativa)
             let aBase = char.sic.armor ? char.sic.armor.abs : 0;
             if(char.cromo['Reativa'].t === 1 || char.cromo['Reativa'].t === 2) aBase += 1;
             if(char.cromo['Reativa'].t === 3) aBase += 2;
             let aBrok = char.sic.armor ? char.sic.armor.broken : 0;
             
-            document.getElementById('s_arm_base').value = aBase; document.getElementById('s_arm_broken').value = aBrok;
             const state = document.getElementById('s_arm_state').value;
             document.getElementById('s_eff_abs').innerText = (state==="Normal") ? aBase : (state==="Danificada" ? Math.floor(aBase/2) : aBrok);
 
-            // Escudo Efetivo (Base + Runa Uruz)
             let sMax = 0;
             if(char.sic.shield) { const match = char.sic.shield.effect.match(/\d+/); if(match) sMax = parseInt(match[0]); }
             char.runic.forEach(r => { if(r.name && r.name.includes("Uruz")) sMax += 10; });
@@ -663,7 +699,6 @@
             document.getElementById('s_shield_cur').innerText = char.shield_cur;
             document.getElementById('s_shield_name').innerText = char.sic.shield ? char.sic.shield.name : "Nenhum Gerador";
 
-            // Cargas
             let lt = 0, lu = 0, lg = 0;
             char.inv_tac.forEach(i => lt += (i.load||0)); char.inv_uti.forEach(i => lu += (i.load||0)); char.inv_gen.forEach(i => lg += (i.load||0));
             document.getElementById('load_tac').innerText = `${lt} / 2`; document.getElementById('load_uti').innerText = `${lu} / 4`; 
@@ -671,7 +706,7 @@
             document.getElementById('load_tac').style.color = lt>2 ? "var(--red)" : "var(--text-muted)"; document.getElementById('load_uti').style.color = lu>4 ? "var(--red)" : "var(--text-muted)";
         }
 
-        // --- ARSENAL / SLOTS COMP/CON ---
+        // --- ARSENAL SLOTS ---
         window.renderSheetArsenal = function() {
             const bSlot = (id, t, i, p, tp) => {
                 const el = document.getElementById(id);
@@ -698,8 +733,8 @@
             curSlot = p;
             if(t === 'builder' || t === 'builder_sec') {
                 document.getElementById('mw_title').innerText = (t==='builder') ? "MONTAR PRIMÁRIA" : "MONTAR SECUNDÁRIA";
-                document.getElementById('mw_f').innerHTML = '<option value="">[ FRAME ]</option>' + DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.n}</option>`).join('');
-                document.getElementById('mw_c').innerHTML = '<option value="">[ NÚCLEO ]</option>' + DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('');
+                document.getElementById('mw_f').innerHTML = '<option value="">[ FRAME ]</option>' + DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.name || f.n}</option>`).join('');
+                document.getElementById('mw_c').innerHTML = '<option value="">[ NÚCLEO ]</option>' + DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.name || c.n}</option>`).join('');
                 document.getElementById('mw_preview').innerHTML = "";
                 document.getElementById('modal-weapon').style.display = 'flex';
             } else {
@@ -725,16 +760,13 @@
             if(fi==="" || ci==="") return;
             const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
             
-            let baseD = c.dmg[3]; if(f.n.includes("Pistola")) baseD=c.dmg[0]; if(f.n.includes("Subm")) baseD=c.dmg[1]; if(f.n.includes("Escopeta")) baseD=c.dmg[2]; if(f.n.includes("Precisão")) baseD=c.dmg[4];
-            let d = baseD;
-            if(ct === 2) d += 1;
-            if(ct === 3) { if(f.n.includes("Pistola") || f.n.includes("Subm")) d += 1; else d += 2; }
-            
-            let slots = ft + 1; // Visual logic
+            const fName = f.name || f.n;
+            let baseD = c.dmg[3]; if(fName.includes("Pistola")) baseD=c.dmg[0]; if(fName.includes("Subm")) baseD=c.dmg[1]; if(fName.includes("Escopeta")) baseD=c.dmg[2]; if(fName.includes("Precisão")) baseD=c.dmg[4];
+            let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(fName.includes("Pistola") || fName.includes("Subm")) d += 1; else d += 2; }
             
             document.getElementById('mw_preview').innerHTML = `
-            <strong style="color:var(--cyan); font-size:1.1rem;">${f.n} T${ft} // ${c.n} T${ct}</strong><br>
-            <div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${d}</span> | ALCANCE: <strong>${f.r}</strong> | CALOR: <strong>${c.h}</strong> | SLOTS: <strong>${slots}</strong></div>
+            <strong style="color:var(--cyan); font-size:1.1rem;">${fName} T${ft} // ${c.name||c.n} T${ct}</strong><br>
+            <div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${d}</span> | ALCANCE: <strong>${f.range||f.r}</strong> | CALOR: <strong>${c.heat||c.h}</strong> | SLOTS MOD: <strong>${ft+1}</strong></div>
             <div style="font-size:0.8rem; color:var(--text-muted);"><strong>[FRAME]:</strong> ${f.eff}</div>
             <div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;"><strong>[NÚCLEO]:</strong> ${c.eff}</div>`;
         }
@@ -744,10 +776,11 @@
             const ft = parseInt(document.getElementById('mw_f_t').value); const ct = parseInt(document.getElementById('mw_c_t').value);
             if(fi==="" || ci==="") return;
             const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
-            let baseD = c.dmg[3]; if(f.n.includes("Pistola")) baseD=c.dmg[0]; if(f.n.includes("Subm")) baseD=c.dmg[1]; if(f.n.includes("Escopeta")) baseD=c.dmg[2]; if(f.n.includes("Precisão")) baseD=c.dmg[4];
-            let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(f.n.includes("Pistola") || f.n.includes("Subm")) d += 1; else d += 2; }
+            const fName = f.name || f.n;
+            let baseD = c.dmg[3]; if(fName.includes("Pistola")) baseD=c.dmg[0]; if(fName.includes("Subm")) baseD=c.dmg[1]; if(fName.includes("Escopeta")) baseD=c.dmg[2]; if(fName.includes("Precisão")) baseD=c.dmg[4];
+            let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(fName.includes("Pistola") || fName.includes("Subm")) d += 1; else d += 2; }
 
-            char.sic[curSlot] = { name: `${f.n} T${ft} (${c.n} T${ct})`, dmg: d, range: f.r, h_max: c.h, h_cur: 0, desc: `${f.eff} // ${c.eff}` };
+            char.sic[curSlot] = { name: `${fName} T${ft} (${c.name||c.n} T${ct})`, dmg: d, range: f.range||f.r, h_max: c.heat||c.h, h_cur: 0, desc: `${f.eff} // ${c.eff}` };
             closeModal(); triggerSave(); applyToSheet();
         }
 
@@ -768,47 +801,45 @@
 
         let cCromo = '';
         window.openCromoSelector = function(cat) {
-            cCromo = cat;
-            const list = document.getElementById('mg_list'); list.innerHTML = '';
-            const items = DB.arsenal.cyber_units.filter(u => u.cat === cat);
-            items.forEach((item, i) => { list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${item.name}</strong><br><small style="color:var(--text-muted)">${item.d}</small></div><button class="btn btn-small" onclick="char.cromo['${cat}'].m.push(DB.arsenal.cyber_units.filter(u=>u.cat==='${cat}')[${i}]); closeModal(); triggerSave(); applyToSheet();">INSTALAR</button></div>`; });
+            cCromo = cat; const list = document.getElementById('mg_list'); list.innerHTML = '';
+            const items = DB.arsenal.cyber_units ? DB.arsenal.cyber_units.filter(u => u.cat === cat) : DB.arsenal.cyber.filter(u => u.name.includes(cat) && !u.name.includes("Tier"));
+            items.forEach((item, i) => { list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${item.name}</strong><br><small style="color:var(--text-muted)">${item.d}</small></div><button class="btn btn-small" onclick="char.cromo['${cat}'].m.push(${JSON.stringify(item).replace(/"/g, '&quot;')}); closeModal(); triggerSave(); applyToSheet();">INSTALAR</button></div>`; });
             document.getElementById('mg_title').innerText = "UNIDADES: " + cat.toUpperCase();
             document.getElementById('modal-generic').style.display = 'flex';
         }
 
-        // --- GENERIC MODALS ---
+        // --- GENERIC MODALS E PERSONA ---
         let cGenP = '';
         window.openGenericModal = function(dbKey, path) {
-            cGenP = path;
-            const list = document.getElementById('mg_list'); list.innerHTML = '';
-            let items =[];
+            cGenP = path; const list = document.getElementById('mg_list'); list.innerHTML = ''; let items =[];
             if(dbKey==='domains') {
                 DB.domains.forEach(d => { const h = char.dom.find(x=>x.n===d.name); list.innerHTML += `<div class="selectable-item" style="${h?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${d.name}</strong><br><small>${d.desc}</small></div><button class="btn btn-small" ${h?'disabled':''} onclick="char.dom.push({n:'${d.name}', lvl:1, flips:1}); closeModal(); triggerSave(); applyToSheet();">TREINAR</button></div>`; });
+            } else if(dbKey==='masteries') {
+                DB.masteries.forEach(m => { list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${m.name}</strong> <span style="color:#666">[${m.type}]</span><br><small>${m.effect}</small></div><button class="btn btn-small" onclick="char.adv.push({n:'${m.name}', d:'${m.effect}'}); closeModal(); triggerSave(); applyToSheet();">ADD</button></div>`; });
             } else {
                 dbKey.split(',').forEach(k => { items = items.concat(DB.arsenal[k] || DB[k] ||[]); });
-                items.forEach((item, i) => {
-                    list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${item.name || item.n}</strong><br><small style="color:var(--text-muted)">${item.effect || item.d || item.traits || ''}</small></div><button class="btn btn-small" onclick="installGenItem('${dbKey}', ${i})">ADD</button></div>`;
-                });
+                items.forEach((item, i) => { list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${item.name || item.n}</strong><br><small style="color:var(--text-muted)">${item.effect || item.d || item.traits || ''}</small></div><button class="btn btn-small" onclick="installGenItem('${dbKey}', ${i})">ADD</button></div>`; });
             }
-            document.getElementById('mg_title').innerText = "BASE DE DADOS DO SINDICATO";
-            document.getElementById('modal-generic').style.display = 'flex';
+            document.getElementById('mg_title').innerText = "BASE DE DADOS DO SINDICATO"; document.getElementById('modal-generic').style.display = 'flex';
         }
-
         window.installGenItem = function(dbKey, idx) {
-            let items =[]; dbKey.split(',').forEach(k => items = items.concat(DB.arsenal[k] || DB[k] || []));
+            let items =[]; dbKey.split(',').forEach(k => items = items.concat(DB.arsenal[k] || DB[k] ||[]));
             char[cGenP].push(JSON.parse(JSON.stringify(items[idx])));
             closeModal(); triggerSave(); applyToSheet();
         }
 
         window.renderPersona = function() {
-            document.getElementById('s_contacts_list').innerHTML = char.contacts.map((c, i) => `
-            <div style="background:#18181b; padding:15px; margin-bottom:10px; border-left:3px solid var(--cyan); border-radius:4px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><input type="text" value="${c.name}" style="background:transparent; border:none; color:var(--cyan); font-weight:bold; font-size:1.1rem;" onchange="char.contacts[${i}].name=this.value; triggerSave();"><button style="background:none; border:none; color:var(--red); cursor:pointer; font-weight:bold;" onclick="char.contacts.splice(${i},1); triggerSave(); applyToSheet();">X</button></div>
-                <textarea rows="2" style="font-size:0.85rem;" placeholder="Detalhes, favores e dívidas..." onchange="char.contacts[${i}].d=this.value; triggerSave();">${c.d}</textarea>
-            </div>`).join('');
+            const list = document.getElementById('s_contacts_list'); list.innerHTML = '';
+            if(!char.contacts) char.contacts =[];
+            char.contacts.forEach((c, i) => {
+                list.innerHTML += `<div style="background:#18181b; padding:15px; margin-bottom:10px; border-left:3px solid var(--cyan); border-radius:4px;"><div style="display:flex; justify-content:space-between; margin-bottom:10px;"><input type="text" value="${c.name || c.n}" style="background:transparent; border:none; color:var(--cyan); font-weight:bold; font-size:1.1rem; padding:0;" onchange="char.contacts[${i}].name=this.value; triggerSave();"><button style="background:none; border:none; color:var(--red); cursor:pointer; font-weight:bold;" onclick="char.contacts.splice(${i},1); triggerSave(); applyToSheet();">X</button></div><textarea rows="2" style="font-size:0.85rem;" placeholder="Detalhes, favores e dívidas..." onchange="char.contacts[${i}].d=this.value; triggerSave();">${c.d}</textarea></div>`;
+            });
         }
-
+        
+        window.switchView = function(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        window.switchTab = function(id, btn) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
         window.closeModal = function() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
+        
         window.openRulesModal = async function() {
             document.getElementById('modal-rules').style.display = 'flex';
             try { const res = await fetch('regras.md'); if(!res.ok) throw new Error(); document.getElementById('rules-content').innerHTML = marked.parse(await res.text()); }
