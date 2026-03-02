@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChromOasis // Sindicato OS v15.1</title>
+    <title>ChromOasis // Sindicato OS v16.0</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* PALETA 'CHASSI SLATE' */
         :root {
-            --bg-base: #18181b;
-            --bg-panel: #27272a;
-            --border-dim: #3f3f46;
-            --text-main: #e4e4e7;
-            --text-muted: #a1a1aa;
-            --cyan: #22d3ee;
-            --red: #f43f5e;
-            --gold: #fbbf24;
-            --green: #34d399;
-            --purple: #c084fc;
+            --bg-base: #101014;
+            --bg-panel: #1e1e24;
+            --border-dim: #33333d;
+            --text-main: #e2e2e8;
+            --text-muted: #8b8b9e;
+            --cyan: #00e5ff;
+            --red: #ff3355;
+            --gold: #ffcc00;
+            --green: #00ff66;
+            --purple: #b000ff;
             --font-mono: 'Courier New', Courier, monospace;
             --font-ui: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -26,8 +26,8 @@
         
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(24, 24, 27, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-            background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 999; opacity: 0.5;
+            background: linear-gradient(rgba(16, 16, 20, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 999; opacity: 0.4;
         }
 
         h1, h2, h3, h4 { font-family: var(--font-mono); text-transform: uppercase; font-weight: normal; margin: 0 0 10px 0; }
@@ -35,10 +35,10 @@
         h2 { color: var(--cyan); font-size: 1.1rem; border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; margin-bottom: 15px; }
 
         input, select, textarea { 
-            background: #18181b; color: var(--text-main); border: 1px solid var(--border-dim); 
+            background: #18181c; color: var(--text-main); border: 1px solid var(--border-dim); 
             padding: 8px 12px; font-family: var(--font-ui); font-size: 0.95rem; width: 100%; box-sizing: border-box; border-radius: 4px;
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); background: #27272a; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); background: #222229; }
         input[type=number] { font-family: var(--font-mono); font-weight: bold; }
 
         .btn {
@@ -52,11 +52,12 @@
         .btn-red:hover:not(:disabled) { background: var(--red); color: #fff; border-color: var(--red); }
         .btn-small { padding: 4px 10px; font-size: 0.75rem; }
 
-        .view { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
+        .view { display: none; padding: 20px; max-width: 1250px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
         .view.active { display: block; }
         .panel { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 20px; margin-bottom: 20px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
 
         /* WIZARD */
         .wiz-progress { display: flex; justify-content: space-between; border-bottom: 2px solid var(--border-dim); padding-bottom: 15px; margin-bottom: 30px; }
@@ -64,7 +65,7 @@
         .prog-node.active { color: var(--cyan); font-weight: bold; border-bottom: 2px solid var(--cyan); padding-bottom: 13px; margin-bottom: -15px; }
         .wiz-step { display: none; }
         .wiz-step.active { display: block; }
-        .wiz-attr-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
+        .wiz-attr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 20px 0; }
 
         /* TABS */
         .tab-bar { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid var(--border-dim); }
@@ -75,27 +76,29 @@
         .tab-content.active { display: block; }
 
         /* SLOTS E VITALS */
-        .slot-box { border: 1px dashed var(--border-dim); background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 15px; border-radius: 4px; transition: 0.2s; }
+        .slot-box { border: 1px dashed var(--border-dim); background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 15px; border-radius: 4px; transition: 0.2s; position: relative; }
         .slot-box.filled { border-style: solid; background: var(--bg-panel); border-left: 4px solid var(--cyan); }
-        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; }
         .slot-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; }
-        .slot-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4; }
         
-        .vitals-row { display: flex; justify-content: space-between; align-items: center; background: #18181b; padding: 15px; border: 1px solid var(--border-dim); border-radius: 4px; margin-bottom: 10px; }
+        .vitals-row { display: flex; justify-content: space-between; align-items: center; background: #141418; padding: 15px; border: 1px solid var(--border-dim); border-radius: 4px; margin-bottom: 10px; }
         .vitals-val { font-size: 2rem; font-weight: bold; font-family: var(--font-mono); display: flex; align-items: center; gap: 10px; }
         .btn-vit { background: var(--bg-panel); border: 1px solid var(--border-dim); color: var(--text-main); width: 36px; height: 36px; border-radius: 4px; cursor: pointer; font-size: 1.2rem; }
         .btn-vit:hover { background: var(--border-dim); }
 
         .ess-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .ess-box { background: #18181b; border: 1px solid var(--border-dim); padding: 10px; text-align: center; border-radius: 4px; }
+        .ess-box { background: #141418; border: 1px solid var(--border-dim); padding: 10px; text-align: center; border-radius: 4px; }
         .ess-val { font-size: 1.4rem; font-weight: bold; color: var(--text-main); font-family: var(--font-mono); display:flex; justify-content:center; align-items:center;}
         .ess-val input { width: 50px; border: none; background: transparent; color: var(--cyan); font-size: 1.4rem; text-align: center; font-weight: bold; }
         .ess-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); background: rgba(34, 211, 238, 0.1); padding: 2px 6px; border-radius: 10px; margin-top: 5px; display:inline-block; }
 
         /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
-        .modal { background: var(--bg-base); border: 1px solid var(--border-dim); width: 90%; max-width: 850px; max-height: 85vh; overflow-y: auto; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .selectable-item { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
+        .modal { background: var(--bg-base); border: 1px solid var(--border-dim); width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .selectable-item { background: #18181c; border: 1px solid var(--border-dim); padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
+        .selectable-item:hover:not(.locked) { border-color: var(--cyan); }
+        .selectable-item.locked { opacity: 0.4; border-color: var(--red); }
+        .cat-header { color: var(--gold); border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; margin: 15px 0 10px 0; font-family: var(--font-mono); font-size: 0.9rem; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -108,34 +111,33 @@
         <p id="loader-msg" style="color:var(--cyan); font-family:var(--font-mono);">Sincronizando com o GRID...</p>
     </div>
 
-    <!-- MODAL DATABASE -->
-    <div id="modal-selector" class="modal-overlay">
+    <!-- MODAL DATABASE (GENÉRICO) -->
+    <div id="modal-generic" class="modal-overlay">
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h1 id="modal-title" style="margin:0; border:none;">DATABASE</h1>
+                <h1 id="mg_title" style="margin:0; border:none;">DATABASE</h1>
                 <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
             </div>
-            <div id="modal-preview" style="background:#000; padding:15px; border:1px dashed var(--cyan); margin-bottom:20px; color:var(--text-muted); font-size:0.85rem;">Passe o mouse sobre um item para ver detalhes.</div>
-            <div id="modal-list"></div>
+            <div id="mg_list"></div>
         </div>
     </div>
 
     <!-- MODAL REGRAS (MD) -->
     <div id="modal-rules" class="modal-overlay">
         <div class="modal">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h1 style="margin:0; border:none;">ARQUIVO MESTRE - REGRAS</h1>
-                <button class="btn btn-red btn-small" onclick="document.getElementById('modal-rules').style.display='none'">FECHAR</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-dim); padding-bottom:10px;">
+                <h2 style="margin:0; border:none;">ARQUIVO MESTRE</h2>
+                <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
             </div>
-            <div id="rules-content" style="background:#050505; padding:20px; border:1px solid #333; line-height: 1.6;">Carregando regras...</div>
+            <div id="rules-content" style="line-height:1.6;">Carregando regras...</div>
         </div>
     </div>
 
     <!-- HUB VIEW -->
     <div id="view-hub" class="view active">
         <div style="text-align:center; margin: 60px 0;">
-            <h1 style="font-size: 3rem; border:none; letter-spacing: 2px;">CHROMOASIS DB</h1>
-            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v15.1</p>
+            <h1 style="font-size: 3.5rem; border:none; letter-spacing: 2px;">CHROMOASIS DB</h1>
+            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v16.0</p>
         </div>
         <div style="display:flex; justify-content:center; gap:15px; margin-bottom: 50px;">
             <button class="btn" style="border-color:var(--cyan); color:var(--cyan);" onclick="startWizard()">+ RECRUTAR OPERADOR</button>
@@ -156,21 +158,20 @@
                 <div class="prog-node" id="p5">5. HISTÓRICO</div>
             </div>
 
-            <!-- STEPS -->
             <div class="wiz-step active" id="step1">
                 <h2>IDENTIFICAÇÃO OPERACIONAL</h2>
                 <label>NOME E CALLSIGN</label>
                 <input type="text" id="w_name" placeholder="Ex: Alaric 'Mago' Wood" style="margin-bottom:20px;">
                 <label>ARQUÉTIPO TÁTICO</label>
                 <select id="w_arch" onchange="updateWizArchDesc()"></select>
-                <div id="w_arch_desc" style="margin-top:10px; color:var(--text-muted); font-size:0.85rem; padding:10px; background:#18181b; border-left:2px solid var(--cyan); border-radius:4px; min-height:40px;"></div>
+                <div id="w_arch_desc" style="margin-top:10px; color:var(--text-muted); font-size:0.85rem; padding:10px; background:#141418; border-left:2px solid var(--cyan); border-radius:4px; min-height:40px;"></div>
                 <div style="text-align:right; margin-top:30px;"><button class="btn" onclick="nextWizStep(2)">PROSSEGUIR >></button></div>
             </div>
 
             <div class="wiz-step" id="step2">
                 <h2>ORIGEM BIOLÓGICA</h2>
                 <select id="w_origin_sel" onchange="renderWizOriginInfo()"></select>
-                <div id="w_origin_desc" style="margin-top:15px; font-size:0.9rem; background:#18181b; padding:15px; border-radius:4px; line-height: 1.5;"></div>
+                <div id="w_origin_desc" style="margin-top:15px; font-size:0.9rem; background:#141418; padding:15px; border-radius:4px; line-height: 1.5;"></div>
                 <div id="w_racial_choices_box" style="display:none; margin-top:20px;">
                     <label style="color:var(--gold); display:block; border-bottom:1px solid #333; padding-bottom:5px; margin-bottom:10px;">VANTAGEM EXTRA (ESCOLHA 1):</label>
                     <div id="w_racial_choices_list"></div>
@@ -202,10 +203,8 @@
                 <div class="panel" style="padding:0;">
                     <div id="w_hist_pool" style="max-height:250px; overflow-y:auto; padding:10px;"></div>
                 </div>
-                
                 <h3 style="margin-top:20px; font-size:0.85rem; color:var(--cyan);">SELECIONADAS:</h3>
-                <div id="w_selected_advs" style="background:#18181b; padding:10px; border-radius:4px; min-height:50px;"></div>
-                
+                <div id="w_selected_advs" style="background:#141418; padding:10px; border-radius:4px; min-height:50px;"></div>
                 <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(4)"><< VOLTAR</button><button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR REGISTRO</button></div>
             </div>
         </div>
@@ -233,8 +232,45 @@
 
         <!-- TAB 1: STATUS -->
         <div id="t_status" class="tab-content active">
-            <div class="grid-2" style="grid-template-columns: 1.1fr 1.5fr;">
-                <!-- ESQUERDA: VITALS -->
+            <!-- ECONOMIA TOP -->
+            <div class="panel grid-4" style="padding:15px; border-color:var(--gold); margin-bottom:20px;">
+                <div><label>FAMA (NF)</label><input type="number" id="s_nf" style="font-size:1.2rem; color:var(--gold);"></div>
+                <div><label>CRÉDITOS (¢)</label><input type="number" id="s_cred" style="font-size:1.2rem; color:var(--green);"></div>
+                <div><label>PONTOS ÉTER</label><input type="number" id="s_eter" style="font-size:1.2rem; color:var(--purple);"></div>
+                <div><label>XP</label><input type="number" id="s_xp" style="font-size:1.2rem;"></div>
+            </div>
+
+            <div class="grid-2" style="grid-template-columns: 1.5fr 1fr;">
+                <!-- ESQUERDA: ESSENCIAS, DOMINIOS, VANTAGENS -->
+                <div>
+                    <div class="panel" style="padding:15px;">
+                        <h2 style="margin:0 0 15px 0; border:none;">ESSÊNCIAS (INCLUI CROMO)</h2>
+                        <div class="ess-grid" id="s_ess_grid"></div>
+                    </div>
+
+                    <div class="panel" style="padding:15px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                            <h2 style="margin:0; border:none;">DOMÍNIOS</h2>
+                            <button class="btn btn-small" onclick="openGenericModal('domains', 'dom')">+ ADICIONAR DOMÍNIO</button>
+                        </div>
+                        <div id="s_dom_list"></div>
+                    </div>
+
+                    <div class="panel" style="padding:15px;">
+                        <h2 style="margin:0 0 15px 0; border:none;">ORIGEM & HISTÓRICO</h2>
+                        <div id="s_traits_list"></div>
+                    </div>
+
+                    <div class="panel" style="padding:15px; border-color:var(--gold);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                            <h2 style="margin:0; border:none; color:var(--gold);">MAESTRIAS</h2>
+                            <button class="btn btn-small" style="border-color:var(--gold); color:var(--gold);" onclick="openGenericModal('masteries', 'masteries')">+ APRENDER MAESTRIA</button>
+                        </div>
+                        <div id="s_mastery_list"></div>
+                    </div>
+                </div>
+
+                <!-- DIREITA: VITALS E DERIVADOS -->
                 <div>
                     <div class="panel" style="border-top: 3px solid var(--cyan); padding: 15px;">
                         <h2 style="border:none; margin:0 0 15px 0;">SINAIS VITAIS</h2>
@@ -254,7 +290,7 @@
                         <div class="vitals-row" style="border-left: 3px solid var(--text-muted);">
                             <div>
                                 <div style="color:var(--text-muted); font-family:var(--font-mono); font-weight:bold;">ARMADURA FÍSICA</div>
-                                <select id="s_arm_state" style="margin-top:5px; padding:4px; font-size:0.75rem; width:120px;" onchange="triggerSave()">
+                                <select id="s_arm_state" style="margin-top:5px; padding:4px; font-size:0.75rem; width:120px;" onchange="updateCalcs()">
                                     <option value="Normal">Normal</option><option value="Danificada">Danificada</option><option value="Quebrada">Quebrada</option>
                                 </select>
                             </div>
@@ -293,60 +329,47 @@
                         <div><div style="color:var(--text-muted); font-size:0.7rem;">APARAR</div><strong id="s_parry" style="font-size:1.2rem; color:var(--cyan);">+0%</strong></div>
                     </div>
                 </div>
-
-                <!-- DIREITA: ESSENCIAS E INFOS -->
-                <div>
-                    <div class="panel" style="padding:15px;">
-                        <h2 style="margin:0 0 15px 0; border:none;">ESSÊNCIAS (INCLUI CROMO)</h2>
-                        <div class="ess-grid" id="s_ess_grid"></div>
-                    </div>
-
-                    <div class="panel" style="padding:15px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <h2 style="margin:0; border:none;">DOMÍNIOS (TREINO)</h2>
-                            <button class="btn btn-small" onclick="openGenericModal('domains', 'dom')">+ ADICIONAR</button>
-                        </div>
-                        <div id="s_dom_list"></div>
-                    </div>
-
-                    <div class="panel" style="padding:15px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <h2 style="margin:0; border:none;">VANTAGENS & MAESTRIAS</h2>
-                            <button class="btn btn-small" onclick="openGenericModal('masteries', 'adv')">+ MAESTRIA</button>
-                        </div>
-                        <div id="s_adv_list"></div>
-                    </div>
-                </div>
             </div>
         </div>
 
         <!-- TAB 2: ARSENAL -->
         <div id="t_arsenal" class="tab-content">
             <div class="grid-2">
+                <!-- COLUNA ESQUERDA (ARMAS E ARMADURA) -->
                 <div>
-                    <div class="slot-box" id="slot_armor"></div>
-                    <div class="slot-box" id="slot_shield"></div>
                     <div class="slot-box" id="slot_wpn_p"></div>
                     <div class="slot-box" id="slot_wpn_s"></div>
-                    
-                    <h3 style="color:var(--text-muted); margin-top:30px; border-bottom:1px solid var(--border-dim); padding-bottom:5px;">COMBATE PRÓXIMO</h3>
-                    <div id="s_melee_list"></div>
-                    <button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openGenericModal('melee', 'melee')">+ ARMA BRANCA</button>
-                </div>
-                <div>
-                    <h3 style="color:var(--text-muted); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>ENCAIXE TÁTICO</span><span id="load_tac">0 / 2</span></h3>
-                    <div id="s_tac_list"></div>
-                    <button class="btn btn-small" style="width:100%; margin-bottom:20px;" onclick="openGenericModal('tactical_items,tactical_weapons,drone_chassis', 'inv_tac')">+ ADD TÁTICO / DRONE</button>
+                    <div class="slot-box" id="slot_armor"></div>
 
-                    <h3 style="color:var(--text-muted); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>UTILIDADE</span><span id="load_uti">0 / 4</span></h3>
+                    <h3 style="color:var(--text-muted); margin-top:30px; border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>COMBATE PRÓXIMO (MELEE)</span> <button class="btn btn-small" onclick="openGenericModal('melee', 'melee')">+ ADD</button></h3>
+                    <div id="s_melee_list"></div>
+                </div>
+
+                <!-- COLUNA DIREITA (SLOTS) -->
+                <div>
+                    <div class="slot-box" id="slot_shield" style="margin-bottom:30px;"></div>
+
+                    <h3 style="color:var(--gold); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>ENCAIXE TÁTICO</span><span id="load_tac">0 / 2</span></h3>
+                    <div style="display:flex; gap:10px; margin-bottom:15px;">
+                        <button class="btn btn-small" style="flex-grow:1" onclick="openGenericModal('tactical_items,tactical_weapons', 'inv_tac')">+ EQUIPAMENTO/ARMA TÁTICA</button>
+                    </div>
+                    <div id="s_tac_list"></div>
+
+                    <h3 style="color:var(--cyan); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between; margin-top:30px;">
+                        <span>DRONES E MÓDULOS</span>
+                        <button class="btn btn-small" onclick="openGenericModal('drone_chassis', 'drones')">+ NOVO CHASSI</button>
+                    </h3>
+                    <div id="s_drones_list"></div>
+
+                    <h3 style="color:var(--green); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between; margin-top:30px;"><span>UTILIDADE</span><span id="load_uti">0 / 4</span></h3>
                     <div id="s_uti_list"></div>
                     <button class="btn btn-small" style="width:100%; margin-bottom:20px;" onclick="openGenericModal('utility_items', 'inv_uti')">+ ADD UTILIDADE</button>
 
-                    <h3 style="color:var(--purple); border-bottom:1px solid var(--border-dim); padding-bottom:5px;">FOCALIZADORES RÚNICOS (2)</h3>
+                    <h3 style="color:var(--purple); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>FOCALIZADORES RÚNICOS</span><span>2 SLOTS</span></h3>
                     <div id="s_runic_list"></div>
                     <button class="btn btn-small" style="border-color:var(--purple); color:var(--purple); width:100%; margin-bottom:20px;" onclick="openGenericModal('runic_eq', 'runic')">+ SINTONIZAR RUNA</button>
 
-                    <h3 style="color:var(--text-muted); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>CARGA GERAL (MOCHILA)</span><span id="load_gen">0 / 0</span></h3>
+                    <h3 style="color:var(--text-muted); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between; margin-top:30px;"><span>CARGA GERAL (MOCHILA)</span><span id="load_gen">0 / 0</span></h3>
                     <div id="s_gen_list"></div>
                     <button class="btn btn-small" style="width:100%;" onclick="openGenericModal('general_load_items', 'inv_gen')">+ ADD ITEM GERAL</button>
                 </div>
@@ -355,7 +378,7 @@
 
         <!-- TAB 3: CROMO -->
         <div id="t_cromo" class="tab-content">
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Interfaces estruturais reduzem sua Sobrecarga (SE) máxima e concedem bônus passivos nas essências e defesa. Dokkas instalam interfaces com custo reduzido (-1 SE).</p>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Interfaces estruturais reduzem sua Sobrecarga (SE) máxima e concedem bônus passivos nas essências e defesa.</p>
             <div class="grid-2" id="cromo_container"></div>
         </div>
 
@@ -363,70 +386,72 @@
         <div id="t_persona" class="tab-content">
             <div class="grid-2">
                 <div class="panel">
-                    <h2>ECONOMIA & PROGRESSÃO</h2>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;">
-                        <div><label>FAMA (NF)</label><input type="number" id="s_nf" onchange="triggerSave()"></div>
-                        <div><label>CRÉDITOS (¢)</label><input type="number" id="s_cred" onchange="triggerSave()"></div>
-                        <div><label>PONTOS DE ÉTER</label><input type="number" id="s_eter" onchange="triggerSave()"></div>
-                        <div><label>XP</label><input type="number" id="s_xp" onchange="triggerSave()"></div>
-                    </div>
                     <h2>DOSSIÊ OPERACIONAL</h2>
-                    <label>APARÊNCIA</label><textarea id="p_app" rows="3" onchange="triggerSave()"></textarea>
+                    <label>APARÊNCIA FÍSICA</label><textarea id="p_app" rows="3" onchange="triggerSave()"></textarea>
                     <label style="margin-top:10px;">TRAÇO NEGATIVO / VÍCIO</label><textarea id="p_flaw" rows="2" onchange="triggerSave()"></textarea>
-                    <label style="margin-top:10px;">BACKGROUND</label><textarea id="p_bg" rows="5" onchange="triggerSave()"></textarea>
+                    <label style="margin-top:10px;">HISTÓRICO E BACKGROUND</label><textarea id="p_bg" rows="6" onchange="triggerSave()"></textarea>
+                    <label style="margin-top:10px;">ANOTAÇÕES DA MISSÃO</label><textarea id="p_notes" rows="6" onchange="triggerSave()"></textarea>
                 </div>
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                         <h2 style="margin:0; border:none;">REDE DE CONTATOS</h2>
-                        <button class="btn btn-small" onclick="char.contacts.push({n:'Novo Contato', d:''}); renderPersona(); triggerSave();">+ NOVO</button>
+                        <button class="btn btn-small" onclick="addContact()">+ NOVO CONTATO</button>
                     </div>
                     <div id="s_contacts_list"></div>
-                    
-                    <h2 style="margin-top:30px;">LOG DE DADOS (MISSÃO)</h2>
-                    <textarea id="p_notes" rows="8" onchange="triggerSave()"></textarea>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL ARMAS (TIERS) -->
-    <div id="modal-weapon" class="modal-overlay">
+    <!-- MODAL ARMAS/ARMADURAS (TIERS) -->
+    <div id="modal-builder" class="modal-overlay">
         <div class="modal">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h2 style="margin:0; border:none;" id="mw_title">MONTAR ARMA</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-dim); padding-bottom:10px;">
+                <h2 style="margin:0; border:none;" id="mb_title">MONTAR EQUIPAMENTO</h2>
                 <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
             </div>
-            <div class="grid-2">
-                <div>
-                    <label>FRAME (CARCAÇA)</label>
-                    <select id="mw_f" style="margin-bottom:10px;" onchange="previewWeapon()"></select>
-                    <label>NÍVEL DO FRAME</label>
-                    <select id="mw_f_t" onchange="previewWeapon()">
-                        <option value="1">Nível I (Básico) - 2 Slots Mod</option>
-                        <option value="2">Nível II (Tático) - 3 Slots Mod</option>
-                        <option value="3">Nível III (Operações) - 4 Slots Mod</option>
-                    </select>
-                </div>
-                <div>
-                    <label>NÚCLEO (MOTOR)</label>
-                    <select id="mw_c" style="margin-bottom:10px;" onchange="previewWeapon()"></select>
-                    <label>NÍVEL DO NÚCLEO</label>
-                    <select id="mw_c_t" onchange="previewWeapon()">
-                        <option value="1">Nível I (Base)</option>
-                        <option value="2">Nível II (+1 Dano)</option>
-                        <option value="3">Nível III (Dano Máximo)</option>
-                    </select>
+            
+            <div id="mb_weapon_fields" style="display:none;">
+                <div class="grid-2">
+                    <div>
+                        <label>FRAME (CARCAÇA)</label>
+                        <select id="mb_f" style="margin-bottom:10px;" onchange="previewBuild()"></select>
+                        <label>NÍVEL DO FRAME [NF Req]</label>
+                        <select id="mb_f_t" onchange="previewBuild()">
+                            <option value="1">Nível I (Básico) - 2 Slots Mod[NF 0 | 0¢]</option>
+                            <option value="2">Nível II (Tático) - 3 Slots Mod[NF 3 | 10¢]</option>
+                            <option value="3">Nível III (Operações) - 4 Slots Mod [NF 7 | 20¢]</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>NÚCLEO (MOTOR)</label>
+                        <select id="mb_c" style="margin-bottom:10px;" onchange="previewBuild()"></select>
+                        <label>NÍVEL DO NÚCLEO [NF Req]</label>
+                        <select id="mb_c_t" onchange="previewBuild()">
+                            <option value="1">Nível I (Base) [NF 0 | 0¢]</option>
+                            <option value="2">Nível II (+1 Dano) [NF 3 | 10¢]</option>
+                            <option value="3">Nível III (Dano Máx) [NF 7 | 20¢]</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div id="mw_preview" style="background:#18181b; border:1px dashed var(--border-dim); padding:15px; margin:20px 0; border-radius:4px; font-size:0.9rem; color:var(--text-muted); min-height:60px;"></div>
-            <button class="btn" style="width:100%;" onclick="confirmWeapon()">EQUIPAR NO SLOT</button>
+
+            <div id="mb_armor_fields" style="display:none;">
+                <label>MODELO DO TRAJE / ARMADURA</label>
+                <select id="mb_a" onchange="previewBuild()"></select>
+            </div>
+
+            <div id="mb_preview" style="background:#141418; border:1px dashed var(--cyan); padding:15px; margin:20px 0; border-radius:4px; font-size:0.9rem; color:var(--text-muted); min-height:60px;"></div>
+            
+            <div id="mb_warn" style="color:var(--red); font-family:var(--font-mono); font-weight:bold; text-align:center; margin-bottom:15px;"></div>
+            <button class="btn" id="mb_confirm" style="width:100%;" onclick="confirmBuild()">GRAVAR NO SLOT</button>
         </div>
     </div>
 
-    <!-- MODAL GENÉRICO -->
+    <!-- MODAL GENÉRICO DE LISTA -->
     <div id="modal-generic" class="modal-overlay">
         <div class="modal">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-dim); padding-bottom:10px;">
                 <h2 style="margin:0; border:none;" id="mg_title">SELECIONAR</h2>
                 <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
             </div>
@@ -437,26 +462,20 @@
     <!-- SCRIPT CORE -->
     <script>
         let DB = null; let roster =[]; let char = null; let activeIdx = -1;
-        const attrMap = { esf: "ESFORÇO", agi: "AGILIDADE", ard: "ARDIL", cor: "CORPO", int: "INTELECTO", per: "PERCEPÇÃO", lab: "LÁBIA", von: "VONTADE", bal: "BALÍSTICA", con: "CONFRONTO" };
+        const attrMap = { esf: "Esforço", agi: "Agilidade", ard: "Ardil", cor: "Corpo", int: "Intelecto", per: "Percepção", lab: "Lábia", von: "Vontade", bal: "Balística", con: "Confronto" };
         const attrKeys = Object.keys(attrMap);
         const cyberCats =["Neural", "Fluxo", "Sensorial", "Atuadores", "Reativa"];
         let wizAdvs =[]; let wizDoms =[];
 
         window.onload = async () => {
             try {
-                // CACHE BUSTER! Garante que o navegador puxe a versão mais atualizada do database.json
                 const res = await fetch('database.json?v=' + new Date().getTime());
                 if(!res.ok) throw new Error();
                 DB = await res.json();
-                
-                if(!DB.archetypes || !DB.histories) {
-                    alert("ATENÇÃO: O database.json parece corrompido ou incompleto. Atualize a página com Ctrl+F5.");
-                }
-
-                roster = JSON.parse(localStorage.getItem('co_roster_v15') || '[]');
+                roster = JSON.parse(localStorage.getItem('co_roster_v16') || '[]');
                 document.getElementById('loader').style.display = 'none';
                 renderHub();
-            } catch(e) { document.getElementById('loader-msg').innerHTML = `<span style="color:var(--red)">ERRO: database.json não encontrado ou inválido.<br>Verifique se os arquivos estão na mesma pasta.</span>`; }
+            } catch(e) { document.getElementById('loader-msg').innerHTML = `<span style="color:var(--red)">ERRO: database.json não encontrado ou inválido.</span>`; }
         };
 
         // --- HUB ---
@@ -471,11 +490,11 @@
             </div>`).join('');
             switchView('view-hub');
         }
-        window.deleteChar = function(i, e) { e.stopPropagation(); if(confirm("Expulsar Operador?")) { roster.splice(i,1); localStorage.setItem('co_roster_v15', JSON.stringify(roster)); renderHub(); } }
+        window.deleteChar = function(i, e) { e.stopPropagation(); if(confirm("Expulsar Operador?")) { roster.splice(i,1); localStorage.setItem('co_roster_v16', JSON.stringify(roster)); renderHub(); } }
 
         // --- WIZARD ---
         window.startWizard = function() {
-            if(!DB || !DB.archetypes) return alert("Banco de Dados não carregado.");
+            if(!DB) return alert("Banco de Dados não carregado.");
             wizAdvs =[]; wizDoms =[]; document.getElementById('w_name').value = '';
             document.getElementById('w_arch').innerHTML = '<option value="">-- Arquétipo --</option>' + Object.keys(DB.archetypes).map(k => `<option value="${k}">${k}</option>`).join('');
             document.getElementById('w_origin_sel').innerHTML = Object.keys(DB.origins).map(k => `<option value="${k}">${DB.origins[k].name}</option>`).join('');
@@ -484,10 +503,8 @@
         }
         window.nextWizStep = function(n) { 
             document.querySelectorAll('.wiz-step, .prog-node').forEach(e => e.classList.remove('active')); 
-            document.getElementById('step'+n).classList.add('active'); 
-            document.getElementById('p'+n).classList.add('active'); 
-            if(n===3) renderWizAttr(); 
-            if(n===4) renderWizDomains(); 
+            document.getElementById('step'+n).classList.add('active'); document.getElementById('p'+n).classList.add('active'); 
+            if(n===3) renderWizAttr(); if(n===4) renderWizDomains(); 
         }
         window.updateWizArchDesc = function() { document.getElementById('w_arch_desc').innerText = DB.archetypes[document.getElementById('w_arch').value] || ''; }
         
@@ -504,27 +521,25 @@
             const ok = document.getElementById('w_origin_sel').value; const base = DB.origins[ok];
             document.getElementById('w_attr_grid').innerHTML = attrKeys.map(k => `
             <div class="wiz-attr-box">
-                <label style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem; letter-spacing:1px;">${attrMap[k]}</label>
+                <label style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem; letter-spacing:1px;">${attrMap[k].toUpperCase()}</label>
                 <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin:10px 0;">
                     <button class="btn btn-red" style="padding:4px 8px;" onclick="modWizAttr('${k}', -5)">-</button>
                     <input type="number" id="wa_${k}" value="${base[k]}" readonly>
                     <button class="btn" style="padding:4px 8px;" onclick="modWizAttr('${k}', 5)">+</button>
                 </div>
-                <div style="color:var(--text-muted); font-size:0.75rem; margin-top:8px;">Bônus: <span id="wab_${k}" style="color:var(--gold);">+${Math.floor(base[k]/10)}</span></div>
+                <div style="color:var(--text-muted); font-size:0.75rem;">Bônus: <span id="wab_${k}" style="color:var(--gold);">+${Math.floor(base[k]/10)}</span></div>
             </div>`).join('');
             calcWizPts();
         }
         window.modWizAttr = function(k, amt) {
             const ok = document.getElementById('w_origin_sel').value; const el = document.getElementById('wa_'+k);
             let val = parseInt(el.value) + amt;
-            if(val < DB.origins[ok][k]) return; // Impede descer além da base
-            
+            if(val < DB.origins[ok][k]) return; 
             let cap = 50; if((ok==='jotun' && (k==='esf'||k==='cor')) || (ok==='oni' && (k==='agi'||k==='per')) || (ok==='dokka' && (k==='int'||k==='von'))) cap = 60;
-            if(val > cap) return; // Impede subir além do limite
-
+            if(val > cap) return;
             if(amt > 0) { 
                 let spent = 0; attrKeys.forEach(key => spent += ((key===k?val:parseInt(document.getElementById('wa_'+key).value)) - DB.origins[ok][key])); 
-                if(spent > DB.origins[ok].pts) return alert("Pontos insuficientes para esta melhoria."); 
+                if(spent > DB.origins[ok].pts) return alert("Pontos insuficientes."); 
             }
             el.value = val; document.getElementById('wab_'+k).innerText = "+" + Math.floor(val/10); calcWizPts();
         }
@@ -536,45 +551,42 @@
         }
         
         window.renderWizDomains = function() {
+            if(!DB.domains) return;
             document.getElementById('w_dom_list').innerHTML = DB.domains.map(d => {
                 const sel = wizDoms.includes(d.name);
-                return `<div class="selectable-item" style="${sel?'border-color:var(--cyan); background:#111;':''}"><div style="flex-grow:1;"><strong>${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div><button class="btn btn-small ${sel?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${sel?'REMOVER':'SELECIONAR'}</button></div>`;
+                return `<div class="selectable-item" style="${sel?'border-color:var(--cyan);':''}"><div style="flex-grow:1;"><strong style="color:${sel?'var(--cyan)':'#fff'}">${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div><button class="btn btn-small ${sel?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${sel?'REMOVER':'SELECIONAR'}</button></div>`;
             }).join('');
         }
-        window.toggleWizDom = function(n) { if(wizDoms.includes(n)) wizDoms = wizDoms.filter(x=>x!==n); else { if(wizDoms.length>=2) return alert("Máximo de 2 Domínios iniciais."); wizDoms.push(n); } renderWizDomains(); }
+        window.toggleWizDom = function(n) { if(wizDoms.includes(n)) wizDoms = wizDoms.filter(x=>x!==n); else { if(wizDoms.length>=2) return alert("Máximo 2 Domínios iniciais."); wizDoms.push(n); } renderWizDomains(); }
         
         window.renderWizHistAdvs = function() {
             const hIdx = document.getElementById('w_hist_sel').value; const pool = document.getElementById('w_hist_pool'); pool.innerHTML = '';
             if(hIdx==="") return;
             DB.histories[hIdx].advantages.forEach((a, i) => {
                 const isAdded = wizAdvs.find(x => x.n === a.name);
-                pool.innerHTML += `<div class="selectable-item" style="${isAdded?'opacity:0.4':''}"><div style="flex-grow:1;"><strong>${a.name}</strong><br><small style="color:var(--text-muted)">${a.effect}</small></div><button class="btn btn-small" ${isAdded?'disabled':''} onclick="addWizAdv(${hIdx}, ${i})">ADD</button></div>`;
+                pool.innerHTML += `<div class="selectable-item" style="${isAdded?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${a.name}</strong><br><small style="color:var(--text-muted)">${a.effect}</small></div><button class="btn btn-small" ${isAdded?'disabled':''} onclick="addWizAdv(${hIdx}, ${i})">ADD</button></div>`;
             });
         }
         window.addWizAdv = function(hIdx, aIdx) {
             const hName = DB.histories[hIdx].name; const adv = DB.histories[hIdx].advantages[aIdx];
             const hists =[...new Set(wizAdvs.map(x => x.h))];
-            if(wizAdvs.length >= 3) return alert("Máximo de 3 vantagens atingido.");
-            if(hists.length===1 && hists[0]!==hName && wizAdvs.length>1) return alert("Ao misturar históricos, o limite é de 1 vantagem de cada.");
-            if(hists.length===2 && !hists.includes(hName)) return alert("Máximo de 2 históricos diferentes permitidos.");
+            if(wizAdvs.length >= 3) return alert("Máximo de 3 vantagens.");
+            if(hists.length===1 && hists[0]!==hName && wizAdvs.length>1) return alert("Limite 1 de cada ao misturar.");
+            if(hists.length===2 && !hists.includes(hName)) return alert("Máximo 2 históricos.");
             wizAdvs.push({h: hName, n: adv.name, d: adv.effect}); renderWizHistAdvs(); renderWizSelAdvs();
         }
         window.renderWizSelAdvs = function() {
-            document.getElementById('w_selected_advs').innerHTML = wizAdvs.map((a, i) => `
-            <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.85rem; border-bottom:1px solid #333; padding-bottom:5px;">
-                <span><strong style="color:var(--gold)">${a.n}</strong> <span style="color:#666">[${a.h}]</span></span>
-                <button style="background:none; border:none; color:var(--red); cursor:pointer; font-weight:bold;" onclick="wizAdvs.splice(${i},1); renderWizSelAdvs(); renderWizHistAdvs();">X</button>
-            </div>`).join('');
+            document.getElementById('w_selected_advs').innerHTML = wizAdvs.map((a, i) => `<div style="display:flex; justify-content:space-between; margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #333;"><span><strong style="color:var(--gold)">${a.n}</strong> <span style="color:#666">[${a.h}]</span></span><button style="background:none; border:none; color:var(--red); cursor:pointer; font-weight:bold;" onclick="wizAdvs.splice(${i},1); renderWizSelAdvs(); renderWizHistAdvs();">X</button></div>`).join('');
         }
         window.finalizeOperador = function() {
-            if(parseInt(document.getElementById('w_pts_left').innerText) < 0) return alert("Ajuste os pontos antes de prosseguir.");
+            if(parseInt(document.getElementById('w_pts_left').innerText) < 0) return alert("Ajuste os pontos.");
             const ok = document.getElementById('w_origin_sel').value;
             const n = {
                 name: document.getElementById('w_name').value || "Novo Operador", arch: document.getElementById('w_arch').value || "Desconhecido",
-                origin: DB.origins[ok].name, origin_k: ok, nf: 0, cred: 20, eter: 1, xp: 0, hp_cur: 10, shield_cur: 0, se_cur: 0, arm_state: "Normal",
-                ess: {}, dom: wizDoms.map(d => ({n: d, lvl: 1, flips: 1})), adv: [...wizAdvs],
+                origin: DB.origins[ok].name, origin_k: ok, nf: 0, cred: 20, eter: 1, xp: 0, hp_cur: 10, shield_cur: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_broken: 0,
+                ess: {}, dom: wizDoms.map(d => ({n: d, lvl: 1, flips: 1})), traits: [...wizAdvs], masteries:[],
                 sic: { armor: null, shield: null, wpn_p: null, wpn_s: null },
-                inv_tac:[], inv_uti:[], inv_gen: [], runic: [], melee:[],
+                inv_tac:[], drones: [], inv_uti:[], inv_gen: [], runic: [], melee:[],
                 cromo: { "Neural":{t:0,m:[]}, "Fluxo":{t:0,m:[]}, "Sensorial":{t:0,m:[]}, "Atuadores":{t:0,m:[]}, "Reativa":{t:0,m:[]} },
                 contacts:[], flaw: "", app: "", bg: "", notes: ""
             };
@@ -582,10 +594,10 @@
             n.hp_cur = 5 + (Math.floor(n.ess.cor/10)*2) + Math.floor(n.ess.von/10) + (ok==='jotun'?5:0);
             if(ok !== 'humano') {
                 const p = document.querySelector('input[name="r_pick"]:checked').value;
-                n.adv.push({h: "Mutação Genética", n: DB.origins[ok].racial_choices[p].name, d: DB.origins[ok].racial_choices[p].effect});
-            } else { n.adv.push({h: "Ancestral", n: "Versatilidade", d: "Ganha +1 Maestria Extra na criação de personagem."}); }
+                n.traits.unshift({h: "Mutação Genética", n: DB.origins[ok].racial_choices[p].name, d: DB.origins[ok].racial_choices[p].effect});
+            } else { n.traits.unshift({h: "Ancestral", n: "Versatilidade", d: "Ganha +1 Maestria Extra na criação."}); }
             
-            roster.push(n); localStorage.setItem('co_roster_v15', JSON.stringify(roster));
+            roster.push(n); localStorage.setItem('co_roster_v16', JSON.stringify(roster));
             activeIdx = roster.length - 1; char = roster[activeIdx];
             applyToSheet(); switchView('view-sheet');
         }
@@ -595,9 +607,8 @@
         window.triggerSave = function() {
             if(activeIdx === -1 || !char) return;
             ['nf','cred','eter','xp','arm_state'].forEach(k => { const el=document.getElementById('s_'+k); if(el) char[k] = (el.type==='number')?parseInt(el.value)||0:el.value; });
-            char.app = document.getElementById('p_app').value; char.flaw = document.getElementById('p_flaw').value;
-            char.bg = document.getElementById('p_bg').value; char.notes = document.getElementById('p_notes').value;
-            localStorage.setItem('co_roster_v15', JSON.stringify(roster));
+            ['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) char[k] = el.value; });
+            localStorage.setItem('co_roster_v16', JSON.stringify(roster));
             document.getElementById('save_ping').style.opacity = 1; setTimeout(()=>document.getElementById('save_ping').style.opacity=0, 1000);
             updateCalcs();
         }
@@ -610,8 +621,8 @@
         window.applyToSheet = function() {
             if(!char) return;
             document.getElementById('s_name').innerText = char.name.toUpperCase(); document.getElementById('s_origin').innerText = char.origin.toUpperCase(); document.getElementById('s_arch').innerText = char.arch.toUpperCase();
-            ['nf','cred','eter','xp','arm_state'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]; });
-            document.getElementById('p_app').value = char.app||""; document.getElementById('p_flaw').value = char.flaw||""; document.getElementById('p_bg').value = char.bg||""; document.getElementById('p_notes').value = char.notes||"";
+            ['nf','cred','eter','xp','arm_state'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]||(el.type==='number'?0:''); });
+            ['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) el.value = char[k]||""; });
             renderSheetStatus(); renderSheetArsenal(); renderSheetCromo(); renderPersona(); updateCalcs();
         }
 
@@ -639,25 +650,26 @@
             document.getElementById('s_init').innerText = "1d10 + " + initB;
             document.getElementById('s_mov').innerText = (4 + Math.floor(Math.floor(eB.agi/10)/3)) + " Zonas";
 
+            // Domains
             document.getElementById('s_dom_list').innerHTML = char.dom.map((d, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#18181b; padding:15px; margin-bottom:10px; border-radius:4px; border:1px solid var(--border-dim);">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#141418; padding:12px; margin-bottom:8px; border-radius:4px; border:1px solid var(--border-dim);">
                 <strong style="color:var(--cyan); width:30%; font-size:1.1rem;">${d.n}</strong>
-                <select style="width:120px; padding:6px;" onchange="char.dom[${i}].lvl=parseInt(this.value); char.dom[${i}].flips=parseInt(this.value); triggerSave(); applyToSheet();">
+                <select style="width:120px; padding:4px;" onchange="char.dom[${i}].lvl=parseInt(this.value); char.dom[${i}].flips=parseInt(this.value); triggerSave(); applyToSheet();">
                     <option value="1" ${d.lvl===1?'selected':''}>Nível I</option><option value="2" ${d.lvl===2?'selected':''}>Nível II</option><option value="3" ${d.lvl===3?'selected':''}>Nível III</option>
                 </select>
-                <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted); display:flex; align-items:center; gap:10px;">
+                <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted); display:flex; align-items:center; gap:8px;">
                     FLIPS: <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.max(0, char.dom[${i}].flips-1); triggerSave(); applyToSheet();">-</button>
-                    <strong style="color:#fff; font-size:1.3rem; min-width:40px; text-align:center;">${d.flips}/${d.lvl}</strong>
+                    <strong style="color:#fff; font-size:1.2rem; min-width:35px; text-align:center;">${d.flips}/${d.lvl}</strong>
                     <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.min(${d.lvl}, char.dom[${i}].flips+1); triggerSave(); applyToSheet();">+</button>
                 </div>
-                <button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer; font-size:1.2rem;" onclick="char.dom.splice(${i},1); triggerSave(); applyToSheet();">X</button>
+                <button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.dom.splice(${i},1); triggerSave(); applyToSheet();">X</button>
             </div>`).join('');
 
-            document.getElementById('s_adv_list').innerHTML = char.adv.map((a,i)=>`
-            <div style="background:#18181b; border-left:3px solid var(--gold); padding:10px; margin-bottom:5px;">
-                <div style="display:flex; justify-content:space-between;"><strong style="color:var(--gold)">${a.name || a.n} ${a.h?`[${a.h}]`:''}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.adv.splice(${i},1); triggerSave(); applyToSheet();">X</button></div>
-                <div style="font-size:0.85rem; color:var(--text-main); margin-top:5px;">${a.d || a.effect}</div>
-            </div>`).join('');
+            // Traits
+            document.getElementById('s_traits_list').innerHTML = char.traits.map(a => `<div style="padding:10px; margin-bottom:5px; border-left:2px solid var(--cyan); background:rgba(0,229,255,0.05);"><strong style="color:var(--cyan);">${a.n}</strong> <span style="color:#666; font-size:0.8rem;">[${a.h}]</span><br><div style="font-size:0.85rem; margin-top:5px;">${a.d || a.effect}</div></div>`).join('');
+            
+            // Masteries
+            document.getElementById('s_mastery_list').innerHTML = char.masteries.map((m,i)=>`<div style="background:#141418; padding:10px; margin-bottom:5px; border-left:3px solid var(--gold);"><div style="display:flex; justify-content:space-between;"><strong style="color:var(--gold)">${m.name}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.masteries.splice(${i},1); triggerSave(); applyToSheet();">X</button></div><div style="font-size:0.85rem; margin-top:5px;">${m.effect}</div></div>`).join('');
         }
 
         window.updateCalcs = function() {
@@ -694,10 +706,10 @@
 
             let sMax = 0;
             if(char.sic.shield) { const match = char.sic.shield.effect.match(/\d+/); if(match) sMax = parseInt(match[0]); }
-            char.runic.forEach(r => { if(r.name && r.name.includes("Uruz")) sMax += 10; });
+            char.runic.forEach(r => { if(r.n && r.n.includes("Uruz")) sMax += 10; });
             document.getElementById('s_shield_max').innerText = sMax;
             document.getElementById('s_shield_cur').innerText = char.shield_cur;
-            document.getElementById('s_shield_name').innerText = char.sic.shield ? char.sic.shield.name : "Nenhum Gerador";
+            document.getElementById('s_shield_name').innerText = char.sic.shield ? char.sic.shield.n : "Nenhum Gerador";
 
             let lt = 0, lu = 0, lg = 0;
             char.inv_tac.forEach(i => lt += (i.load||0)); char.inv_uti.forEach(i => lu += (i.load||0)); char.inv_gen.forEach(i => lg += (i.load||0));
@@ -706,81 +718,97 @@
             document.getElementById('load_tac').style.color = lt>2 ? "var(--red)" : "var(--text-muted)"; document.getElementById('load_uti').style.color = lu>4 ? "var(--red)" : "var(--text-muted)";
         }
 
-        // --- ARSENAL SLOTS ---
+        // --- ARSENAL / SLOTS ---
         window.renderSheetArsenal = function() {
             const bSlot = (id, t, i, p, tp) => {
                 const el = document.getElementById(id);
-                if(!i) { el.className = "slot-box"; el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><button class="btn btn-small" onclick="openSlotSelector('${p}', '${tp}')">EQUIPAR</button></div><div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:10px 0;">[ VAZIO ]</div>`; } 
+                if(!i) { el.className = "slot-box"; el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><button class="btn btn-small" onclick="openBuilder('${p}')">EQUIPAR</button></div><div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:10px 0;">[ VAZIO ]</div>`; } 
                 else {
                     el.className = "slot-box filled";
-                    let x = ""; if(i.h_max) x = `<div style="font-family:var(--font-mono); margin-top:10px; display:flex; align-items:center; gap:10px; color:var(--gold);">CALOR: <button class="btn-vit" onclick="char.sic.${p}.h_cur=Math.max(0,char.sic.${p}.h_cur-1); triggerSave(); applyToSheet();">-</button><span style="font-size:1.2rem; font-weight:bold;">${i.h_cur}/${i.h_max}</span><button class="btn-vit" onclick="char.sic.${p}.h_cur++; triggerSave(); applyToSheet();">+</button> <button class="btn-small" style="background:transparent; border:1px solid var(--border-dim); color:var(--text-muted);" onclick="char.sic.${p}.h_cur=0; triggerSave(); applyToSheet();">Zerar</button></div>`;
-                    el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; triggerSave(); applyToSheet();">REMOVER</button></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name || i.n} ${i.dmg? `<span style="color:var(--red); margin-left:10px;">[DANO +${i.dmg} | ALC ${i.range}]</span>`:''}</div><div class="slot-desc">${i.traits || i.effect || i.desc}</div>${x}`;
+                    let x = ""; if(i.h_max !== undefined) x = `<div style="font-family:var(--font-mono); margin-top:10px; display:flex; align-items:center; gap:10px; color:var(--gold);">CALOR: <button class="btn-vit" onclick="char.sic.${p}.h_cur=Math.max(0,char.sic.${p}.h_cur-1); triggerSave(); applyToSheet();">-</button><span style="font-size:1.2rem; font-weight:bold;">${i.h_cur}/${i.h_max}</span><button class="btn-vit" onclick="char.sic.${p}.h_cur++; triggerSave(); applyToSheet();">+</button> <button class="btn-small" style="background:transparent; border:1px solid var(--border-dim); color:var(--text-muted);" onclick="char.sic.${p}.h_cur=0; triggerSave(); applyToSheet();">Zerar</button></div>`;
+                    let mBtn = (p==='wpn_p'||p==='wpn_s'||p==='armor') ? `<button class="btn btn-small" style="margin-right:10px; border-color:var(--gold); color:var(--gold);" onclick="openModSelector('${p}')">+ MOD (${i.mods?i.mods.length:0}/${i.slots||0})</button>` : '';
+                    let mList = (i.mods && i.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + i.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name||md.n}</span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.${p}.mods.splice(${midx},1); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
+                    el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><div>${mBtn}<button class="btn btn-small" onclick="openBuilder('${p}')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; triggerSave(); applyToSheet();">X</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name || i.n} ${i.dmg? `<span style="color:var(--red); margin-left:10px;">[DANO +${i.dmg} | ALC ${i.range}]</span>`:''}</div><div class="slot-desc">${i.traits || i.effect || i.desc}</div>${x}${mList}`;
                 }
             };
-            bSlot('slot_armor', 'TRAJE / ARMADURA', char.sic.armor, 'armor', 'armors');
-            bSlot('slot_shield', 'GERADOR DE ESCUDO', char.sic.shield, 'shield', 'mods_armor');
             bSlot('slot_wpn_p', 'SLOT PRIMÁRIO', char.sic.wpn_p, 'wpn_p', 'builder');
             bSlot('slot_wpn_s', 'SLOT SECUNDÁRIO', char.sic.wpn_s, 'wpn_s', 'builder_sec');
-
+            bSlot('slot_armor', 'TRAJE / ARMADURA', char.sic.armor, 'armor', 'armors');
+            
             const rList = (id, arr, path) => {
                 document.getElementById(id).innerHTML = arr.map((a,i) => `<div class="selectable-item" style="padding:10px;"><div style="flex-grow:1;"><strong>${a.name || a.n}</strong><br><small style="color:var(--text-muted)">${a.d || a.traits || a.effect || ''}</small></div><button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.${path}.splice(${i},1); triggerSave(); applyToSheet();">X</button></div>`).join('');
             };
             rList('s_melee_list', char.melee, 'melee'); rList('s_tac_list', char.inv_tac, 'inv_tac'); rList('s_uti_list', char.inv_uti, 'inv_uti'); rList('s_runic_list', char.runic, 'runic'); rList('s_gen_list', char.inv_gen, 'inv_gen');
+            
+            // Drones Render
+            if(!char.drones) char.drones =[];
+            document.getElementById('s_drones_list').innerHTML = char.drones.map((d, i) => `
+                <div class="slot-box filled" style="border-left-color:var(--cyan); margin-bottom:10px;">
+                    <div class="slot-header"><strong style="color:#fff;">${d.n}</strong><div><button class="btn btn-small" style="margin-right:10px; color:var(--cyan);" onclick="openModSelector('drone_${i}')">+ MOD (${d.mods.length}/${d.slots})</button><button class="btn-red" style="background:none;border:none;cursor:pointer;" onclick="char.drones.splice(${i},1); applyToSheet();">X</button></div></div>
+                    <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">INT: ${d.integ} | ABS: ${d.abs} | VEL: ${d.spd} | DEF: ${d.def}</div>
+                    ${d.mods.length>0 ? `<div style="border-top:1px dashed #333; padding-top:5px;">` + d.mods.map((md, midx)=>`<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name} <span style="color:#666;">[${md.slots} slot]</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.drones[${i}].mods.splice(${midx},1); applyToSheet();">x</button></div>`).join('') + `</div>` : ''}
+                </div>
+            `).join('');
         }
 
-        let curSlot = '';
-        window.openSlotSelector = function(p, t) {
-            curSlot = p;
-            if(t === 'builder' || t === 'builder_sec') {
-                document.getElementById('mw_title').innerText = (t==='builder') ? "MONTAR PRIMÁRIA" : "MONTAR SECUNDÁRIA";
-                document.getElementById('mw_f').innerHTML = '<option value="">[ FRAME ]</option>' + DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.name || f.n}</option>`).join('');
-                document.getElementById('mw_c').innerHTML = '<option value="">[ NÚCLEO ]</option>' + DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.name || c.n}</option>`).join('');
-                document.getElementById('mw_preview').innerHTML = "";
-                document.getElementById('modal-weapon').style.display = 'flex';
-            } else {
-                const list = document.getElementById('mg_list'); list.innerHTML = '';
-                let items = (t==='armors') ? DB.arsenal.armors : DB.arsenal.mods_armor.filter(m => m.name.includes("Emissor"));
-                items.forEach((item, i) => {
-                    list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${item.n || item.name}</strong><br><small>${item.traits||item.effect}</small></div><button class="btn btn-small" onclick="equipSlot('${t}', ${i})">EQUIPAR</button></div>`;
-                });
-                document.getElementById('mg_title').innerText = t==='armors'?"TRAJES":"GERADORES DE ESCUDO";
-                document.getElementById('modal-generic').style.display = 'flex';
+        let curBuildSlot = '';
+        window.openBuilder = function(slot) {
+            curBuildSlot = slot;
+            if(slot==='wpn_p' || slot==='wpn_s') {
+                document.getElementById('mb_title').innerText = slot==='wpn_p' ? "MONTAR PRIMÁRIA" : "MONTAR SECUNDÁRIA";
+                document.getElementById('mb_armor_fields').style.display = 'none'; document.getElementById('mb_weapon_fields').style.display = 'block';
+                document.getElementById('mb_f').innerHTML = '<option value="">[ FRAME ]</option>' + DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.n}</option>`).join('');
+                document.getElementById('mb_c').innerHTML = '<option value="">[ NÚCLEO ]</option>' + DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('');
+                
+                if(char.sic[slot]) {
+                    document.getElementById('mb_f_t').value = char.sic[slot].frame_lvl; document.getElementById('mb_c_t').value = char.sic[slot].core_lvl;
+                }
+                previewBuild(); document.getElementById('modal-builder').style.display = 'flex';
+            } else if(slot==='armor') {
+                document.getElementById('mb_title').innerText = "EQUIPAR TRAJE/ARMADURA";
+                document.getElementById('mb_weapon_fields').style.display = 'none'; document.getElementById('mb_armor_fields').style.display = 'block';
+                document.getElementById('mb_a').innerHTML = '<option value="">[ SELECIONAR ]</option>' + DB.arsenal.armors.map((a,i)=>`<option value="${i}">${a.n} [NF ${a.nf} | ${a.cost}¢]</option>`).join('');
+                previewBuild(); document.getElementById('modal-builder').style.display = 'flex';
             }
         }
 
-        window.equipSlot = function(t, i) {
-            let src = (t==='armors') ? DB.arsenal.armors : DB.arsenal.mods_armor.filter(m => m.name.includes("Emissor"));
-            char.sic[curSlot] = JSON.parse(JSON.stringify(src[i]));
-            closeModal(); triggerSave(); applyToSheet();
+        window.previewBuild = function() {
+            const btn = document.getElementById('mb_confirm'); const warn = document.getElementById('mb_warn'); warn.innerText = ''; btn.disabled = true;
+            if(curBuildSlot==='wpn_p' || curBuildSlot==='wpn_s') {
+                const fi = document.getElementById('mb_f').value; const ci = document.getElementById('mb_c').value;
+                if(fi==="" || ci==="") return document.getElementById('mb_preview').innerHTML = "";
+                const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
+                const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
+                
+                let reqNfF = ft===1?0:(ft===2?3:7); let reqNfC = ct===1?0:(ct===2?3:7);
+                if(char.nf < reqNfF || char.nf < reqNfC) { warn.innerText = "NÍVEL DE FAMA (NF) INSUFICIENTE PARA ESTAS PEÇAS."; } else btn.disabled = false;
+
+                let baseD = c.dmg[3]; if(f.n.includes("Pistola")) baseD=c.dmg[0]; if(f.n.includes("Subm")) baseD=c.dmg[1]; if(f.n.includes("Escopeta")) baseD=c.dmg[2]; if(f.n.includes("Precisão")) baseD=c.dmg[4];
+                let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(f.n.includes("Pistola") || f.n.includes("Subm")) d += 1; else d += 2; }
+                let slots = ft + 1;
+                
+                document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${f.n} T${ft} // ${c.n} T${ct}</strong><br><div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${d}</span> | ALCANCE: <strong>${f.r}</strong> | CALOR: <strong>${c.h}</strong> | SLOTS MOD: <strong>${slots}</strong></div><div style="font-size:0.8rem; color:var(--text-muted);"><strong>[FRAME]:</strong> ${f.eff}</div><div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;"><strong>[NÚCLEO]:</strong> ${c.eff}</div>`;
+            } else if(curBuildSlot==='armor') {
+                const ai = document.getElementById('mb_a').value; if(ai==="") return document.getElementById('mb_preview').innerHTML = "";
+                const a = DB.arsenal.armors[ai];
+                if(char.nf < a.nf) { warn.innerText = "NÍVEL DE FAMA INSUFICIENTE."; } else btn.disabled = false;
+                document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${a.n}</strong><br><div style="margin:10px 0; color:#fff;">ABSORÇÃO: <strong>${a.abs}</strong> (Quebrada: ${a.broken}) | SLOTS MOD: <strong>${a.slots}</strong></div><div style="font-size:0.8rem; color:var(--text-muted);">${a.traits}</div>`;
+            }
         }
 
-        window.previewWeapon = function() {
-            const fi = document.getElementById('mw_f').value; const ci = document.getElementById('mw_c').value;
-            const ft = parseInt(document.getElementById('mw_f_t').value); const ct = parseInt(document.getElementById('mw_c_t').value);
-            if(fi==="" || ci==="") return;
-            const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
-            
-            const fName = f.name || f.n;
-            let baseD = c.dmg[3]; if(fName.includes("Pistola")) baseD=c.dmg[0]; if(fName.includes("Subm")) baseD=c.dmg[1]; if(fName.includes("Escopeta")) baseD=c.dmg[2]; if(fName.includes("Precisão")) baseD=c.dmg[4];
-            let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(fName.includes("Pistola") || fName.includes("Subm")) d += 1; else d += 2; }
-            
-            document.getElementById('mw_preview').innerHTML = `
-            <strong style="color:var(--cyan); font-size:1.1rem;">${fName} T${ft} // ${c.name||c.n} T${ct}</strong><br>
-            <div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${d}</span> | ALCANCE: <strong>${f.range||f.r}</strong> | CALOR: <strong>${c.heat||c.h}</strong> | SLOTS MOD: <strong>${ft+1}</strong></div>
-            <div style="font-size:0.8rem; color:var(--text-muted);"><strong>[FRAME]:</strong> ${f.eff}</div>
-            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;"><strong>[NÚCLEO]:</strong> ${c.eff}</div>`;
-        }
-
-        window.confirmWeapon = function() {
-            const fi = document.getElementById('mw_f').value; const ci = document.getElementById('mw_c').value;
-            const ft = parseInt(document.getElementById('mw_f_t').value); const ct = parseInt(document.getElementById('mw_c_t').value);
-            if(fi==="" || ci==="") return;
-            const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
-            const fName = f.name || f.n;
-            let baseD = c.dmg[3]; if(fName.includes("Pistola")) baseD=c.dmg[0]; if(fName.includes("Subm")) baseD=c.dmg[1]; if(fName.includes("Escopeta")) baseD=c.dmg[2]; if(fName.includes("Precisão")) baseD=c.dmg[4];
-            let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(fName.includes("Pistola") || fName.includes("Subm")) d += 1; else d += 2; }
-
-            char.sic[curSlot] = { name: `${fName} T${ft} (${c.name||c.n} T${ct})`, dmg: d, range: f.range||f.r, h_max: c.heat||c.h, h_cur: 0, desc: `${f.eff} // ${c.eff}` };
+        window.confirmBuild = function() {
+            if(curBuildSlot==='wpn_p' || curBuildSlot==='wpn_s') {
+                const f = DB.arsenal.frames[document.getElementById('mb_f').value]; const c = DB.arsenal.cores[document.getElementById('mb_c').value];
+                const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
+                let baseD = c.dmg[3]; if(f.n.includes("Pistola")) baseD=c.dmg[0]; if(f.n.includes("Subm")) baseD=c.dmg[1]; if(f.n.includes("Escopeta")) baseD=c.dmg[2]; if(f.n.includes("Precisão")) baseD=c.dmg[4];
+                let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(f.n.includes("Pistola") || f.n.includes("Subm")) d += 1; else d += 2; }
+                const oldMods = char.sic[curBuildSlot] ? char.sic[curBuildSlot].mods :[];
+                char.sic[curBuildSlot] = { name: `${f.n} T${ft} (${c.n} T${ct})`, dmg: d, range: f.r, h_max: c.h, h_cur: 0, desc: `${f.eff} // ${c.eff}`, frame_lvl: ft, core_lvl: ct, slots: ft+1, mods: oldMods };
+            } else if(curBuildSlot==='armor') {
+                const a = DB.arsenal.armors[document.getElementById('mb_a').value];
+                const oldMods = char.sic.armor ? char.sic.armor.mods :[];
+                char.sic.armor = { name: a.n, abs: a.abs, broken: a.broken, traits: a.traits, slots: a.slots, mods: oldMods };
+            }
             closeModal(); triggerSave(); applyToSheet();
         }
 
@@ -788,13 +816,15 @@
         window.renderSheetCromo = function() {
             document.getElementById('cromo_container').innerHTML = cyberCats.map(c => {
                 const data = char.cromo[c];
-                let html = `<div class="panel" style="border-top: 3px solid var(--purple);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"><h3 style="color:var(--purple); margin:0;">${c.toUpperCase()}</h3><select style="width:120px;" onchange="char.cromo['${c}'].t=parseInt(this.value); char.cromo['${c}'].m=[]; triggerSave(); applyToSheet();"><option value="0" ${data.t===0?'selected':''}>Não Instalada</option><option value="1" ${data.t===1?'selected':''}>Tier I (1 Slot)</option><option value="2" ${data.t===2?'selected':''}>Tier II (2 Slots)</option><option value="3" ${data.t===3?'selected':''}>Tier III (3 Slots)</option></select></div>`;
+                let html = `<div class="panel" style="border-top: 3px solid var(--purple);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"><h3 style="color:var(--purple); margin:0;">${c.toUpperCase()}</h3><select style="width:auto;" onchange="char.cromo['${c}'].t=parseInt(this.value); char.cromo['${c}'].m=[]; triggerSave(); applyToSheet();"><option value="0" ${data.t===0?'selected':''}>Offline</option><option value="1" ${data.t===1?'selected':''}>Tier I (1 Slot)[NF 0 | 5¢]</option><option value="2" ${data.t===2?'selected':''}>Tier II (2 Slots) [NF 3 | 10¢]</option><option value="3" ${data.t===3?'selected':''}>Tier III (3 Slots) [NF 7 | 20¢]</option></select></div>`;
                 if(data.t > 0) {
+                    let reqNf = data.t===1?0:(data.t===2?3:7);
+                    if(char.nf < reqNf) html += `<div style="color:var(--red); font-size:0.8rem; margin-bottom:10px;">⚠️ NF insuficiente para manter este Tier.</div>`;
                     for(let i=0; i<data.t; i++) {
                         if(data.m[i]) html += `<div class="slot-box filled" style="border-left-color:var(--purple); padding:10px; margin-bottom:10px;"><div style="display:flex; justify-content:space-between;"><strong>${data.m[i].name}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.cromo['${c}'].m.splice(${i},1); triggerSave(); applyToSheet();">X</button></div><div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${data.m[i].d}</div></div>`;
-                        else html += `<div class="slot-box" style="padding:15px; text-align:center; cursor:pointer;" onclick="openCromoSelector('${c}')"><span style="color:var(--text-muted); font-family:var(--font-mono); font-size:0.8rem;">[ SOQUETE DE UNIDADE VAZIO ]</span></div>`;
+                        else html += `<div class="slot-box" style="padding:15px; text-align:center; cursor:pointer;" onclick="openCromoSelector('${c}')"><span style="color:var(--text-muted); font-family:var(--font-mono); font-size:0.8rem;">[ SOQUETE VAZIO ]</span></div>`;
                     }
-                } else { html += `<div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:20px 0;">[ INTERFACE OFFLINE ]</div>`; }
+                } else { html += `<div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:20px 0;">[ OFFLINE ]</div>`; }
                 return html + `</div>`;
             }).join('');
         }
@@ -802,39 +832,97 @@
         let cCromo = '';
         window.openCromoSelector = function(cat) {
             cCromo = cat; const list = document.getElementById('mg_list'); list.innerHTML = '';
-            const items = DB.arsenal.cyber_units ? DB.arsenal.cyber_units.filter(u => u.cat === cat) : DB.arsenal.cyber.filter(u => u.name.includes(cat) && !u.name.includes("Tier"));
-            items.forEach((item, i) => { list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${item.name}</strong><br><small style="color:var(--text-muted)">${item.d}</small></div><button class="btn btn-small" onclick="char.cromo['${cat}'].m.push(${JSON.stringify(item).replace(/"/g, '&quot;')}); closeModal(); triggerSave(); applyToSheet();">INSTALAR</button></div>`; });
-            document.getElementById('mg_title').innerText = "UNIDADES: " + cat.toUpperCase();
+            DB.arsenal.cyber_units.filter(u => u.cat === cat).forEach((item, i) => {
+                const locked = char.nf < item.nf;
+                list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red);':''}"><div style="flex-grow:1;"><strong style="color:var(--purple)">${item.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${item.nf} | ${item.cost} ¢]</span><br><small style="color:var(--text-muted)">${item.d}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.cromo['${cat}'].m.push(${JSON.stringify(item).replace(/"/g, '&quot;')}); closeModal(); triggerSave(); applyToSheet();">INSTALAR</button></div>`;
+            });
+            document.getElementById('mg_title').innerText = "UNIDADES CIBERNÉTICAS: " + cat.toUpperCase();
             document.getElementById('modal-generic').style.display = 'flex';
         }
 
-        // --- GENERIC MODALS E PERSONA ---
+        // --- GENERIC MODALS ---
         let cGenP = '';
         window.openGenericModal = function(dbKey, path) {
             cGenP = path; const list = document.getElementById('mg_list'); list.innerHTML = ''; let items =[];
             if(dbKey==='domains') {
                 DB.domains.forEach(d => { const h = char.dom.find(x=>x.n===d.name); list.innerHTML += `<div class="selectable-item" style="${h?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${d.name}</strong><br><small>${d.desc}</small></div><button class="btn btn-small" ${h?'disabled':''} onclick="char.dom.push({n:'${d.name}', lvl:1, flips:1}); closeModal(); triggerSave(); applyToSheet();">TREINAR</button></div>`; });
             } else if(dbKey==='masteries') {
-                DB.masteries.forEach(m => { list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${m.name}</strong> <span style="color:#666">[${m.type}]</span><br><small>${m.effect}</small></div><button class="btn btn-small" onclick="char.adv.push({n:'${m.name}', d:'${m.effect}'}); closeModal(); triggerSave(); applyToSheet();">ADD</button></div>`; });
+                const cats =[...new Set(DB.masteries.map(m=>m.type))];
+                cats.forEach(cat => {
+                    list.innerHTML += `<div class="cat-header">${cat}</div>`;
+                    DB.masteries.filter(m=>m.type===cat).forEach(m => {
+                        const has = char.masteries.find(x=>x.name===m.name);
+                        list.innerHTML += `<div class="selectable-item" style="${has?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${m.name}</strong><br><small>${m.effect}</small></div><button class="btn btn-small" ${has?'disabled':''} onclick="char.masteries.push({name:'${m.name}', effect:'${m.effect}'}); closeModal(); triggerSave(); applyToSheet();">ADD</button></div>`;
+                    });
+                });
+            } else if(dbKey==='drone_chassis') {
+                DB.arsenal.drone_chassis.forEach(ch => {
+                    const locked = char.nf < ch.nf;
+                    list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red)':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${ch.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${ch.nf} | ${ch.cost} ¢]</span><br><small style="color:var(--text-muted)">Slots: ${ch.slots} | Integ: ${ch.integ} | Abs: ${ch.abs} | Vel: ${ch.spd}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="addDrone(${JSON.stringify(ch).replace(/"/g, '&quot;')})">COMPRAR</button></div>`;
+                });
             } else {
                 dbKey.split(',').forEach(k => { items = items.concat(DB.arsenal[k] || DB[k] ||[]); });
-                items.forEach((item, i) => { list.innerHTML += `<div class="selectable-item"><div style="flex-grow:1;"><strong>${item.name || item.n}</strong><br><small style="color:var(--text-muted)">${item.effect || item.d || item.traits || ''}</small></div><button class="btn btn-small" onclick="installGenItem('${dbKey}', ${i})">ADD</button></div>`; });
+                items.forEach((item, i) => { 
+                    const locked = (item.nf !== undefined && char.nf < item.nf);
+                    let meta = ''; if(item.nf!==undefined) meta+=` [NF ${item.nf}]`; if(item.cost!==undefined) meta+=`[${item.cost} ¢]`;
+                    list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red)':''}"><div style="flex-grow:1;"><strong>${item.name || item.n}</strong><span style="color:var(--gold); font-size:0.75rem;">${meta}</span><br><small style="color:var(--text-muted)">${item.effect || item.d || item.traits || ''}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="installGenItem('${dbKey}', ${i})">ADD</button></div>`; 
+                });
             }
             document.getElementById('mg_title').innerText = "BASE DE DADOS DO SINDICATO"; document.getElementById('modal-generic').style.display = 'flex';
         }
+        
         window.installGenItem = function(dbKey, idx) {
             let items =[]; dbKey.split(',').forEach(k => items = items.concat(DB.arsenal[k] || DB[k] ||[]));
-            char[cGenP].push(JSON.parse(JSON.stringify(items[idx])));
+            char[cGenP].push(JSON.parse(JSON.stringify(items[idx]))); closeModal(); triggerSave(); applyToSheet();
+        }
+
+        window.addDrone = function(ch) {
+            char.drones.push({ n: ch.name, integ: ch.integ, abs: ch.abs, spd: ch.spd, def: ch.def, slots: ch.slots, mods:[] });
             closeModal(); triggerSave(); applyToSheet();
+        }
+
+        window.openModSelector = function(target) {
+            cGenP = target; const list = document.getElementById('mg_list'); list.innerHTML = '';
+            let src =[]; let currSlots = 0; let maxSlots = 0;
+            if(target.startsWith('drone_')) {
+                const dIdx = parseInt(target.split('_')[1]); const dr = char.drones[dIdx];
+                src = DB.arsenal.drone_modules; maxSlots = dr.slots; dr.mods.forEach(m=> currSlots += m.slots);
+                src.forEach((m, i) => {
+                    const locked = (char.nf < m.nf) || (currSlots + m.slots > maxSlots);
+                    list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red)':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${m.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢ | ${m.slots} Slot]</span><br><small style="color:var(--text-muted)">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.drones[${dIdx}].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); triggerSave(); applyToSheet();">ADD</button></div>`;
+                });
+            } else {
+                if(target==='armor') { src = DB.arsenal.mods_armor; maxSlots = char.sic.armor.slots; char.sic.armor.mods.forEach(m=> currSlots++); }
+                else { src = DB.arsenal.mods_weapon; maxSlots = char.sic[target].slots; char.sic[target].mods.forEach(m=> currSlots++); }
+                
+                src.forEach((m, i) => {
+                    const locked = (char.nf < m.nf) || (currSlots >= maxSlots);
+                    list.innerHTML += `<div class="selectable-item" style="${locked?'opacity:0.4; border-color:var(--red)':''}"><div style="flex-grow:1;"><strong>${m.name} ${m.type?`(${m.type})`:''}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢]</span><br><small style="color:var(--text-muted)">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.sic['${target}'].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); triggerSave(); applyToSheet();">ADD</button></div>`;
+                });
+            }
+            document.getElementById('mg_title').innerText = "INSTALAR MODIFICAÇÃO"; document.getElementById('modal-generic').style.display = 'flex';
         }
 
         window.renderPersona = function() {
             const list = document.getElementById('s_contacts_list'); list.innerHTML = '';
             if(!char.contacts) char.contacts =[];
             char.contacts.forEach((c, i) => {
-                list.innerHTML += `<div style="background:#18181b; padding:15px; margin-bottom:10px; border-left:3px solid var(--cyan); border-radius:4px;"><div style="display:flex; justify-content:space-between; margin-bottom:10px;"><input type="text" value="${c.name || c.n}" style="background:transparent; border:none; color:var(--cyan); font-weight:bold; font-size:1.1rem; padding:0;" onchange="char.contacts[${i}].name=this.value; triggerSave();"><button style="background:none; border:none; color:var(--red); cursor:pointer; font-weight:bold;" onclick="char.contacts.splice(${i},1); triggerSave(); applyToSheet();">X</button></div><textarea rows="2" style="font-size:0.85rem;" placeholder="Detalhes, favores e dívidas..." onchange="char.contacts[${i}].d=this.value; triggerSave();">${c.d}</textarea></div>`;
+                list.innerHTML += `<div style="background:#141418; padding:15px; margin-bottom:10px; border-left:3px solid var(--cyan); border-radius:4px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px; gap:10px;">
+                        <input type="text" value="${c.n}" placeholder="Nome" style="font-weight:bold; color:var(--cyan); flex-grow:1;" onchange="char.contacts[${i}].n=this.value; triggerSave();">
+                        <select style="width:120px;" onchange="char.contacts[${i}].cat=this.value; triggerSave();"><option ${c.cat==='Amigo'?'selected':''}>Amigo</option><option ${c.cat==='Conhecido'?'selected':''}>Conhecido</option></select>
+                        <select style="width:140px;" onchange="char.contacts[${i}].sph=this.value; triggerSave();"><option ${c.sph==='Corporativa'?'selected':''}>Corporativa</option><option ${c.sph==='Militar'?'selected':''}>Militar</option><option ${c.sph==='Submundo'?'selected':''}>Submundo</option><option ${c.sph==='Tecnologia'?'selected':''}>Tecnologia</option><option ${c.sph==='Biotech'?'selected':''}>Biotech</option><option ${c.sph==='Logística'?'selected':''}>Logística</option><option ${c.sph==='Sintonização'?'selected':''}>Sintonização</option></select>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                        <label style="color:var(--gold); margin:0;">DÍVIDA (0-5):</label>
+                        <input type="number" min="0" max="5" value="${c.debt||0}" style="width:60px;" onchange="char.contacts[${i}].debt=parseInt(this.value); triggerSave();">
+                    </div>
+                    <textarea rows="2" placeholder="Anotações / Favores..." onchange="char.contacts[${i}].d=this.value; triggerSave();">${c.d}</textarea>
+                    <div style="text-align:right; margin-top:5px;"><button class="btn-red" style="background:none; border:none; cursor:pointer;" onclick="char.contacts.splice(${i},1); triggerSave(); applyToSheet();">REMOVER CONTATO</button></div>
+                </div>`;
             });
         }
+        window.addContact = function() { char.contacts.push({n:"Novo", cat:"Conhecido", sph:"Submundo", debt:0, d:""}); renderPersona(); triggerSave(); }
         
         window.switchView = function(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
         window.switchTab = function(id, btn) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
