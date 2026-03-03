@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChromOasis // Sindicato OS v20.0</title>
+    <title>ChromOasis // Sindicato OS v21.0</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
-            --bg-base: #101014;
-            --bg-panel: #1a1a20;
-            --bg-modal: #0a0e14;
-            --border-dim: #33333d;
-            --text-main: #e2e2e8;
-            --text-muted: #8b8b9e;
+            --bg-base: #1e1f20; /* Slate Grey - Estilo AI Studio */
+            --bg-panel: #28292c;
+            --bg-modal: #161718;
+            --border-dim: #3c4043;
+            --text-main: #e8eaed;
+            --text-muted: #9aa0a6;
             --cyan: #00e5ff;
             --red: #ff3355;
             --gold: #ffcc00;
@@ -26,8 +26,8 @@
         
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(16, 16, 20, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-            background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 999; opacity: 0.4;
+            background: linear-gradient(rgba(30, 31, 32, 0) 50%, rgba(0, 0, 0, 0.05) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.01));
+            background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 999; opacity: 0.3;
         }
 
         h1, h2, h3, h4 { font-family: var(--font-mono); text-transform: uppercase; font-weight: normal; margin: 0 0 10px 0; }
@@ -35,10 +35,10 @@
         h2 { color: var(--cyan); font-size: 1.1rem; border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; margin-bottom: 15px; }
 
         input, select, textarea { 
-            background: #101014; color: var(--text-main); border: 1px solid var(--border-dim); 
+            background: #161718; color: var(--text-main); border: 1px solid var(--border-dim); 
             padding: 8px 12px; font-family: var(--font-ui); font-size: 0.95rem; width: 100%; box-sizing: border-box; border-radius: 4px;
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); background: #1a1a20; }
+        input:focus, select:focus { border-color: var(--cyan); background: #202124; outline: none; }
         input[type=number] { font-family: var(--font-mono); font-weight: bold; text-align: center; }
 
         .btn {
@@ -46,20 +46,17 @@
             padding: 8px 16px; font-family: var(--font-mono); font-weight: bold; cursor: pointer;
             text-transform: uppercase; border-radius: 4px; transition: 0.2s;
         }
-        .btn:hover:not(:disabled) { background: var(--border-dim); border-color: var(--cyan); color: #fff; }
+        .btn:hover:not(:disabled) { background: #3c4043; border-color: var(--cyan); color: #fff; }
         .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .btn-red { color: var(--red); }
-        .btn-red:hover:not(:disabled) { background: var(--red); color: #fff; border-color: var(--red); }
+        .btn-red { color: var(--red); border-color: var(--red); }
+        .btn-red:hover:not(:disabled) { background: var(--red); color: #fff; }
         .btn-small { padding: 4px 10px; font-size: 0.75rem; }
         
-        .btn-vit { background: #101014; border: 1px solid var(--border-dim); color: var(--text-main); width: 25px; height: 25px; border-radius: 4px; cursor: pointer; font-size: 1.1rem; display:inline-flex; align-items:center; justify-content:center; padding:0; line-height:1;}
-        .btn-vit:hover { background: var(--border-dim); color: #fff;}
-
-        .inline-ctrl { display:inline-flex; align-items:center; gap:5px; background:#101014; border:1px solid #333; padding:4px 8px; border-radius:4px; font-family:var(--font-mono); font-size:0.85rem;}
+        .btn-vit { background: #161718; border: 1px solid var(--border-dim); color: var(--text-main); width: 25px; height: 25px; border-radius: 4px; cursor: pointer; font-size: 1.1rem; display:inline-flex; align-items:center; justify-content:center; padding:0; line-height:1;}
 
         .view { display: none; padding: 20px; max-width: 1250px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
         .view.active { display: block; }
-        .panel { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 20px; margin-bottom: 20px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .panel { background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 20px; margin-bottom: 20px; border-radius: 6px; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
@@ -67,51 +64,46 @@
         /* WIZARD */
         .wiz-progress { display: flex; justify-content: space-between; border-bottom: 2px solid var(--border-dim); padding-bottom: 15px; margin-bottom: 30px; }
         .prog-node { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
-        .prog-node.active { color: var(--cyan); font-weight: bold; border-bottom: 2px solid var(--cyan); padding-bottom: 13px; margin-bottom: -15px; }
+        .prog-node.active { color: var(--cyan); font-weight: bold; }
         .wiz-step { display: none; }
         .wiz-step.active { display: block; }
-        .wiz-attr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 20px 0; }
 
-        /* TABS */
-        .tab-bar { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid var(--border-dim); }
-        .tab-btn { background: transparent; color: var(--text-muted); border: none; padding: 12px 24px; cursor: pointer; font-family: var(--font-mono); font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent; margin-bottom: -2px; }
-        .tab-btn:hover { color: var(--text-main); }
+        .tab-bar { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 1px solid var(--border-dim); }
+        .tab-btn { background: transparent; color: var(--text-muted); border: none; padding: 12px 24px; cursor: pointer; font-family: var(--font-mono); font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent; }
         .tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* SLOTS E VITALS */
-        .slot-box { border: 1px dashed var(--border-dim); background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 15px; border-radius: 4px; transition: 0.2s; position: relative; }
+        .slot-box { border: 1px dashed var(--border-dim); background: rgba(0,0,0,0.1); padding: 15px; margin-bottom: 15px; border-radius: 4px; position: relative; }
         .slot-box.filled { border-style: solid; background: var(--bg-panel); border-left: 4px solid var(--cyan); }
-        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; }
-        .slot-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; }
+        
+        .vitals-row { display: flex; justify-content: space-between; align-items: center; background: #161718; padding: 15px; border: 1px solid var(--border-dim); border-radius: 4px; margin-bottom: 10px; }
+        .vitals-val { font-size: 1.8rem; font-weight: bold; font-family: var(--font-mono); display: flex; align-items: center; gap: 10px; }
 
         .ess-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .ess-box { background: #101014; border: 1px solid var(--border-dim); padding: 10px; text-align: center; border-radius: 4px; }
-        .ess-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); background: rgba(34, 211, 238, 0.1); padding: 2px 6px; border-radius: 10px; margin-top: 5px; display:inline-block; }
-
-        .selectable-item { background: #18181c; border: 1px solid var(--border-dim); padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: flex-start; text-align: left; transition: 0.2s;}
-        .selectable-item:hover:not(.locked) { border-color: var(--cyan); }
-        .selectable-item.locked { opacity: 0.4; border-color: var(--red); }
-        .cat-header { color: var(--gold); border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; margin: 20px 0 10px 0; font-family: var(--font-mono); font-size: 1rem; }
+        .ess-box { background: #161718; border: 1px solid var(--border-dim); padding: 10px; text-align: center; border-radius: 4px; }
+        .ess-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); background: rgba(0, 229, 255, 0.1); padding: 2px 6px; border-radius: 10px; margin-top: 5px; display:inline-block; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
-        .modal { background: var(--bg-base); border: 1px solid var(--cyan); width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        .roster-card { display: flex; gap: 20px; background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 20px; cursor: pointer; transition: 0.2s; border-left: 4px solid var(--cyan); margin-bottom: 15px; }
-        .roster-card:hover { border-color: var(--cyan); transform: translateX(10px); }
+        .modal { background: var(--bg-base); border: 1px solid var(--cyan); width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; padding: 30px; border-radius: 8px; }
+        .selectable-item { background: #28292c; border: 1px solid var(--border-dim); padding: 12px; margin-bottom: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
+        .selectable-item:hover:not(.locked) { border-color: var(--cyan); }
+        .selectable-item.locked { opacity: 0.3; filter: grayscale(1); border-color: var(--red); }
+        .cat-header { color: var(--gold); border-bottom: 1px solid var(--border-dim); padding: 15px 0 5px 0; font-family: var(--font-mono); font-size: 0.9rem; }
 
-        .blink-red { animation: blinker 1s linear infinite; color: var(--red); font-weight: bold; font-family: var(--font-mono); font-size: 1.5rem; text-align:center; padding:10px; border:2px dashed var(--red); margin-bottom:15px; background:rgba(255,51,85,0.1); border-radius:4px;}
+        .inline-ctrl { display:inline-flex; align-items:center; gap:5px; background:#161718; border:1px solid #3c4043; padding:4px 8px; border-radius:4px; font-family:var(--font-mono); font-size:0.85rem;}
+
+        .blink-red { animation: blinker 0.8s linear infinite; color: var(--red); font-weight: bold; font-family: var(--font-mono); text-align:center; padding:10px; border:2px dashed var(--red); margin-bottom:15px; background:rgba(255,51,85,0.1); }
         @keyframes blinker { 50% { opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <!-- LOADING -->
+    <!-- LOADER -->
     <div id="loader" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--bg-base); z-index:2000; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-        <h1 style="border:none; color:var(--text-main);">SINDICATO O.S.</h1>
-        <p id="loader-msg" style="color:var(--cyan); font-family:var(--font-mono);">Conectando ao GRID...</p>
+        <h1 style="border:none;">SINDICATO O.S.</h1>
+        <p id="loader-msg" style="color:var(--cyan); font-family:var(--font-mono);">Sincronizando com o GRID...</p>
     </div>
 
     <!-- MODAL DATABASE -->
@@ -121,6 +113,7 @@
                 <h1 id="mg_title" style="margin:0; border:none;">DATABASE</h1>
                 <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
             </div>
+            <div id="mg_preview" style="background:#161718; padding:15px; border:1px dashed var(--cyan); margin-bottom:20px; color:var(--text-muted); font-size:0.85rem; min-height:40px;">Passe o mouse sobre um item para ver detalhes.</div>
             <div id="mg_list"></div>
         </div>
     </div>
@@ -128,31 +121,31 @@
     <!-- MODAL REGRAS -->
     <div id="modal-rules" class="modal-overlay">
         <div class="modal">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-dim); padding-bottom:10px;">
-                <h2 style="margin:0; border:none;">ARQUIVO MESTRE</h2>
-                <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="margin:0;">ARQUIVO MESTRE</h2>
+                <button class="btn btn-red btn-small" onclick="document.getElementById('modal-rules').style.display='none'">FECHAR</button>
             </div>
             <div id="rules-content" style="line-height:1.6; color:#ccc;">Carregando regras...</div>
         </div>
     </div>
 
-    <!-- HUB VIEW -->
+    <!-- HUB -->
     <div id="view-hub" class="view active">
         <div style="text-align:center; margin: 60px 0;">
-            <h1 style="font-size: 3.5rem; border:none; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">CHROMOASIS DB</h1>
-            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v20.0</p>
+            <h1 style="font-size: 3.5rem; border:none; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0, 229, 255, 0.2);">CHROMOASIS</h1>
+            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v21.0</p>
         </div>
         <div style="display:flex; justify-content:center; gap:15px; margin-bottom: 50px;">
             <button class="btn" style="border-color:var(--cyan); color:var(--cyan);" onclick="startWizard()">+ RECRUTAR OPERADOR</button>
-            <button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="openRulesModal()">📘 ARQUIVO MESTRE (REGRAS)</button>
-            <button class="btn btn-red" onclick="if(confirm('FORMATAR BANCO DE DADOS?')) { localStorage.clear(); location.reload(); }">⚠️ FORMAT DB</button>
+            <button class="btn" onclick="openRulesModal()">📘 ARQUIVO MESTRE (REGRAS)</button>
+            <button class="btn btn-red" onclick="wipeDB()">⚠️ FORMAT DB</button>
         </div>
-        <div id="roster-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:20px;"></div>
+        <div id="roster-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px;"></div>
     </div>
 
-    <!-- WIZARD VIEW -->
+    <!-- WIZARD -->
     <div id="view-wizard" class="view">
-        <div class="panel" style="max-width: 900px; margin: 0 auto;">
+        <div class="panel" style="max-width: 900px; margin: 0 auto; border-color:var(--cyan);">
             <div class="wiz-progress">
                 <div class="prog-node active" id="p1">1. PERFIL</div>
                 <div class="prog-node" id="p2">2. ORIGEM</div>
@@ -161,68 +154,62 @@
                 <div class="prog-node" id="p5">5. HISTÓRICO</div>
             </div>
 
-            <!-- STEPS -->
             <div class="wiz-step active" id="step1">
-                <h2>IDENTIFICAÇÃO OPERACIONAL</h2>
+                <h2>CADASTRO INICIAL</h2>
                 <label>NOME E CALLSIGN</label>
                 <input type="text" id="w_name" placeholder="Ex: Alaric 'Mago' Wood" style="margin-bottom:20px;">
                 <label>ARQUÉTIPO TÁTICO</label>
                 <select id="w_arch" onchange="updateWizArchDesc()"></select>
-                <div id="w_arch_desc" style="margin-top:10px; color:var(--text-muted); font-size:0.85rem; padding:10px; background:#101014; border-left:2px solid var(--cyan); border-radius:4px; min-height:40px;"></div>
+                <div id="w_arch_desc" style="margin-top:10px; color:var(--text-muted); font-size:0.85rem; padding:10px; background:#161718; border-left:2px solid var(--cyan); min-height:40px;"></div>
                 <div style="text-align:right; margin-top:30px;"><button class="btn" onclick="nextWizStep(2)">PROSSEGUIR >></button></div>
             </div>
 
             <div class="wiz-step" id="step2">
                 <h2>ORIGEM BIOLÓGICA</h2>
                 <select id="w_origin_sel" onchange="renderWizOriginInfo()"></select>
-                <div id="w_origin_desc" style="margin-top:15px; font-size:0.9rem; background:#101014; padding:15px; border-radius:4px; line-height: 1.5;"></div>
+                <div id="w_origin_desc" style="margin-top:15px; font-size:0.9rem; background:#161718; padding:15px; line-height:1.6; border-radius:4px;"></div>
                 <div id="w_racial_choices_box" style="display:none; margin-top:20px;">
-                    <label style="color:var(--gold); display:block; border-bottom:1px solid #333; padding-bottom:5px; margin-bottom:10px;">VANTAGEM EXTRA (ESCOLHA 1):</label>
+                    <label style="color:var(--gold); border-bottom:1px solid #444; padding-bottom:5px; margin-bottom:10px; display:block;">VANTAGEM RACIAL EXTRA:</label>
                     <div id="w_racial_choices_list"></div>
                 </div>
-                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(1)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(3)">PROSSEGUIR >></button></div>
+                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(1)">VOLTAR</button><button class="btn" onclick="nextWizStep(3)">PROSSEGUIR</button></div>
             </div>
 
             <div class="wiz-step" id="step3">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <h2>DISTRIBUIÇÃO DE ESSÊNCIAS</h2>
-                    <div style="font-family:var(--font-mono); color:var(--text-muted);">PONTOS RESTANTES: <span id="w_pts_left" style="color:var(--green); font-size:1.5rem; font-weight:bold;">0</span></div>
+                    <h2>PONTOS DE CRIAÇÃO</h2>
+                    <div style="font-family:var(--font-mono);">CRÉDITOS: <span id="w_pts_left" style="color:var(--green); font-size:1.6rem; font-weight:bold;">0</span></div>
                 </div>
                 <div class="wiz-attr-grid" id="w_attr_grid"></div>
-                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(2)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(4)">PROSSEGUIR >></button></div>
+                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(2)">VOLTAR</button><button class="btn" onclick="nextWizStep(4)">PROSSEGUIR</button></div>
             </div>
 
             <div class="wiz-step" id="step4">
-                <h2>TREINAMENTO DE DOMÍNIOS (MÁX 2 - NÍVEL I)</h2>
-                <div class="panel" style="padding:0;">
-                    <div id="w_dom_list" style="max-height:350px; overflow-y:auto; padding:10px;"></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-top:20px;"><button class="btn btn-red" onclick="nextWizStep(3)"><< VOLTAR</button><button class="btn" onclick="nextWizStep(5)">PROSSEGUIR >></button></div>
+                <h2>DOMÍNIOS INICIAIS (MAX 2)</h2>
+                <div id="w_dom_list" style="max-height:400px; overflow-y:auto; border:1px solid var(--border-dim); border-radius:4px;"></div>
+                <div style="display:flex; justify-content:space-between; margin-top:20px;"><button class="btn btn-red" onclick="nextWizStep(3)">VOLTAR</button><button class="btn" onclick="nextWizStep(5)">PROSSEGUIR</button></div>
             </div>
 
             <div class="wiz-step" id="step5">
-                <h2>VANTAGENS DE HISTÓRICO</h2>
-                <p style="font-size:0.85rem; color:var(--text-muted);">Regra: Até 3 do mesmo histórico OU 1 de cada de 2 históricos diferentes.</p>
-                <select id="w_hist_sel" onchange="renderWizHistAdvs()" style="margin-bottom:15px;"></select>
-                <div class="panel" style="padding:0;">
-                    <div id="w_hist_pool" style="max-height:250px; overflow-y:auto; padding:10px;"></div>
-                </div>
-                <h3 style="margin-top:20px; font-size:0.85rem; color:var(--cyan);">SELECIONADAS:</h3>
-                <div id="w_selected_advs" style="background:#101014; padding:10px; border-radius:4px; min-height:50px;"></div>
-                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(4)"><< VOLTAR</button><button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR REGISTRO</button></div>
+                <h2>HISTÓRICO OPERACIONAL</h2>
+                <select id="w_hist_sel" onchange="renderWizHistAdvs()" style="margin-bottom:15px; width:50%;"></select>
+                <div id="w_hist_pool" style="max-height:250px; overflow-y:auto; border:1px solid var(--border-dim); background:#161718; padding:5px;"></div>
+                <h3 style="margin-top:20px; font-size:0.8rem; color:var(--cyan);">SELECIONADAS:</h3>
+                <div id="w_selected_advs" style="min-height:60px; border:1px dashed var(--border-dim); padding:10px; background:#161718; margin-bottom: 20px;"></div>
+                <div style="display:flex; justify-content:space-between;"><button class="btn btn-red" onclick="nextWizStep(4)">VOLTAR</button><button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR REGISTRO</button></div>
             </div>
         </div>
     </div>
 
-    <!-- SHEET VIEW -->
-    <div id="view-sheet" class="view container">
+    <!-- SHEET -->
+    <div id="view-sheet" class="view">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
             <div>
-                <h1 id="s_name" style="border:none; font-size:2.2rem; margin-bottom:0;">CALLSIGN</h1>
-                <div style="color:var(--text-muted); font-family:var(--font-mono); font-size:0.85rem; margin-top:5px;"><span id="s_origin"></span> // <span id="s_arch"></span></div>
+                <h1 id="s_name" style="border:none; font-size:2.2rem; margin:0;">CALLSIGN</h1>
+                <div style="color:var(--cyan); font-family:var(--font-mono); font-size:0.85rem;"><span id="s_origin"></span> // <span id="s_arch"></span></div>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
-                <span id="save_ping" style="color:var(--green); font-size:0.7rem; opacity:0; font-family:var(--font-mono);">SALVO</span>
+                <span id="save_ping" style="color:var(--green); font-size:0.7rem; opacity:0; font-family:var(--font-mono);">SYNC OK</span>
                 <button class="btn btn-small" onclick="backToHub()">FECHAR TERMINAL</button>
             </div>
         </div>
@@ -237,58 +224,29 @@
         <!-- TAB 1: STATUS -->
         <div id="t_status" class="tab-content active">
             <div class="panel grid-4" style="padding:15px; border-color:var(--gold); margin-bottom:20px;">
-                <div><label>FAMA (NF)</label><input type="number" id="s_nf" style="font-size:1.2rem; color:var(--gold);" onchange="updateDirect('nf', this.value);"></div>
-                <div><label>CRÉDITOS (¢)</label><input type="number" id="s_cred" style="font-size:1.2rem; color:var(--green);" onchange="updateDirect('cred', this.value);"></div>
-                <div><label>PONTOS DE ÉTER</label><input type="number" id="s_eter" style="font-size:1.2rem; color:var(--purple);" onchange="updateDirect('eter', this.value);"></div>
-                <div><label>XP</label><input type="number" id="s_xp" style="font-size:1.2rem;" onchange="updateDirect('xp', this.value);"></div>
+                <div><label>FAMA (NF)</label><input type="number" id="s_nf" onchange="updateDirect('nf', this.value); updateCalcs();"></div>
+                <div><label>CRÉDITOS (¢)</label><input type="number" id="s_cred" onchange="updateDirect('cred', this.value);"></div>
+                <div><label>PONTOS DE ÉTER</label><input type="number" id="s_eter" onchange="updateDirect('eter', this.value);"></div>
+                <div><label>XP</label><input type="number" id="s_xp" onchange="updateDirect('xp', this.value);"></div>
             </div>
 
             <div class="grid-2" style="grid-template-columns: 1.5fr 1fr;">
                 <!-- ESQUERDA -->
                 <div>
-                    <div class="panel" style="padding:15px;">
-                        <h2 style="margin:0 0 15px 0; border:none;">ESSÊNCIAS (INCLUI CROMO)</h2>
+                    <div class="panel">
+                        <h2>ESSÊNCIAS (INCLUI CROMO)</h2>
                         <div class="ess-grid" id="s_ess_grid"></div>
                     </div>
-
-                    <div class="panel" style="padding:15px;">
-                        <h2 style="border:none; margin-bottom:15px;">TÁTICAS DE DEFESA E REAÇÃO</h2>
-                        <div style="display:flex; justify-content:space-between; gap:10px;">
-                            <div class="inline-ctrl" style="flex-grow:1;">
-                                <span style="color:var(--text-muted);">Iniciativa:</span>
-                                <button onclick="modVital('ex_init', -1)">-</button><span id="s_ex_init">0</span><button onclick="modVital('ex_init', 1)">+</button>
-                                <strong style="color:#fff; margin-left:auto;" id="s_init_total">1d10+0</strong>
-                            </div>
-                            <div class="inline-ctrl" style="flex-grow:1;">
-                                <span style="color:var(--text-muted);">Esquiva:</span>
-                                <button onclick="modVital('ex_dodge', -5)">-</button><span id="s_ex_dodge">0</span><button onclick="modVital('ex_dodge', 5)">+</button>
-                                <strong style="color:var(--cyan); margin-left:auto;" id="s_dodge_total">0%</strong>
-                            </div>
-                            <div class="inline-ctrl" style="flex-grow:1;">
-                                <span style="color:var(--text-muted);">Aparar:</span>
-                                <button onclick="modVital('ex_parry', -5)">-</button><span id="s_ex_parry">0</span><button onclick="modVital('ex_parry', 5)">+</button>
-                                <strong style="color:var(--cyan); margin-left:auto;" id="s_parry_total">0%</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel" style="padding:15px;">
+                    <div class="panel">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <h2 style="margin:0; border:none;">DOMÍNIOS</h2>
-                            <button class="btn btn-small" onclick="openGenericModal('domains', 'dom')">+ DOMÍNIO</button>
+                            <h2>DOMÍNIOS</h2><button class="btn btn-small" onclick="openGenericModal('domains', 'dom')">+ ADICIONAR</button>
                         </div>
                         <div id="s_dom_list"></div>
                     </div>
-
-                    <div class="panel" style="padding:15px;">
-                        <h2 style="margin:0 0 15px 0; border:none;">ORIGEM & HISTÓRICO</h2>
-                        <div id="s_traits_list"></div>
-                    </div>
-
-                    <div class="panel" style="padding:15px; border-color:var(--gold);">
+                    <div class="panel"><h2>VANTAGENS & ORIGEM</h2><div id="s_traits_list"></div></div>
+                    <div class="panel" style="border-color:var(--gold);">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <h2 style="margin:0; border:none; color:var(--gold);">MAESTRIAS</h2>
-                            <button class="btn btn-small" style="border-color:var(--gold); color:var(--gold);" onclick="openGenericModal('masteries', 'masteries')">+ MAESTRIA</button>
+                            <h2 style="color:var(--gold); border:none;">MAESTRIAS</h2><button class="btn btn-small" style="color:var(--gold); border-color:var(--gold);" onclick="openGenericModal('masteries', 'masteries')">+ APRENDER</button>
                         </div>
                         <div id="s_mastery_list"></div>
                     </div>
@@ -296,59 +254,47 @@
 
                 <!-- DIREITA: VITALS -->
                 <div>
-                    <div id="s_dying_alert" class="blink-red">⚠️ OPERADOR MORRENDO ⚠️</div>
+                    <div id="dying_alert" class="blink-red" style="display:none;">⚠️ OPERADOR MORRENDO ⚠️</div>
 
-                    <div class="panel" style="border-top: 3px solid var(--cyan); padding: 15px;">
-                        <h3 style="color:var(--cyan); border-bottom:1px solid var(--border-dim); padding-bottom:5px;">ESCUDO ETÉREO (PE)</h3>
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                            <span class="inline-ctrl" style="font-size:1.2rem; border-color:var(--cyan); background:rgba(0,229,255,0.05);">
-                                ATUAL: <button onclick="modVital('shield_cur',-1)">-</button> 
-                                <strong style="color:var(--cyan); min-width:30px; text-align:center;" id="s_shield_cur">0</strong> 
-                                <button onclick="modVital('shield_cur',1)">+</button>
-                            </span>
-                        </div>
-                        <div style="display:flex; gap:10px;">
-                            <span class="inline-ctrl">Máximo: <button onclick="modVital('shield_max',-1)">-</button> <strong id="s_shield_max">0</strong> <button onclick="modVital('shield_max',1)">+</button></span>
-                            <span class="inline-ctrl">Recarga: <button onclick="modVital('shield_rec',-1)">-</button> <strong id="s_shield_rec">0</strong> <button onclick="modVital('shield_rec',1)">+</button></span>
-                        </div>
-                    </div>
-
-                    <div class="panel" style="border-top: 3px solid var(--accent-gray); padding: 15px;">
-                        <h3 style="color:var(--text-main); border-bottom:1px solid var(--border-dim); padding-bottom:5px;">ARMADURA FÍSICA (ABSORÇÃO)</h3>
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <select id="s_arm_state" style="width:auto; font-size:0.9rem;" onchange="updateDirect('arm_state', this.value); updateCalcs();">
-                                <option value="Normal">Estado: Normal</option><option value="Danificada">Estado: Danificada</option><option value="Quebrada">Estado: Quebrada</option>
-                            </select>
-                            <div style="font-size:0.8rem; color:var(--text-muted); text-align:right;">
-                                EFETIVA: <strong id="s_eff_abs" style="font-size:1.5rem; color:#fff; margin-left:5px;">0</strong>
+                    <div class="panel" style="border-top:3px solid var(--cyan)">
+                        <h3 style="color:var(--cyan); border-bottom:1px solid #444; padding-bottom:5px;">SINAIS VITAIS</h3>
+                        
+                        <div class="vitals-row">
+                            <label style="color:var(--cyan)">ESCUDO (PE)</label>
+                            <div style="text-align:right;">
+                                <div class="vitals-val" style="color:var(--cyan);"><button class="btn-vit" onclick="modStat('shield_cur',-1)">-</button><span id="s_shield_cur">0</span> / <span id="s_shield_max">0</span><button class="btn-vit" onclick="modStat('shield_cur',1)">+</button></div>
+                                <div style="margin-top:5px;"><span class="inline-ctrl">Max: <button onclick="modStat('shield_max',-1)">-</button><span id="s_shield_max_val">0</span><button onclick="modStat('shield_max',1)">+</button></span> <span class="inline-ctrl">Rec: <button onclick="modStat('shield_rec',-1)">-</button><span id="s_shield_rec">0</span><button onclick="modStat('shield_rec',1)">+</button></span></div>
                             </div>
                         </div>
-                        <div style="display:flex; flex-wrap:wrap; gap:10px;">
-                            <span class="inline-ctrl">Intacta: <button onclick="modVital('arm_base',-1)">-</button> <strong id="s_arm_base">0</strong> <button onclick="modVital('arm_base',1)">+</button></span>
-                            <span class="inline-ctrl">Danificada: <button onclick="modVital('arm_dmg',-1)">-</button> <strong id="s_arm_dmg">0</strong> <button onclick="modVital('arm_dmg',1)">+</button></span>
-                            <span class="inline-ctrl">Quebrada: <button onclick="modVital('arm_brok',-1)">-</button> <strong id="s_arm_brok">0</strong> <button onclick="modVital('arm_brok',1)">+</button></span>
+
+                        <div class="vitals-row">
+                            <label>ARMADURA (ABS)</label>
+                            <div style="text-align:right;">
+                                <select id="s_arm_state" style="width:110px; margin-bottom:8px;" onchange="updateDirect('arm_state', this.value); updateCalcs();"><option>Normal</option><option>Danificada</option><option>Quebrada</option></select>
+                                <div style="font-size:2rem; font-weight:bold; color:#fff;" id="s_eff_abs">0</div>
+                                <div style="margin-top:5px; display:flex; gap:5px; justify-content:flex-end;">
+                                    <span class="inline-ctrl" title="Base">B: <button onclick="modStat('arm_base',-1)">-</button><span id="s_arm_base">0</span><button onclick="modStat('arm_base',1)">+</button></span>
+                                    <span class="inline-ctrl" title="Dano">D: <button onclick="modStat('arm_dmg',-1)">-</button><span id="s_arm_dmg">0</span><button onclick="modStat('arm_dmg',1)">+</button></span>
+                                    <span class="inline-ctrl" title="Quebra">Q: <button onclick="modStat('arm_brok',-1)">-</button><span id="s_arm_brok">0</span><button onclick="modStat('arm_brok',1)">+</button></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vitals-row" style="border-left: 4px solid var(--green);">
+                            <label style="color:var(--green)">RESISTÊNCIA (PR)</label>
+                            <div class="vitals-val" style="color:var(--green);"><button class="btn-vit" onclick="modStat('hp_cur',-1)">-</button><span id="s_hp_cur">0</span> / <span id="s_hp_max">0</span><button class="btn-vit" onclick="modStat('hp_cur',1)">+</button></div>
+                        </div>
+
+                        <div class="vitals-row" style="border-left: 4px solid var(--gold); display:block;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;"><label style="color:var(--gold)">SOBRECARGA (SE)</label><div class="vitals-val" style="color:var(--gold); font-size:1.4rem;"><button class="btn-vit" onclick="modStat('se_cur',-1)">-</button><span id="s_se_cur">0</span> / <span id="s_se_max">0</span><button class="btn-vit" onclick="modStat('se_cur',1)">+</button></div></div>
+                            <div id="se_alert" style="color:var(--gold); font-size:0.75rem; text-align:center; margin-top:10px; display:none; background:rgba(0,0,0,0.2); padding:5px;"></div>
                         </div>
                     </div>
 
-                    <div class="panel" style="border-top: 3px solid var(--green); padding: 15px; display:flex; justify-content:space-between; align-items:center;">
-                        <h3 style="color:var(--green); margin:0;">PR (RESISTÊNCIA)</h3>
-                        <span class="inline-ctrl" style="font-size:1.2rem; border-color:var(--green); background:rgba(0,255,102,0.05);">
-                            <button onclick="modVital('hp_cur',-1)">-</button>
-                            <strong style="color:var(--green); min-width:50px; text-align:center;"><span id="s_hp_cur">0</span> / <span id="s_hp_max">0</span></strong>
-                            <button onclick="modVital('hp_cur',1)">+</button>
-                        </span>
-                    </div>
-
-                    <div class="panel" style="border-top: 3px solid var(--gold); padding: 15px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <h3 style="color:var(--gold); margin:0;">SOBRECARGA (SE)</h3>
-                            <span class="inline-ctrl" style="font-size:1.2rem; border-color:var(--gold); background:rgba(255,204,0,0.05);">
-                                <button onclick="modVital('se_cur',-1)">-</button>
-                                <strong style="color:var(--gold); min-width:50px; text-align:center;"><span id="s_se_cur">0</span> / <span id="s_se_max">0</span></strong>
-                                <button onclick="modVital('se_cur',1)">+</button>
-                            </span>
-                        </div>
-                        <div id="se_alert" style="color:var(--gold); font-size:0.75rem; font-weight:bold; text-align:center; margin-top:10px; background:rgba(251,191,36,0.1); padding:5px; border-radius:4px; display:none;"></div>
+                    <div class="panel grid-3" style="text-align:center; font-family:var(--font-mono);">
+                        <div><label>INICIATIVA</label><div class="inline-ctrl"><button onclick="modStat('ex_init',-1)">-</button><span id="s_ex_init">0</span><button onclick="modStat('ex_init',1)">+</button></div><div id="s_init_total" style="font-size:1.1rem; margin-top:5px; color:#fff;"></div></div>
+                        <div><label>ESQUIVA</label><div class="inline-ctrl"><button onclick="modStat('ex_dodge',-1)">-</button><span id="s_ex_dodge">0</span><button onclick="modStat('ex_dodge',1)">+</button></div><div id="s_dodge_total" style="font-size:1.1rem; margin-top:5px; color:var(--cyan);"></div></div>
+                        <div><label>APARAR</label><div class="inline-ctrl"><button onclick="modStat('ex_parry',-1)">-</button><span id="s_ex_parry">0</span><button onclick="modStat('ex_parry',1)">+</button></div><div id="s_parry_total" style="font-size:1.1rem; margin-top:5px; color:var(--cyan);"></div></div>
                     </div>
                 </div>
             </div>
@@ -357,743 +303,398 @@
         <!-- TAB 2: ARSENAL -->
         <div id="t_arsenal" class="tab-content">
             <div class="grid-2">
-                <!-- ESQUERDA -->
                 <div>
-                    <div class="slot-box" id="slot_wpn_p"></div>
-                    <div class="slot-box" id="slot_wpn_s"></div>
+                    <div class="slot-box" id="slot_p"></div>
+                    <div class="slot-box" id="slot_s"></div>
                     <div class="slot-box" id="slot_armor" style="border-color:var(--accent-gray);"></div>
+                    <div class="panel"><h2>CARGA GERAL (MOCHILA)</h2><div id="s_gen_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openGenericModal('general_load_items', 'inv_gen')">+ ADICIONAR ITEM</button></div>
                 </div>
-
-                <!-- DIREITA -->
                 <div>
-                    <h3 style="color:var(--gold); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between;"><span>ENCAIXE TÁTICO</span><span id="load_tac">0 / 2</span></h3>
-                    <div style="display:flex; gap:10px; margin-bottom:15px;">
-                        <button class="btn btn-small" style="flex-grow:1" onclick="openGenericModal('tactical_items,tactical_weapons', 'inv_tac')">+ EQUIPAMENTO</button>
-                        <button class="btn btn-small" style="flex-grow:1; border-color:var(--cyan); color:var(--cyan);" onclick="openGenericModal('drone_chassis', 'drones')">+ NOVO DRONE</button>
+                    <div class="panel" style="border-color:var(--gold)">
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><h2>TÁTICO / DRONES</h2><strong id="load_tac">0/2</strong></div>
+                        <div style="display:flex; gap:10px; margin:10px 0;"><button class="btn btn-small" style="flex-grow:1" onclick="openGenericModal('tactical_items,tactical_weapons', 'inv_tac')">+ EQUIPAMENTO</button><button class="btn btn-small" style="flex-grow:1; border-color:var(--cyan); color:var(--cyan);" onclick="openGenericModal('drone_chassis', 'drones')">+ NOVO DRONE</button></div>
+                        <div id="s_tac_list"></div><div id="s_drones_list"></div>
                     </div>
-                    <div id="s_tac_list"></div>
-                    <div id="s_drones_list"></div>
-
-                    <h3 style="color:var(--green); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between; margin-top:30px;"><span>UTILIDADE</span><span id="load_uti">0 / 4</span></h3>
-                    <button class="btn btn-small" style="width:100%; margin-bottom:15px;" onclick="openGenericModal('utility_items', 'inv_uti')">+ ADD UTILIDADE</button>
-                    <div id="s_uti_list"></div>
-
-                    <h3 style="color:var(--purple); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between; margin-top:30px;"><span>FOCALIZADORES RÚNICOS</span><span>2 SLOTS</span></h3>
-                    <button class="btn btn-small" style="border-color:var(--purple); color:var(--purple); width:100%; margin-bottom:15px;" onclick="openGenericModal('runic_eq', 'runic')">+ SINTONIZAR RUNA</button>
-                    <div id="s_runic_list"></div>
-
-                    <h3 style="color:var(--text-muted); border-bottom:1px solid var(--border-dim); padding-bottom:5px; display:flex; justify-content:space-between; margin-top:30px;"><span>CARGA GERAL (MOCHILA)</span><span id="load_gen">0 / 0</span></h3>
-                    <button class="btn btn-small" style="width:100%; margin-bottom:15px;" onclick="openGenericModal('general_load_items', 'inv_gen')">+ ADD ITEM GERAL</button>
-                    <div id="s_gen_list"></div>
+                    <div class="panel">
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><h2>UTILIDADE</h2><strong id="load_uti">0/4</strong></div>
+                        <button class="btn btn-small" style="width:100%; margin-bottom:15px;" onclick="openGenericModal('utility_items', 'inv_uti')">+ ADD UTILIDADE</button>
+                        <div id="s_uti_list"></div>
+                    </div>
+                    <div class="panel" style="border-color:var(--purple)"><h2>FOCALIZADORES RÚNICOS</h2><div id="s_runic_list"></div><button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openGenericModal('runic_eq', 'runic')">+ SINTONIZAR RUNA</button></div>
                 </div>
             </div>
         </div>
 
         <!-- TAB 3: CROMO -->
         <div id="t_cromo" class="tab-content">
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Interfaces estruturais reduzem sua Sobrecarga (SE) máxima e concedem bônus passivos nas essências e defesa.</p>
-            <div class="grid-2" id="cromo_container"></div>
+            <div id="cromo_grid" class="grid-2"></div>
         </div>
 
         <!-- TAB 4: PERSONA -->
         <div id="t_persona" class="tab-content">
             <div class="grid-2">
-                <div class="panel">
-                    <h2>DOSSIÊ OPERACIONAL</h2>
-                    <label>APARÊNCIA FÍSICA</label><textarea id="p_app" rows="3" onchange="updateDirect('app', this.value)"></textarea>
-                    <label style="margin-top:10px;">TRAÇO NEGATIVO / VÍCIO</label><textarea id="p_flaw" rows="2" onchange="updateDirect('flaw', this.value)"></textarea>
-                    <label style="margin-top:10px;">HISTÓRICO E BACKGROUND</label><textarea id="p_bg" rows="6" onchange="updateDirect('bg', this.value)"></textarea>
-                    <label style="margin-top:10px;">ANOTAÇÕES DA MISSÃO</label><textarea id="p_notes" rows="6" onchange="updateDirect('notes', this.value)"></textarea>
-                </div>
-                <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                        <h2 style="margin:0; border:none;">REDE DE CONTATOS</h2>
-                        <button class="btn btn-small" onclick="addContact()">+ NOVO CONTATO</button>
-                    </div>
-                    <div id="s_contacts_list"></div>
-                </div>
+                <div class="panel"><h2>DOSSIÊ</h2><label>APARÊNCIA</label><textarea id="p_app" rows="4" onchange="updateDirect('app', this.value)"></textarea><label style="margin-top:10px;">TRAÇO NEGATIVO</label><textarea id="p_flaw" rows="2" onchange="updateDirect('flaw', this.value)"></textarea><label style="margin-top:10px;">HISTÓRIA DO OPERADOR</label><textarea id="p_bg" rows="8" onchange="updateDirect('bg', this.value)"></textarea></div>
+                <div class="panel"><div style="display:flex; justify-content:space-between; align-items:center;"><h2>REDE DE CONTATOS</h2><button class="btn btn-small" onclick="addContact()">+ NOVO</button></div><div id="s_con_list"></div></div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL ARMAS E ARMADURA -->
+    <!-- MODAL BUILDER -->
     <div id="modal-builder" class="modal-overlay">
         <div class="modal">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-dim); padding-bottom:10px;">
-                <h2 style="margin:0; border:none;" id="mb_title">MONTAR EQUIPAMENTO</h2>
-                <button class="btn btn-red btn-small" onclick="closeModal()">FECHAR</button>
-            </div>
-            
-            <div id="mb_wpn_tabs" style="display:none; margin-bottom:15px;">
-                <button class="btn btn-small" id="btn_tab_fogo" onclick="switchWeaponTab('fogo')">FOGO MODULAR</button>
-                <button class="btn btn-small" style="background:transparent; color:var(--text-muted);" id="btn_tab_melee" onclick="switchWeaponTab('melee')">ARMA BRANCA (MELEE)</button>
-            </div>
-
-            <div id="mb_weapon_fogo" style="display:none;">
-                <div class="grid-2">
-                    <div>
-                        <label>FRAME</label>
-                        <select id="mb_f" style="margin-bottom:10px;" onchange="previewBuild()"></select>
-                        <label>NÍVEL DO FRAME</label>
-                        <select id="mb_f_t" onchange="previewBuild()">
-                            <option value="1">Nível I (Básico) [NF 0 | 0¢]</option>
-                            <option value="2">Nível II (Tático) [NF 3 | 10¢]</option>
-                            <option value="3">Nível III (Operações)[NF 7 | 20¢]</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>NÚCLEO</label>
-                        <select id="mb_c" style="margin-bottom:10px;" onchange="previewBuild()"></select>
-                        <label>NÍVEL DO NÚCLEO</label>
-                        <select id="mb_c_t" onchange="previewBuild()">
-                            <option value="1">Nível I (Base)[NF 0 Sindicato | 5¢ Corpos]</option>
-                            <option value="2">Nível II (+1 Dano)[NF 3 | 10¢]</option>
-                            <option value="3">Nível III (Dano Máx) [NF 7 | 20¢]</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div id="mb_weapon_melee" style="display:none;">
-                <label>LÂMINA / CONTUSÃO</label>
-                <select id="mb_m" onchange="previewBuild()"></select>
-            </div>
-
-            <div id="mb_armor_fields" style="display:none;">
-                <label>MODELO DO TRAJE / ARMADURA</label>
-                <select id="mb_a" onchange="previewBuild()"></select>
-            </div>
-
-            <div id="mb_preview" style="background:#101014; border:1px dashed var(--cyan); padding:15px; margin:20px 0; border-radius:4px; font-size:0.9rem; color:var(--text-muted); min-height:60px;"></div>
-            
-            <div id="mb_warn" style="color:var(--red); font-family:var(--font-mono); font-weight:bold; text-align:center; margin-bottom:15px;"></div>
-            <button class="btn" id="mb_confirm" style="width:100%;" onclick="confirmBuild()">GRAVAR NO SLOT</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:20px;"><h2 id="mb_title">OFICINA DE ARMAMENTO</h2><button class="btn btn-red btn-small" onclick="closeModal()">CANCELAR</button></div>
+            <div id="mb_wpn_tabs" style="display:flex; gap:10px; margin-bottom:20px;"><button class="btn btn-small" id="bt_fogo" onclick="switchWType('fogo')">FOGO MODULAR</button><button class="btn btn-small" id="bt_melee" onclick="switchWType('melee')">CORPO A CORPO</button></div>
+            <div id="mb_fogo"><div class="grid-2"><div><label>FRAME (CARCAÇA)</label><select id="mb_f" onchange="previewBuild()"></select><label style="margin-top:10px;">NÍVEL FRAME</label><select id="mb_ft" onchange="previewBuild()"><option value="1">Nível I (Básico) [0¢]</option><option value="2">Nível II (Tático) [10¢]</option><option value="3">Nível III (Operações) [20¢]</option></select></div><div><label>NÚCLEO (MOTOR)</label><select id="mb_c" onchange="previewBuild()"></select><label style="margin-top:10px;">NÍVEL NÚCLEO</label><select id="mb_ct" onchange="previewBuild()"><option value="1">Nível I (Base) [0¢ / 5¢ Corp]</option><option value="2">Nível II (+1 Dano) [10¢]</option><option value="3">Nível III (+2 Dano/Dano Máx) [20¢]</option></select></div></div></div>
+            <div id="mb_melee" style="display:none;"><label>ARMA BRANCA / CONTUSÃO</label><select id="mb_m" onchange="previewBuild()"></select></div>
+            <div id="mb_armor" style="display:none;"><label>TRAJE DE ARMADURA</label><select id="mb_a" onchange="previewBuild()"></select></div>
+            <div id="mb_preview" style="background:#000; border:1px dashed var(--cyan); padding:15px; margin:20px 0; font-size:0.85rem; color:var(--text-muted);">Selecione as partes...</div>
+            <button id="mb_confirm" class="btn" style="width:100%;" onclick="confirmBuild()" disabled>GRAVAR NO SLOT</button>
         </div>
     </div>
 
-    <!-- SCRIPT CORE -->
     <script>
-        let DB = null; let roster =[]; let char = null; let activeIdx = -1;
-        const attrMap = { esf: "ESFORÇO", agi: "AGILIDADE", ard: "ARDIL", cor: "CORPO", int: "INTELECTO", per: "PERCEPÇÃO", lab: "LÁBIA", von: "VONTADE", bal: "BALÍSTICA", con: "CONFRONTO" };
+        let DB = null; let roster = []; let char = null; let activeIdx = -1;
+        const attrMap = {esf:"Esforço",agi:"Agilidade",ard:"Ardil",cor:"Corpo",int:"Intelecto",per:"Percepção",lab:"Lábia",von:"Vontade",bal:"Balística",con:"Confronto"};
         const attrKeys = Object.keys(attrMap);
-        const cyberCats =["Neural", "Fluxo", "Sensorial", "Atuadores", "Reativa"];
-        const cyberPassives = {
-            "Neural": "Bônus Passivo: +5% em Intelecto e Vontade.",
-            "Fluxo": "Bônus Passivo: +5% em Corpo e +2 PR Máximos.",
-            "Sensorial": "Bônus Passivo: +5% em Percepção e +1 Iniciativa.",
-            "Atuadores": "Bônus Passivo: +5% em Esforço e Agilidade.",
-            "Reativa": "Bônus Passivo: Absorção Natural permanente de +1."
-        };
-        let wizAdvs =[]; let wizDoms =[];
-
-        const sysDomains =[
-            {name: "Atletismo", desc: "Correr longas distâncias, nadar, escalar e saltar abismos."},
-            {name: "Acrobacia", desc: "Manter o equilíbrio, escapar de amarras e parkour."},
-            {name: "Pilotar", desc: "Condução de veículos e drones sob fogo."},
-            {name: "Furtividade", desc: "Mover-se em silêncio e evitar detecção."},
-            {name: "Ladinagem", desc: "Abrir trancas físicas, bater carteiras e camuflar itens."},
-            {name: "Biotech", desc: "Medicina e procedimentos biológicos. Exige Kit."},
-            {name: "Cibernéticos", desc: "Reparo e instalação de implantes."},
-            {name: "Engenharia", desc: "Sabotagem, explosivos e reparo de armas."},
-            {name: "Tech", desc: "Hackear tecnologia antiga e interfaces de dados."},
-            {name: "Ciências", desc: "Conhecimento acadêmico e teoria do éter."},
-            {name: "Mecânica", desc: "Manutenção de veículos e naves-base."},
-            {name: "Tática", desc: "Análise de terreno e padrões inimigos."},
-            {name: "Vigilância", desc: "Percepção sensorial ativa para evitar surpresas."},
-            {name: "Intuição", desc: "Sexto sentido para detectar mentiras ou perigo."},
-            {name: "Investigação", desc: "Busca forense e dedução lógica."},
-            {name: "Sobrevivência", desc: "Rastreio e abrigo em ambientes hostis."},
-            {name: "Diplomacia", desc: "Convencer através de argumentos e bom papo."},
-            {name: "Subterfúgio", desc: "Mentiras, disfarces e trapaças."},
-            {name: "Intimidação", desc: "Coagir através de medo e ameaça."},
-            {name: "Liderança", desc: "Capacidade de comando e manter a moral."},
-            {name: "Manha", desc: "Conhecimento das ruas e etiqueta criminal."},
-            {name: "Sintonização", desc: "Capacidade de sentir o Éter e usar Artefatos."}
-        ];
+        const cyberCats = ["Neural", "Fluxo", "Sensorial", "Atuadores", "Reativa"];
+        const cyberPassives = { "Neural":"+5% Intelecto/Vontade", "Fluxo":"+5% Corpo e +2 PR Max", "Sensorial":"+5% Percepção e +1 Iniciativa", "Atuadores":"+5% Esforço/Agilidade", "Reativa":"+1 Absorção Natural" };
+        const sysDomains = [{n:"Atletismo",d:"Físico"},{n:"Acrobacia",d:"Físico"},{n:"Pilotar",d:"Físico"},{n:"Furtividade",d:"Ardil"},{n:"Ladinagem",d:"Ardil"},{n:"Biotech",d:"Mental"},{n:"Cibernéticos",d:"Mental"},{n:"Engenharia",d:"Mental"},{n:"Tech",d:"Mental"},{n:"Ciências",d:"Mental"},{n:"Mecânica",d:"Mental"},{n:"Tática",d:"Mental"},{n:"Vigilância",d:"Percepção"},{n:"Intuição",d:"Percepção"},{n:"Investigação",d:"Percepção"},{n:"Sobrevivência",d:"Percepção"},{n:"Diplomacia",d:"Lábia"},{n:"Subterfúgio",d:"Lábia"},{n:"Intimidação",d:"Lábia"},{n:"Liderança",d:"Lábia"},{n:"Manha",d:"Lábia"},{n:"Sintonização",d:"Vontade"}];
+        
+        let wizAdvs = []; let wizDoms = [];
 
         window.onload = async () => {
             try {
-                const res = await fetch('database.json?v=' + new Date().getTime());
-                if(res.ok) { DB = await res.json(); }
-            } catch(e) { console.error("Falha ao carregar database.json."); }
-            roster = JSON.parse(localStorage.getItem('co_roster_v20') || '[]');
-            document.getElementById('loader').style.display = 'none';
-            renderHub();
+                const res = await fetch('database.json?v='+Date.now());
+                DB = await res.json();
+                roster = JSON.parse(localStorage.getItem('co_roster_v20') || '[]');
+                document.getElementById('loader').style.display='none';
+                renderHub();
+            } catch(e) { document.getElementById('loader-msg').innerText = "ERRO: database.json não encontrado."; }
         };
 
-        // --- HUB ---
         function renderHub() {
             const grid = document.getElementById('roster-grid');
             grid.innerHTML = roster.map((c, i) => `
-            <div class="panel" style="cursor:pointer; border-left:4px solid var(--cyan); transition:0.2s;" onclick="openChar(${i})" onmouseover="this.style.borderColor='var(--cyan)';" onmouseout="this.style.borderColor='var(--border-dim)';">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div><h3 style="margin:0; color:#fff; font-size:1.4rem;">${c.name}</h3><div style="color:var(--text-muted); font-size:0.8rem; font-family:var(--font-mono); margin-top:5px;">${(c.origin||"").toUpperCase()} // ${(c.arch||"").toUpperCase()}</div><div style="color:var(--gold); font-size:0.75rem; font-family:var(--font-mono); margin-top:5px;">NF: ${c.nf||0} | ¢: ${c.cred||0}</div></div>
-                    <button class="btn btn-red btn-small" onclick="deleteChar(${i}, event)">X</button>
-                </div>
-            </div>`).join('');
+                <div class="panel" style="cursor:pointer; border-left:4px solid var(--cyan);" onclick="openChar(${i})">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div><h3 style="margin:0;">${c.name}</h3><small>${c.origin} // ${c.arch}</small></div>
+                        <button class="btn btn-red btn-small" onclick="deleteChar(${i}, event)">X</button>
+                    </div>
+                </div>`).join('');
             switchView('view-hub');
         }
-        window.deleteChar = function(i, e) { e.stopPropagation(); if(confirm("Expulsar Operador?")) { roster.splice(i,1); saveRoster(); renderHub(); } }
 
-        // --- WIZARD ---
         window.startWizard = function() {
-            if(!DB) return alert("Erro crítico: Banco de Dados não carregado.");
-            try {
-                wizAdvs =[]; wizDoms =[]; document.getElementById('w_name').value = '';
-                document.getElementById('w_arch').innerHTML = '<option value="">-- Arquétipo --</option>' + Object.keys(DB.archetypes||{}).map(k => `<option value="${k}">${k}</option>`).join('');
-                document.getElementById('w_origin_sel').innerHTML = Object.keys(DB.origins||{}).map(k => `<option value="${k}">${(DB.origins[k]||{}).name}</option>`).join('');
-                document.getElementById('w_hist_sel').innerHTML = '<option value="">-- Histórico --</option>' + (DB.histories||[]).map((h,i) => `<option value="${i}">${h.name}</option>`).join('');
-                updateWizArchDesc(); renderWizOriginInfo(); nextWizStep(1); switchView('view-wizard');
-            } catch(err) { alert("Falha ao abrir Wizard: " + err.message); }
+            wizAdvs =[]; wizDoms =[]; document.getElementById('w_name').value = '';
+            document.getElementById('w_arch').innerHTML = Object.keys(DB.archetypes).map(k=>`<option value="${k}">${k}</option>`).join('');
+            document.getElementById('w_origin_sel').innerHTML = Object.keys(DB.origins).map(k=>`<option value="${k}">${DB.origins[k].name}</option>`).join('');
+            document.getElementById('w_hist_sel').innerHTML = '<option value="">-- Selecione --</option>'+DB.histories.map((h,i)=>`<option value="${i}">${h.name}</option>`).join('');
+            document.getElementById('w_arch_desc').innerText = DB.archetypes["Sentinela"];
+            renderWizOrigin(); nextStep(1); switchView('view-wizard');
         }
-        window.nextWizStep = function(n) { 
-            document.querySelectorAll('.wiz-step, .prog-node').forEach(e => e.classList.remove('active')); 
-            document.getElementById('step'+n).classList.add('active'); document.getElementById('p'+n).classList.add('active'); 
-            if(n===3) renderWizAttr(); if(n===4) renderWizDomains(); 
+
+        function nextStep(n) {
+            document.querySelectorAll('.wiz-step, .prog-node').forEach(e=>e.classList.remove('active'));
+            document.getElementById('step'+n).classList.add('active'); document.getElementById('p'+n).classList.add('active');
+            if(n===3) renderWizAttr(); if(n===4) renderWizDoms();
         }
-        window.updateWizArchDesc = function() { 
-            const a = document.getElementById('w_arch').value;
-            document.getElementById('w_arch_desc').innerText = (DB.archetypes && DB.archetypes[a]) ? DB.archetypes[a] : ''; 
+
+        function renderWizOrigin() {
+            const k = document.getElementById('w_origin_sel').value; const o = DB.origins[k];
+            document.getElementById('w_origin_desc').innerHTML = o.traits.replace(/(Constituição Titânica:|Mãos Pesadas:|Miragem:|Estigma Visual:|Sintonização Estável:|Inércia Física:|Versatilidade:)/g, "<br>• <strong style='color:var(--cyan)'>$1</strong>");
+            const box = document.getElementById('w_racial_choices');
+            if(k!=='humano') {
+                box.style.display='block';
+                document.getElementById('w_racial_list').innerHTML = o.racial_choices.map((c,i)=>`<div class="selectable-item"><div style="flex-grow:1;"><strong>${c.name}</strong><br><small>${c.effect}</small></div><input type="radio" name="rp" value="${i}" ${i===0?'checked':''}></div>`).join('');
+            } else box.style.display='none';
         }
-        
-        window.renderWizOriginInfo = function() {
-            const k = document.getElementById('w_origin_sel').value; if(!k || !DB.origins) return; const o = DB.origins[k];
-            let t = (o.traits||"").replace(/(Constituição Titânica:|Mãos Pesadas:|Miragem:|Estigma Visual:|Sintonização Estável:|Inércia Física:|Versatilidade:)/g, "<br><strong style='color:var(--cyan)'>$1</strong>").replace(/^<br>/,"");
-            document.getElementById('w_origin_desc').innerHTML = t;
-            const box = document.getElementById('w_racial_choices_box'); const list = document.getElementById('w_racial_choices_list');
-            if(k !== 'humano' && o.racial_choices) {
-                box.style.display = 'block'; list.innerHTML = o.racial_choices.map((c, i) => `<div class="selectable-item"><div style="flex-grow:1;"><strong>${c.name}</strong><br><small style="color:var(--text-muted)">${c.effect}</small></div><input type="radio" name="r_pick" value="${i}" ${i===0?'checked':''}></div>`).join('');
-            } else { box.style.display = 'none'; }
-        }
-        
-        window.renderWizAttr = function() {
-            const ok = document.getElementById('w_origin_sel').value; const base = DB.origins[ok];
-            document.getElementById('w_attr_grid').innerHTML = attrKeys.map(k => `
-            <div class="wiz-attr-box">
-                <label style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem; letter-spacing:1px;">${attrMap[k]}</label>
-                <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin:10px 0;">
-                    <button class="btn btn-red" style="padding:4px 8px;" onclick="modWizAttr('${k}', -5)">-</button>
-                    <input type="number" id="wa_${k}" value="${base[k]}" readonly>
-                    <button class="btn" style="padding:4px 8px;" onclick="modWizAttr('${k}', 5)">+</button>
-                </div>
-                <div style="color:var(--text-muted); font-size:0.75rem; margin-top:8px;">Bônus Tático: <span id="wab_${k}" style="color:var(--gold);">+${Math.floor(base[k]/10)}</span></div>
-            </div>`).join('');
+
+        function renderWizAttr() {
+            const ok = document.getElementById('w_origin_sel').value; const o = DB.origins[ok];
+            document.getElementById('w_attr_grid').innerHTML = attrKeys.map(k=>`
+                <div class="wiz-attr-box">
+                    <label style="font-size:0.7rem;">${attrMap[k]}</label>
+                    <div style="display:flex; align-items:center; justify-content:center; gap:5px; margin:5px 0;">
+                        <button class="btn btn-small" onclick="modWizA('${k}',-5)">-</button>
+                        <strong id="wa_${k}">${o[k]}</strong>
+                        <button class="btn btn-small" onclick="modWizA('${k}',5)">+</button>
+                    </div>
+                </div>`).join('');
             calcWizPts();
         }
-        window.modWizAttr = function(k, amt) {
+
+        function modWizA(k, a) {
             const ok = document.getElementById('w_origin_sel').value; const el = document.getElementById('wa_'+k);
-            let val = parseInt(el.value) + amt;
-            if(val < DB.origins[ok][k]) return; 
-            let cap = 50; if((ok==='jotun' && (k==='esf'||k==='cor')) || (ok==='oni' && (k==='agi'||k==='per')) || (ok==='dokka' && (k==='int'||k==='von'))) cap = 60;
-            if(val > cap) return;
-            if(amt > 0) { 
-                let spent = 0; attrKeys.forEach(key => spent += ((key===k?val:parseInt(document.getElementById('wa_'+key).value)) - DB.origins[ok][key])); 
-                if(spent > DB.origins[ok].pts) return alert("Pontos insuficientes."); 
-            }
-            el.value = val; document.getElementById('wab_'+k).innerText = "+" + Math.floor(val/10); calcWizPts();
+            let v = parseInt(el.innerText) + a;
+            if(v < DB.origins[ok][k]) return;
+            let cap = 50; if((ok==='jotun'&&(k==='esf'||k==='cor'))||(ok==='oni'&&(k==='agi'||k==='per'))||(ok==='dokka'&&(k==='int'||k==='von'))) cap=60;
+            if(v > cap) return;
+            el.innerText = v; calcWizPts();
         }
-        window.calcWizPts = function() {
-            const ok = document.getElementById('w_origin_sel').value; let spent = 0;
-            attrKeys.forEach(k => spent += (parseInt(document.getElementById('wa_'+k).value) - DB.origins[ok][k]));
-            const rem = DB.origins[ok].pts - spent;
-            document.getElementById('w_pts_left').innerText = rem; document.getElementById('w_pts_left').style.color = rem < 0 ? "var(--red)" : "var(--green)";
+
+        function calcWizPts() {
+            const ok = document.getElementById('w_origin_sel').value; let s=0;
+            attrKeys.forEach(k=> s += (parseInt(document.getElementById('wa_'+k).innerText)-DB.origins[ok][k]));
+            const r = DB.origins[ok].pts - s; document.getElementById('w_pts').innerText=r;
+            document.getElementById('w_pts').style.color = r < 0 ? 'var(--red)' : 'var(--green)';
         }
-        
-        window.renderWizDomains = function() {
-            document.getElementById('w_dom_list').innerHTML = sysDomains.map(d => {
-                const sel = wizDoms.includes(d.name);
-                return `<div class="selectable-item" style="${sel?'border-color:var(--cyan); background:#111;':''}"><div style="flex-grow:1;"><strong style="color:${sel?'var(--cyan)':'#fff'}">${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div><button class="btn btn-small ${sel?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${sel?'REMOVER':'SELECIONAR'}</button></div>`;
+
+        function renderWizDoms() {
+            document.getElementById('w_dom_list').innerHTML = sysDomains.map(d=> {
+                const s = wizDoms.includes(d.name);
+                return `<div class="selectable-item" style="${s?'border-color:var(--cyan)':''}"><div><strong>${d.name}</strong><br><small>${d.d}</small></div><button class="btn btn-small ${s?'btn-red':''}" onclick="tglWizD('${d.name}')">${s?'REMOVER':'TREINAR'}</button></div>`;
             }).join('');
         }
-        window.toggleWizDom = function(n) { if(wizDoms.includes(n)) wizDoms = wizDoms.filter(x=>x!==n); else { if(wizDoms.length>=2) return alert("Máximo 2 Domínios iniciais."); wizDoms.push(n); } renderWizDomains(); }
-        
-        window.renderWizHistAdvs = function() {
-            const hIdx = document.getElementById('w_hist_sel').value; const pool = document.getElementById('w_hist_pool'); pool.innerHTML = '';
-            if(hIdx==="") return;
-            DB.histories[hIdx].advantages.forEach((a, i) => {
-                const isAdded = wizAdvs.find(x => x.n === a.name);
-                pool.innerHTML += `<div class="selectable-item" style="${isAdded?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${a.name}</strong><br><small style="color:var(--text-muted)">${a.effect}</small></div><button class="btn btn-small" ${isAdded?'disabled':''} onclick="addWizAdv(${hIdx}, ${i})">ADD</button></div>`;
-            });
+        function tglWizD(n) { if(wizDoms.includes(n)) wizDoms=wizDoms.filter(x=>x!==n); else if(wizDoms.length<2) wizDoms.push(n); renderWizDoms(); }
+
+        function renderWizHists() {
+            const hi = document.getElementById('w_hist_sel').value; if(hi==='') return;
+            document.getElementById('w_hist_pool').innerHTML = DB.histories[hi].advantages.map((a,i)=> `
+                <div class="selectable-item">
+                    <div style="flex-grow:1;"><strong>${a.name}</strong><br><small>${a.effect}</small></div>
+                    <button class="btn btn-small" onclick="addWizAdv(${hi},${i})">ADD</button>
+                </div>`).join('');
         }
-        window.addWizAdv = function(hIdx, aIdx) {
-            const hName = DB.histories[hIdx].name; const adv = DB.histories[hIdx].advantages[aIdx];
-            const hists =[...new Set(wizAdvs.map(x => x.h))];
-            if(wizAdvs.length >= 3) return alert("Máximo de 3 vantagens.");
-            if(hists.length===1 && hists[0]!==hName && wizAdvs.length>1) return alert("Limite 1 de cada ao misturar.");
-            if(hists.length===2 && !hists.includes(hName)) return alert("Máximo 2 históricos.");
-            wizAdvs.push({h: hName, n: adv.name, d: adv.effect}); renderWizHistAdvs(); renderWizSelAdvs();
+        function addWizAdv(hi, ai) {
+            const h = DB.histories[hi]; const a = h.advantages[ai];
+            const hs = [...new Set(wizAdvs.map(x=>x.h))];
+            if(wizAdvs.length>=3 || (hs.length===1 && hs[0]!==h.name && wizAdvs.length>1) || (hs.length===2 && !hs.includes(h.name))) return alert("Regra de histórico violada.");
+            wizAdvs.push({h:h.name, n:a.name, d:a.effect}); renderWizHists(); renderWizSelA();
         }
-        window.renderWizSelAdvs = function() {
-            document.getElementById('w_selected_advs').innerHTML = wizAdvs.map((a, i) => `<div style="display:flex; justify-content:space-between; margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #333;"><span><strong style="color:var(--gold)">${a.n}</strong> <span style="color:#666">[${a.h}]</span></span><button style="background:none; border:none; color:var(--red); cursor:pointer; font-weight:bold;" onclick="wizAdvs.splice(${i},1); renderWizSelAdvs(); renderWizHistAdvs();">X</button></div>`).join('');
+        function renderWizSelA() {
+            document.getElementById('w_sel_advs').innerHTML = wizAdvs.map((a,i)=> `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span><strong>${a.n}</strong> <small>[${a.h}]</small></span><button class="btn-red btn-small" onclick="wizAdvs.splice(${i},1); renderWizSelA(); renderWizHists();">X</button></div>`).join('');
         }
-        window.finalizeOperador = function() {
-            if(parseInt(document.getElementById('w_pts_left').innerText) < 0) return alert("Ajuste os pontos.");
+
+        function finalizeOperador() {
+            if(parseInt(document.getElementById('w_pts').innerText)<0) return alert("Pontos negativos.");
             const ok = document.getElementById('w_origin_sel').value;
             const n = {
-                name: document.getElementById('w_name').value || "Novo Operador", arch: document.getElementById('w_arch').value || "Desconhecido",
-                origin: DB.origins[ok].name, origin_k: ok, nf: 0, cred: 20, eter: 1, xp: 0, 
-                hp_cur: 10, shield_cur: 0, shield_max: 0, shield_rec: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_dmg: 0, arm_brok: 0,
-                ex_init:0, ex_dodge:0, ex_parry:0,
-                ess: {}, dom: wizDoms.map(d => ({n: d, lvl: 1, flips: 1})), traits:[...wizAdvs], masteries:[],
-                sic: { armor: null, wpn_p: null, wpn_s: null },
-                inv_tac:[], drones:[], inv_uti:[], inv_gen:[], runic:[],
-                cromo: { "Neural":{t:0,m:[]}, "Fluxo":{t:0,m:[]}, "Sensorial":{t:0,m:[]}, "Atuadores":{t:0,m:[]}, "Reativa":{t:0,m:[]} },
-                contacts:[], flaw: "", app: "", bg: "", notes: ""
+                name: document.getElementById('w_name').value||"Novo Agente", arch: document.getElementById('w_arch').value,
+                origin: DB.origins[ok].name, origin_k: ok, nf:0, cred:20, eter:1, xp:0, hp_cur:10, shield_cur:0, shield_max:0, shield_rec:0,
+                se_cur:0, arm_state:"Normal", arm_base:0, arm_dmg:0, arm_brok:0, ex_init:0, ex_dodge:0, ex_parry:0,
+                ess:{}, dom: wizDoms.map(d=>({n:d, lvl:1, flips:1})), traits:[...wizAdvs], masteries:[],
+                sic: { wpn_p:null, wpn_s:null, armor:null },
+                inv_tac:[], inv_uti:[], inv_gen:[], runic:[], drones:[], contacts:[], app:"", flaw:"", bg:"", notes:""
             };
-            attrKeys.forEach(k => n.ess[k] = parseInt(document.getElementById('wa_'+k).value));
-            n.hp_cur = 5 + (Math.floor(n.ess.cor/10)*2) + Math.floor(n.ess.von/10) + (ok==='jotun'?5:0);
-            if(ok !== 'humano') {
-                const p = document.querySelector('input[name="r_pick"]:checked').value;
-                n.traits.unshift({h: "Mutação Genética", n: DB.origins[ok].racial_choices[p].name, d: DB.origins[ok].racial_choices[p].effect});
-            } else { n.traits.unshift({h: "Ancestral", n: "Versatilidade", d: "Ganha +1 Maestria Extra na criação."}); }
-            
-            roster.push(n); saveRoster();
-            activeIdx = roster.length - 1; char = roster[activeIdx];
-            applyToSheet(); switchView('view-sheet');
+            attrKeys.forEach(k=> n.ess[k] = parseInt(document.getElementById('wa_'+k).innerText));
+            if(ok!=='humano') { const p = document.querySelector('input[name="rp"]:checked').value; n.traits.push({h:"Racial", n:DB.origins[ok].racial_choices[p].name, d:DB.origins[ok].racial_choices[p].effect}); }
+            roster.push(n); saveRoster(); openChar(roster.length-1);
         }
 
-        // --- SHEET ENGINE ---
-        window.openChar = function(idx) {
-            activeIdx = idx; char = roster[idx];
-            try { applyToSheet(); switchView('view-sheet'); } 
-            catch(err) { alert("Falha ao ler dados da ficha: " + err.message); }
+        // --- SHEET ---
+        function openChar(idx) { 
+            activeIdx=idx; char=roster[idx]; 
+            applyToSheet(); switchView('view-sheet'); 
         }
-        window.updateDirect = function(key, val) { if(!char) return; if(key==='app'||key==='flaw'||key==='bg'||key==='notes'||key==='arm_state') char[key] = val; else char[key] = parseInt(val)||0; saveDisk(); }
-        window.saveRoster = function() { localStorage.setItem('co_roster_v20', JSON.stringify(roster)); }
-        window.saveDisk = function() { if(activeIdx === -1 || !char) return; roster[activeIdx]=char; saveRoster(); const p = document.getElementById('save_ping'); p.style.opacity = 1; setTimeout(()=>p.style.opacity=0, 1000); }
-        window.backToHub = function() { autoSave(); activeIdx = -1; char = null; renderHub(); }
-        
-        window.modVital = function(v, a) {
+
+        function applyToSheet() {
             if(!char) return;
-            if(v==='hp_cur') char.hp_cur = Math.max(0, char.hp_cur + a);
-            else if(v==='shield_cur') char.shield_cur = Math.min(char.shield_max||0, Math.max(0, char.shield_cur + a));
-            else if(v==='se_cur') char.se_cur = Math.max(0, char.se_cur + a);
-            else char[v] = Math.max(0, (char[v]||0) + a);
-            saveDisk(); applyToSheet(); 
+            document.getElementById('s_name').innerText=char.name; document.getElementById('s_origin').innerText=char.origin; document.getElementById('s_arch').innerText=char.arch;['nf','cred','eter','xp','arm_state'].forEach(k=> { const el=document.getElementById('s_'+k); if(el) el.value=char[k]||0; });
+            ['app','flaw','bg','notes'].forEach(k=> { const el=document.getElementById('p_'+k); if(el) el.value=char[k]||""; });
+            renderEss(); renderDoms(); renderTraits(); renderArsenal(); renderCromo(); renderPersona(); updateCalcs();
         }
 
-        window.applyToSheet = function() {
-            if(!char) return;
-            document.getElementById('s_name').innerText = (char.name||"Sem Nome").toUpperCase(); 
-            document.getElementById('s_origin').innerText = (char.origin||"").toUpperCase(); 
-            document.getElementById('s_arch').innerText = (char.arch||"").toUpperCase();['nf','cred','eter','xp','shield_max','shield_rec','arm_base','arm_dmg','arm_brok'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.innerText = char[k]||0; });
-            ['nf','cred','eter','xp'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]||0; });
-            document.getElementById('s_arm_state').value = char.arm_state || "Normal";
-            ['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) el.value = char[k]||""; });
-            
-            renderSheetStatus(); renderSheetArsenal(); renderSheetCromo(); renderPersona(); updateCalcs();
+        function renderEss() {
+            document.getElementById('s_ess_grid').innerHTML = attrKeys.map(k=> `<div class="ess-box"><label style="font-size:0.65rem;">${attrMap[k]}</label><div class="ess-val"><button class="btn-vit" onclick="char.ess.${k}=Math.max(0,char.ess.${k}-5); saveDisk(); applyToSheet();">-</button><span style="width:45px;">${char.ess[k]}%</span><button class="btn-vit" onclick="char.ess.${k}+=5; saveDisk(); applyToSheet();">+</button></div><div class="ess-mod">+${Math.floor(char.ess[k]/10)}</div></div>`).join('');
         }
 
-        window.renderSheetStatus = function() {
-            let eB = {...char.ess};
-            if(char.cromo['Neural'].t > 0) { eB.int += 5; eB.von += 5; }
-            if(char.cromo['Fluxo'].t > 0) { eB.cor += 5; }
-            if(char.cromo['Sensorial'].t > 0) { eB.per += 5; }
-            if(char.cromo['Atuadores'].t > 0) { eB.esf += 5; eB.agi += 5; }
+        function updateCalcs() {
+            const b = (k) => Math.floor(char.ess[k]/10);
+            const mhp = 5 + (b('cor')*2) + b('von') + (char.origin_k==='jotun'?5:0);
+            document.getElementById('s_hp_max').innerText=mhp; document.getElementById('s_hp_cur').innerText=char.hp_cur;
+            document.getElementById('dying_alert').style.display = char.hp_cur <= 0 ? 'block' : 'none';
 
-            document.getElementById('s_ess_grid').innerHTML = attrKeys.map(k => `
-            <div class="ess-box">
-                <label style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">${attrMap[k].toUpperCase()}</label>
-                <div class="ess-val"><button class="btn-vit" style="background:none; border:none;" onclick="char.ess['${k}']=Math.max(0,char.ess['${k}']-5); saveDisk(); applyToSheet();">-</button><span style="width:45px; text-align:center; color:var(--cyan);">${eB[k]}</span><button class="btn-vit" style="background:none; border:none;" onclick="char.ess['${k}']+=5; saveDisk(); applyToSheet();">+</button></div>
-                <div class="ess-mod">+${Math.floor(eB[k]/10)}</div>
-            </div>`).join('');
-            
-            document.getElementById('s_ex_init').innerText = char.ex_init || 0;
-            document.getElementById('s_ex_dodge').innerText = char.ex_dodge || 0;
-            document.getElementById('s_ex_parry').innerText = char.ex_parry || 0;
+            let sMax = Number(char.shield_max); let sRec = Number(char.shield_rec);
+            if(char.sic.armor && char.sic.armor.shield) { sMax += 20; sRec += 2; }
+            document.getElementById('s_shield_max').innerText=sMax; document.getElementById('s_shield_max_val').innerText=char.shield_max; document.getElementById('s_shield_cur').innerText=char.shield_cur; document.getElementById('s_shield_rec').innerText=char.shield_rec;
 
-            document.getElementById('s_dodge_total').innerText = "+" + ((Math.floor(eB.agi/10)*5) + (char.ex_dodge||0)) + "%";
-            document.getElementById('s_parry_total').innerText = "+" + ((Math.floor(eB.con/10)*5) + (char.ex_parry||0)) + "%";
+            const st = document.getElementById('s_arm_state').value;
+            let eff = st==='Normal'?char.arm_base : (st==='Danificada'?char.arm_dmg : char.arm_brok);
+            document.getElementById('s_eff_abs').innerText=eff;
+            document.getElementById('s_arm_base').innerText=char.arm_base; document.getElementById('s_arm_dmg').innerText=char.arm_dmg; document.getElementById('s_arm_brok').innerText=char.arm_brok;
 
-            let initB = Math.floor(eB.agi/10) + (char.ex_init||0);
-            if(char.cromo['Sensorial'].t === 1) initB += 1; else if(char.cromo['Sensorial'].t === 2) initB += 2; else if(char.cromo['Sensorial'].t === 3) initB += 3;
-            document.getElementById('s_init_total').innerText = "1d10 + " + initB;
+            const mse = 3 + b('cor') + b('von') + (char.origin_k==='dokka'?2:0);
+            document.getElementById('s_se_max').innerText=mse; document.getElementById('s_se_cur').innerText=char.se_cur;
+            const sa = document.getElementById('se_alert');
+            if(char.se_cur > mse) { sa.innerText="COLAPSO (INCONSCIENTE)"; sa.style.display='block'; }
+            else if(char.se_cur === mse) { sa.innerText="PENALIDADE -20% ATIVA"; sa.style.display='block'; }
+            else sa.style.display='none';
 
-            // Domains
-            document.getElementById('s_dom_list').innerHTML = char.dom.map((d, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#141418; padding:12px; margin-bottom:8px; border-radius:4px; border:1px solid var(--border-dim);">
-                <strong style="color:var(--cyan); width:30%; font-size:1.1rem;">${d.n}</strong>
-                <select style="width:120px; padding:4px;" onchange="char.dom[${i}].lvl=parseInt(this.value); char.dom[${i}].flips=parseInt(this.value); saveDisk(); applyToSheet();">
-                    <option value="1" ${d.lvl===1?'selected':''}>Nível I</option><option value="2" ${d.lvl===2?'selected':''}>Nível II</option><option value="3" ${d.lvl===3?'selected':''}>Nível III</option>
-                </select>
-                <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted); display:flex; align-items:center; gap:8px;">
-                    FLIPS: <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.max(0, char.dom[${i}].flips-1); saveDisk(); applyToSheet();">-</button>
-                    <strong style="color:#fff; font-size:1.2rem; min-width:35px; text-align:center;">${d.flips}/${d.lvl}</strong>
-                    <button class="btn-vit" style="width:25px; height:25px;" onclick="char.dom[${i}].flips=Math.min(${d.lvl}, char.dom[${i}].flips+1); saveDisk(); applyToSheet();">+</button>
-                </div>
-                <button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.dom.splice(${i},1); saveDisk(); applyToSheet();">X</button>
-            </div>`).join('');
-
-            document.getElementById('s_traits_list').innerHTML = char.traits.map(a => `<div style="padding:10px; margin-bottom:5px; border-left:2px solid var(--cyan); background:rgba(0,229,255,0.05);"><strong style="color:var(--cyan);">${a.n||a.name}</strong> <span style="color:#666; font-size:0.8rem;">[${a.h}]</span><br><div style="font-size:0.85rem; margin-top:5px;">${a.d || a.effect}</div></div>`).join('');
-            document.getElementById('s_mastery_list').innerHTML = char.masteries.map((m,i)=>`<div style="background:#141418; padding:10px; margin-bottom:5px; border-left:3px solid var(--gold);"><div style="display:flex; justify-content:space-between;"><strong style="color:var(--gold)">${m.name}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.masteries.splice(${i},1); saveDisk(); applyToSheet();">X</button></div><div style="font-size:0.85rem; margin-top:5px;">${m.effect}</div></div>`).join('');
+            document.getElementById('s_ex_init').innerText=char.ex_init; document.getElementById('s_init_total').innerText="1d10 + " + (b('agi')+char.ex_init);
+            document.getElementById('s_ex_dodge').innerText=char.ex_dodge; document.getElementById('s_dodge_total').innerText="+"+((b('agi')*5)+char.ex_dodge)+"%";
+            document.getElementById('s_ex_parry').innerText=char.ex_parry; document.getElementById('s_parry_total').innerText="+"+((b('con')*5)+char.ex_parry)+"%";
         }
 
-        window.updateCalcs = function() {
-            let eB = {...char.ess}; if(char.cromo['Fluxo'].t > 0) eB.cor += 5; if(char.cromo['Neural'].t > 0) eB.von += 5;
-            const bC = Math.floor(eB.cor/10); const bV = Math.floor(eB.von/10);
-            
-            let maxHp = 5 + (bC*2) + bV + (char.origin_k==='jotun'?5:0);
-            if(char.cromo['Fluxo'].t === 1) maxHp += 2; if(char.cromo['Fluxo'].t === 2) maxHp += 4; if(char.cromo['Fluxo'].t === 3) maxHp += 6;
-            document.getElementById('s_hp_max').innerText = maxHp; document.getElementById('s_hp_cur').innerText = char.hp_cur;
-            
-            const dy = document.getElementById('s_dying_alert');
-            if(char.hp_cur === 0) dy.style.display = 'block'; else dy.style.display = 'none';
-
-            let cst = 0; 
-            cyberCats.forEach(c => {
-                let tc = 0;
-                if(c==='Neural'||c==='Fluxo') { if(char.cromo[c].t===1) tc=2; else if(char.cromo[c].t===2) tc=2; else if(char.cromo[c].t===3) tc=3; }
-                else { if(char.cromo[c].t===1) tc=1; else if(char.cromo[c].t===2) tc=1; else if(char.cromo[c].t===3) tc=2; }
-                if(char.origin_k === 'dokka' && char.cromo[c].t > 0) tc = Math.max(0, tc - 1);
-                cst += tc;
-            });
-            const maxSe = Math.max(1, (3 + bC + bV + (char.origin_k==='dokka'?2:0)) - cst);
-            document.getElementById('s_se_max').innerText = maxSe; document.getElementById('s_se_cur').innerText = char.se_cur;
-
-            const al = document.getElementById('se_alert');
-            if(char.se_cur > maxSe) { al.innerText = "⚠️ COLAPSO TOTAL (INCONSCIENTE)"; al.style.color="var(--red)"; al.style.display="block"; }
-            else if(char.se_cur === maxSe) { al.innerText = "⚠️ PENALIDADE ATIVA (-20% TESTES)"; al.style.color="var(--gold)"; al.style.display="block"; }
-            else al.style.display="none";
-
-            document.getElementById('s_eff_abs').innerText = (char.arm_state==="Normal") ? char.arm_base : (char.arm_state==="Danificada" ? char.arm_dmg : char.arm_brok);
-
-            // Load
-            let lt = 0, lu = 0, lg = 0;
-            char.inv_tac.forEach(i => lt += (i.load||0)); lt += char.drones.length;
-            char.inv_uti.forEach(i => lu += (i.load||0)); char.inv_gen.forEach(i => lg += (i.load||0));
-            document.getElementById('load_tac').innerText = `${lt} / 2`; document.getElementById('load_uti').innerText = `${lu} / 4`; 
-            document.getElementById('load_gen').innerText = `${lg} / ${3+Math.floor(eB.esf/10)}`;
-            document.getElementById('load_tac').style.color = lt>2 ? "var(--red)" : "var(--text-muted)"; document.getElementById('load_uti').style.color = lu>4 ? "var(--red)" : "var(--text-muted)";
-        }
-
-        // --- ARSENAL SLOTS ---
-        window.renderSheetArsenal = function() {
-            const bWpn = (id, t, i, p) => {
-                const el = document.getElementById(id);
-                if(!i) { el.className = "slot-box"; el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><button class="btn btn-small" onclick="openBuilder('${p}')">EQUIPAR</button></div><div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:10px 0;">[ VAZIO ]</div>`; return; } 
-                
-                el.className = "slot-box filled";
-                let btnHtml = `<div><button class="btn btn-small" onclick="openBuilder('${p}')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; saveDisk(); applyToSheet();">X</button></div>`;
-                
-                if(i.is_melee) {
-                    el.innerHTML = `<div class="slot-header"><span class="slot-title">${t} (MELEE)</span>${btnHtml}</div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name} <span class="inline-ctrl" style="margin-left:10px; color:var(--red);">DANO: <button onclick="char.sic.${p}.dmg--; saveDisk(); applyToSheet();">-</button>+${i.dmg}<button onclick="char.sic.${p}.dmg++; saveDisk(); applyToSheet();">+</button></span></div><div class="slot-desc" style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${i.traits}</div>`;
-                } else {
-                    let totalH = i.h_max; let lim = totalH + 1;
-                    let hState = "";
-                    if(i.h_cur >= lim) hState = `<div style="background:var(--red); color:#fff; font-weight:bold; font-size:0.8rem; padding:4px; text-align:center; margin-top:10px; border-radius:4px;">⚠️ ARMA DANIFICADA/QUEBRADA</div>`;
-                    else if(i.h_cur === totalH) hState = `<div style="background:var(--gold); color:#000; font-weight:bold; font-size:0.8rem; padding:4px; text-align:center; margin-top:10px; border-radius:4px;">⚠️ ARMA TRAVADA</div>`;
-
-                    let x = `<div style="margin-top:10px; display:flex; align-items:center; gap:10px;"><span class="inline-ctrl" style="color:var(--gold);">CALOR: <button onclick="modHeat('${p}', -1)">-</button><span style="font-size:1.2rem;">${i.h_cur} / ${totalH}</span><button onclick="modHeat('${p}', 1)">+</button></span> <span class="inline-ctrl">Max: <button onclick="char.sic.${p}.h_max=Math.max(1, char.sic.${p}.h_max-1); saveDisk(); applyToSheet();">-</button>${i.h_max}<button onclick="char.sic.${p}.h_max++; saveDisk(); applyToSheet();">+</button></span> <button class="btn btn-small" style="border-color:#333; color:#aaa;" onclick="char.sic.${p}.h_cur=0; saveDisk(); applyToSheet();">Zerar</button></div>`;
-                    
-                    let mBtn = `<button class="btn btn-small" style="margin-right:10px; border-color:var(--gold); color:var(--gold);" onclick="openModSelector('${p}')">+ MOD (${i.mods?i.mods.length:0}/${i.slots||0})</button>`;
-                    let mList = (i.mods && i.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + i.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name} <span style="color:#666">[${md.type}]</span><br><span style="color:var(--text-muted); font-size:0.75rem;">${md.effect}</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.${p}.mods.splice(${midx},1); saveDisk(); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
-                    
-                    el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><div>${mBtn}${btnHtml}</div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name} <span class="inline-ctrl" style="margin-left:10px; color:var(--red);">DANO: <button onclick="char.sic.${p}.dmg--; saveDisk(); applyToSheet();">-</button>+${i.dmg}<button onclick="char.sic.${p}.dmg++; saveDisk(); applyToSheet();">+</button></span> <span style="font-size:0.8rem; color:#aaa;">[ALC ${i.range}]</span></div><div class="slot-desc" style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${i.desc}</div>${x}${hState}${mList}`;
-                }
-            };
-            bWpn('slot_wpn_p', 'SLOT PRIMÁRIO', char.sic.wpn_p, 'wpn_p');
-            bWpn('slot_wpn_s', 'SLOT SECUNDÁRIO', char.sic.wpn_s, 'wpn_s');
-            
-            // ARMOR
-            const a = char.sic.armor; const elA = document.getElementById('slot_armor');
-            if(!a) { elA.className = "slot-box"; elA.innerHTML = `<div class="slot-header"><span class="slot-title">TRAJE / ARMADURA</span><button class="btn btn-small" onclick="openBuilder('armor')">EQUIPAR</button></div><div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:10px 0;">[ VAZIO ]</div>`; }
-            else {
-                elA.className = "slot-box filled"; elA.style.borderLeftColor = "var(--accent-gray)";
-                let sMod = a.shield ? 1 : 0; let mTot = (a.mods?a.mods.length:0) + sMod;
-                
-                let sHtml = a.shield ? `<div style="background:#101014; border:1px solid var(--cyan); padding:10px; margin-top:10px; border-radius:4px;"><div style="display:flex; justify-content:space-between; color:var(--cyan); font-weight:bold; font-size:0.9rem;"><span>[GERADOR DE ESCUDO] ${a.shield.name}</span><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.sic.armor.shield=null; saveDisk(); applyToSheet();">X</button></div><div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;">${a.shield.effect || a.shield.d}</div></div>` : `<button class="btn btn-small" style="width:100%; margin-top:10px; border-color:var(--cyan); color:var(--cyan);" onclick="openGenericModal('mods_armor', 'shield', true)">+ ADD GERADOR DE ESCUDO (Consome 1 Slot)</button>`;
-
-                let mList = (a.mods && a.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + a.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-main);"><span>- ${md.name}<br><span style="color:var(--text-muted); font-size:0.75rem;">${md.effect}</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.armor.mods.splice(${midx},1); saveDisk(); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
-
-                elA.innerHTML = `<div class="slot-header"><span class="slot-title">TRAJE / ARMADURA</span><div><button class="btn btn-small" style="margin-right:10px; border-color:var(--gold); color:var(--gold);" onclick="openModSelector('armor')">+ MOD (${mTot}/${a.slots||0})</button><button class="btn btn-small" onclick="openBuilder('armor')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.armor=null; saveDisk(); applyToSheet();">X</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${a.name} <span style="font-size:0.8rem; color:var(--text-muted);">[ABS ${a.abs} / QUB ${a.broken}]</span></div><div class="slot-desc" style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${a.traits}</div>${sHtml}${mList}`;
-            }
-
-            const rUti = () => {
-                let cats = {"Injetores & Química":[], "Granadas & Armadilhas":[], "Diversos":[]};
-                char.inv_uti.forEach((a, i) => {
-                    a._idx = i;
-                    if(a.name.includes("Injetor") || a.name.includes("Sugar") || a.name.includes("Pantera") || a.name.includes("Dust") || a.name.includes("Névoa") || a.name.includes("Ritalina") || a.name.includes("Bravura") || a.name.includes("Synapse") || a.name.includes("Goliath") || a.name.includes("Hermes") || a.name.includes("Coruja") || a.name.includes("Void") || a.name.includes("VITAL") || a.name.includes("Mind") || a.name.includes("Vitalizer") || a.name.includes("Heal Max") || a.name.includes("Bio Shield")) cats["Injetores & Química"].push(a);
-                    else if(a.name.includes("Granada") || a.name.includes("Mina") || a.name.includes("Flashbang") || a.name.includes("Carga") || a.name.includes("Faca de Arremesso")) cats["Granadas & Armadilhas"].push(a);
-                    else cats["Diversos"].push(a);
-                });
-
-                let html = '';
-                Object.keys(cats).forEach(c => {
-                    if(cats[c].length > 0) {
-                        html += `<div class="cat-header" style="margin:10px 0 5px 0;">${c.toUpperCase()}</div>`;
-                        cats[c].forEach(a => {
-                            let usesHtml = `<div style="margin-top:5px; font-size:0.85rem;"><span class="inline-ctrl" style="color:var(--gold);">Usos: <button onclick="char.inv_uti[${a._idx}].u_cur=Math.max(0, char.inv_uti[${a._idx}].u_cur-1); saveDisk(); applyToSheet();">-</button><span style="font-size:1.1rem;">${a.u_cur||0}</span><button onclick="char.inv_uti[${a._idx}].u_cur=Math.min(char.inv_uti[${a._idx}].u_max||0, char.inv_uti[${a._idx}].u_cur+1); saveDisk(); applyToSheet();">+</button></span> <span class="inline-ctrl">Max: <button onclick="char.inv_uti[${a._idx}].u_max=(char.inv_uti[${a._idx}].u_max||0)-1; saveDisk(); applyToSheet();">-</button>${a.u_max||0}<button onclick="char.inv_uti[${a._idx}].u_max=(char.inv_uti[${a._idx}].u_max||0)+1; saveDisk(); applyToSheet();">+</button></span></div>`;
-                            html += `<div class="selectable-item" style="padding:10px; display:block;"><div style="display:flex; justify-content:space-between; align-items:flex-start;"><div><strong>${a.name || a.n}</strong> <span style="color:#666; font-size:0.75rem;">${a.load?`[Carga ${a.load}]`:''}</span><br><small style="color:var(--text-muted); display:block; margin-top:4px;">${a.d || a.traits || a.effect || ''}</small></div><button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.inv_uti.splice(${a._idx},1); saveDisk(); applyToSheet();">X</button></div>${usesHtml}</div>`;
-                        });
-                    }
-                });
-                document.getElementById('s_uti_list').innerHTML = html;
-            };
-            rUti();
-
-            const rGen = (id, arr, path) => {
-                document.getElementById(id).innerHTML = arr.map((a,i) => `<div class="selectable-item" style="padding:10px; display:block;"><div style="display:flex; justify-content:space-between; align-items:flex-start;"><div><strong>${a.name || a.n}</strong> <span style="color:#666; font-size:0.75rem;">${a.load?`[Carga ${a.load}]`:''}</span><br><small style="color:var(--text-muted); display:block; margin-top:4px;">${a.d || a.traits || a.effect || ''}</small></div><button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.${path}.splice(${i},1); saveDisk(); applyToSheet();">X</button></div></div>`).join('');
-            };
-            rGen('s_tac_list', char.inv_tac, 'inv_tac'); rGen('s_runic_list', char.runic, 'runic'); rGen('s_gen_list', char.inv_gen, 'inv_gen');
-            
-            document.getElementById('s_drones_list').innerHTML = char.drones.map((d, i) => `
-                <div class="slot-box filled" style="border-left-color:var(--cyan); margin-bottom:10px; padding:10px;">
-                    <div class="slot-header"><strong style="color:#fff; font-size:1.1rem;">${d.name}</strong> <span style="color:#666; font-size:0.75rem;">[Tático +1]</span><div><button class="btn btn-small" style="margin-right:10px; color:var(--cyan);" onclick="openModSelector('drone_${i}')">+ MOD (${d.mods.length}/${d.slots})</button><button class="btn-red" style="background:none;border:none;cursor:pointer;" onclick="char.drones.splice(${i},1); saveDisk(); applyToSheet();">X</button></div></div>
-                    <div style="display:flex; gap:10px; margin-bottom:5px;"><span class="inline-ctrl">INT: <button onclick="char.drones[${i}].integ--; saveDisk(); applyToSheet();">-</button>${d.integ}<button onclick="char.drones[${i}].integ++; saveDisk(); applyToSheet();">+</button></span><span class="inline-ctrl">ABS: <button onclick="char.drones[${i}].abs--; saveDisk(); applyToSheet();">-</button>${d.abs}<button onclick="char.drones[${i}].abs++; saveDisk(); applyToSheet();">+</button></span><span style="font-size:0.8rem; color:var(--text-muted); align-self:center;">VEL: ${d.spd} | DEF: ${d.def}</span></div>
-                    <div style="font-size:0.75rem; color:#666; margin-bottom:10px;">${d.d}</div>
-                    ${d.mods.length>0 ? `<div style="border-top:1px dashed #333; padding-top:5px;">` + d.mods.map((md, midx)=>`<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name} <span style="color:#666;">[${md.slots||1} slot]</span><br><span style="color:var(--text-muted); font-size:0.75rem;">${md.effect}</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.drones[${i}].mods.splice(${midx},1); saveDisk(); applyToSheet();">x</button></div>`).join('') + `</div>` : ''}
-                </div>
-            `).join('');
-        }
-
-        window.modHeat = function(slot, amt) {
-            let w = char.sic[slot]; if(!w) return;
-            w.h_cur += amt; if(w.h_cur < 0) w.h_cur = 0;
-            let max = w.h_max + (w.h_mod||0); if(w.h_cur > max + 1) w.h_cur = max + 1;
+        function modVital(v, a) {
+            if(v==='hp_cur') char.hp_cur = Math.max(0, Number(char.hp_cur)+a);
+            else if(v==='shield_cur') char.shield_cur = Math.max(0, Number(char.shield_cur)+a);
+            else char[v] = Math.max(0, Number(char[v]||0)+a);
             saveDisk(); applyToSheet();
         }
 
-        let curBuildSlot = '';
-        window.openBuilder = function(slot) {
-            curBuildSlot = slot;
-            if(slot==='wpn_p' || slot==='wpn_s') {
-                document.getElementById('mb_title').innerText = slot==='wpn_p' ? "MONTAR PRIMÁRIA" : "MONTAR SECUNDÁRIA";
-                document.getElementById('mb_armor_fields').style.display = 'none'; document.getElementById('mb_weapon_fogo').style.display = 'block'; document.getElementById('mb_wpn_tabs').style.display = 'block';
-                
-                document.getElementById('mb_f').innerHTML = '<option value="">[ FRAME ]</option>' + DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.name||f.n}</option>`).join('');
-                document.getElementById('mb_c').innerHTML = '<option value="">[ NÚCLEO ]</option>' + DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.name||c.n}</option>`).join('');
-                
-                let mList = slot==='wpn_p' ? DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary) : DB.arsenal.melee_secondary;
-                document.getElementById('mb_m').innerHTML = '<option value="">[ LÂMINA/CONTUSÃO ]</option>' + mList.map((m,i)=>`<option value="${i}">${m.name||m.n}</option>`).join('');
-
-                if(char.sic[slot] && char.sic[slot].is_melee) switchWeaponTab('melee'); else switchWeaponTab('fogo');
-                if(char.sic[slot] && !char.sic[slot].is_melee) { document.getElementById('mb_f_t').value = char.sic[slot].frame_lvl||1; document.getElementById('mb_c_t').value = char.sic[slot].core_lvl||1; }
-                previewBuild(); document.getElementById('modal-builder').style.display = 'flex';
-            } else if(slot==='armor') {
-                document.getElementById('mb_title').innerText = "EQUIPAR TRAJE/ARMADURA";
-                document.getElementById('mb_weapon_fogo').style.display = 'none'; document.getElementById('mb_wpn_tabs').style.display = 'none'; document.getElementById('mb_weapon_melee').style.display = 'none'; document.getElementById('mb_armor_fields').style.display = 'block';
-                document.getElementById('mb_a').innerHTML = '<option value="">[ SELECIONAR ]</option>' + DB.arsenal.armors.map((a,i)=>`<option value="${i}">${a.n} [NF ${a.nf} | ${a.cost}¢]</option>`).join('');
-                previewBuild(); document.getElementById('modal-builder').style.display = 'flex';
-            }
-        }
-
-        let wpnTab = 'fogo';
-        window.switchWeaponTab = function(t) {
-            wpnTab = t;
-            if(t==='fogo') { document.getElementById('mb_weapon_fogo').style.display='block'; document.getElementById('mb_weapon_melee').style.display='none'; document.getElementById('btn_tab_fogo').style.color='var(--cyan)'; document.getElementById('btn_tab_melee').style.color='var(--text-muted)'; }
-            else { document.getElementById('mb_weapon_fogo').style.display='none'; document.getElementById('mb_weapon_melee').style.display='block'; document.getElementById('btn_tab_fogo').style.color='var(--text-muted)'; document.getElementById('btn_tab_melee').style.color='var(--cyan)'; }
-            previewBuild();
-        }
-
-        window.previewBuild = function() {
-            const btn = document.getElementById('mb_confirm'); const warn = document.getElementById('mb_warn'); warn.innerText = ''; btn.disabled = true;
-            if(curBuildSlot==='wpn_p' || curBuildSlot==='wpn_s') {
-                if(wpnTab==='fogo') {
-                    const fi = document.getElementById('mb_f').value; const ci = document.getElementById('mb_c').value;
-                    if(fi==="" || ci==="") return document.getElementById('mb_preview').innerHTML = "Selecione as partes...";
-                    const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
-                    const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
-                    
-                    let reqNfF = ft===1?0:(ft===2?3:7); let reqNfC = ct===1?0:(ct===2?3:7);
-                    if((char.nf||0) < reqNfF || (char.nf||0) < reqNfC) { warn.innerText = "FAMA INSUFICIENTE (NF)."; } else btn.disabled = false;
-
-                    let baseD = c.dmg[3]; const fN = f.name||f.n;
-                    if(fN.includes("Pistola")||fN.includes("Revólver")) baseD=c.dmg[0]; if(fN.includes("Subm")) baseD=c.dmg[1]; if(fN.includes("Escopeta")) baseD=c.dmg[2]; if(fN.includes("Precisão")) baseD=c.dmg[4];
-                    let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(fN.includes("Pistola")||fN.includes("Revólver")||fN.includes("Subm")) d += 1; else d += 2; }
-                    
-                    document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${fN} T${ft} // ${c.name||c.n} T${ct}</strong><br><div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${d}</span> | ALCANCE: <strong>${f.range||f.r}</strong> | CALOR: <strong>${c.heat||c.h}</strong> | SLOTS: <strong>${ft+1}</strong></div><div style="font-size:0.8rem; color:var(--text-muted);"><strong>[FRAME]:</strong> ${f.eff||f.effect}</div><div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;"><strong>[NÚCLEO]:</strong> ${c.eff||c.effect}</div>`;
-                } else {
-                    const mi = document.getElementById('mb_m').value; if(mi==="") return document.getElementById('mb_preview').innerHTML = "Selecione...";
-                    const mList = curBuildSlot==='wpn_p' ? DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary) : DB.arsenal.melee_secondary;
-                    const m = mList[mi];
-                    if((char.nf||0) < m.nf) { warn.innerText = "FAMA INSUFICIENTE (NF)."; } else btn.disabled = false;
-                    document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${m.name||m.n}</strong><br><div style="margin:10px 0; color:#fff;">DANO: <span style="color:var(--red); font-weight:bold;">+${m.dmg}</span> | ALCANCE: <strong>Engajado</strong></div><div style="font-size:0.8rem; color:var(--text-muted);">${m.traits}</div>`;
-                }
-            } else if(curBuildSlot==='armor') {
-                const ai = document.getElementById('mb_a').value; if(ai==="") return document.getElementById('mb_preview').innerHTML = "Selecione...";
-                const a = DB.arsenal.armors[ai];
-                if((char.nf||0) < a.nf) { warn.innerText = "FAMA INSUFICIENTE (NF)."; } else btn.disabled = false;
-                document.getElementById('mb_preview').innerHTML = `<strong style="color:var(--cyan); font-size:1.1rem;">${a.name||a.n}</strong><br><div style="margin:10px 0; color:#fff;">ABSORÇÃO: <strong>${a.abs}</strong> (Quebrada: ${a.broken}) | SLOTS: <strong>${a.slots}</strong></div><div style="font-size:0.8rem; color:var(--text-muted);">${a.traits}</div>`;
-            }
-        }
-
-        window.confirmBuild = function() {
-            if(curBuildSlot==='wpn_p' || curBuildSlot==='wpn_s') {
-                if(wpnTab==='fogo') {
-                    const f = DB.arsenal.frames[document.getElementById('mb_f').value]; const c = DB.arsenal.cores[document.getElementById('mb_c').value];
-                    const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
-                    let baseD = c.dmg[3]; const fN = f.name||f.n; if(fN.includes("Pistola")||fN.includes("Revólver")) baseD=c.dmg[0]; if(fN.includes("Subm")) baseD=c.dmg[1]; if(fN.includes("Escopeta")) baseD=c.dmg[2]; if(fN.includes("Precisão")) baseD=c.dmg[4];
-                    let d = baseD; if(ct === 2) d += 1; if(ct === 3) { if(fN.includes("Pistola")||fN.includes("Revólver")||fN.includes("Subm")) d += 1; else d += 2; }
-                    const oldMods = (char.sic[curBuildSlot] && !char.sic[curBuildSlot].is_melee) ? char.sic[curBuildSlot].mods :[];
-                    char.sic[curBuildSlot] = { is_melee: false, name: `${fN} T${ft} (${c.name||c.n} T${ct})`, dmg: d, range: (f.range||f.r), h_max: (c.heat||c.h), h_cur: 0, h_mod: 0, desc: `${f.eff||f.effect} // ${c.eff||c.effect}`, frame_lvl: ft, core_lvl: ct, slots: ft+1, mods: oldMods };
-                } else {
-                    const mList = curBuildSlot==='wpn_p' ? DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary) : DB.arsenal.melee_secondary;
-                    const m = mList[document.getElementById('mb_m').value];
-                    char.sic[curBuildSlot] = { is_melee: true, name: (m.name||m.n), dmg: m.dmg, traits: m.traits };
-                }
-            } else if(curBuildSlot==='armor') {
-                const a = DB.arsenal.armors[document.getElementById('mb_a').value];
-                const oldMods = char.sic.armor ? char.sic.armor.mods :[];
-                const oldShield = char.sic.armor ? char.sic.armor.shield : null;
-                char.arm_base = a.abs; char.arm_brok = a.broken; char.arm_dmg = Math.floor(a.abs/2); char.arm_state = "Normal";
-                char.sic.armor = { name: (a.name||a.n), abs: a.abs, broken: a.broken, traits: a.traits, slots: a.slots, mods: oldMods, shield: oldShield };
-            }
-            closeModal(); saveDisk(); applyToSheet();
-        }
-
-        // --- CROMO ---
-        window.renderSheetCromo = function() {
-            document.getElementById('cromo_container').innerHTML = cyberCats.map(c => {
-                const data = char.cromo[c];
-                let passivo = cyberPassives[c];
-                
-                let html = `<div class="panel" style="border-top: 3px solid var(--purple);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"><h3 style="color:var(--purple); margin:0;">${c.toUpperCase()}</h3><select style="width:auto; font-size:0.8rem;" onchange="char.cromo['${c}'].t=parseInt(this.value); char.cromo['${c}'].m=[]; saveDisk(); applyToSheet();"><option value="0" ${data.t===0?'selected':''}>Offline</option><option value="1" ${data.t===1?'selected':''}>Tier I [NF 0]</option><option value="2" ${data.t===2?'selected':''}>Tier II [NF 3]</option><option value="3" ${data.t===3?'selected':''}>Tier III [NF 7]</option></select></div>`;
-                if(data.t > 0) {
-                    let reqNf = data.t===1?0:(data.t===2?3:7);
-                    if((char.nf||0) < reqNf) html += `<div style="color:var(--red); font-size:0.8rem; margin-bottom:10px;">⚠️ NF insuficiente para manter este Tier.</div>`;
-                    html += `<div style="font-size:0.8rem; color:var(--cyan); margin-bottom:10px; background:rgba(0,229,255,0.05); padding:10px; border-left:2px solid var(--cyan);"><strong>${passivo}</strong></div>`;
-                    let maxM = c==='Neural'||c==='Fluxo' ? data.t : (data.t===3?2:1);
-                    for(let i=0; i<maxM; i++) {
-                        if(data.m[i]) html += `<div class="slot-box filled" style="border-left-color:var(--purple); padding:10px; margin-bottom:10px;"><div style="display:flex; justify-content:space-between;"><strong style="color:var(--text-main); font-size:0.9rem;">${data.m[i].name}</strong><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.cromo['${c}'].m.splice(${i},1); saveDisk(); applyToSheet();">X</button></div><div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${data.m[i].d}</div></div>`;
-                        else html += `<div class="slot-box" style="padding:15px; text-align:center; cursor:pointer;" onclick="openCromoSelector('${c}')"><span style="color:var(--text-muted); font-family:var(--font-mono); font-size:0.8rem;">[ SOQUETE VAZIO ]</span></div>`;
+        // --- ARSENAL ---
+        function renderArsenal() {
+            const bSlot = (id, t, i, p) => {
+                const el = document.getElementById(id);
+                if(!i) { el.className="slot-box"; el.innerHTML=`<div class="slot-header"><span class="slot-title">${t}</span><button class="btn btn-small" onclick="openBuild('${p}')">EQUIPAR</button></div><div style="text-align:center; color:#444; padding:10px;">[ VAZIO ]</div>`; }
+                else {
+                    el.className="slot-box filled";
+                    if(i.is_melee) {
+                        el.innerHTML=`<div class="slot-header"><span class="slot-title">${t} (MELEE)</span><button class="btn btn-red btn-small" onclick="char.sic.${p}=null; saveDisk(); applyToSheet();">X</button></div><strong>${i.name}</strong> <span class="inline-ctrl">DANO: <button onclick="char.sic.${p}.dmg--; saveDisk(); applyToSheet();">-</button>+${i.dmg}<button onclick="char.sic.${p}.dmg++; saveDisk(); applyToSheet();">+</button></span><br><small>${i.traits}</small>`;
+                    } else if(p==='armor') {
+                        el.innerHTML=`<div class="slot-header"><span class="slot-title">${t}</span><div><button class="btn btn-small" onclick="openModS('armor')">+ MOD (${i.mods.length}/${i.slots})</button> <button class="btn-red btn-small" onclick="char.sic.armor=null; saveDisk(); applyToSheet();">X</button></div></div><strong>${i.name}</strong><br><small>${i.traits}</small>` + (i.shield?`<div style="color:var(--cyan); margin-top:10px;">[ESCUDO INTEGRADO]</div>`:'') + i.mods.map((m,idx)=>`<div style="font-size:0.75rem; color:var(--cyan); margin-top:5px;">- ${m.name} <button style="color:var(--red); background:none; border:none;" onclick="char.sic.armor.mods.splice(${idx},1); saveDisk(); applyToSheet();">x</button></div>`).join('');
+                    } else {
+                        const totalH = Number(i.h_max); const status = i.h_cur > totalH ? '<span style="color:var(--red)">[DANIFICADA]</span>' : (i.h_cur === totalH ? '<span style="color:var(--gold)">[TRAVADA]</span>' : '');
+                        el.innerHTML=`<div class="slot-header"><span class="slot-title">${t}</span><div><button class="btn btn-small" onclick="openModS('${p}')">+ MOD (${i.mods.length}/${i.slots})</button> <button class="btn btn-red btn-small" onclick="char.sic.${p}=null; saveDisk(); applyToSheet();">X</button></div></div><strong>${i.name} ${status}</strong><br><div style="margin:5px 0;"><span class="inline-ctrl">DANO: <button onclick="char.sic.${p}.dmg--; saveDisk(); applyToSheet();">-</button>+${i.dmg}<button onclick="char.sic.${p}.dmg++; saveDisk(); applyToSheet();">+</button></span> | ALC: ${i.range}</div><div style="font-family:var(--font-mono); color:var(--gold); display:flex; align-items:center; gap:5px;">CALOR: <button class="btn-vit" onclick="char.sic.${p}.h_cur=Math.max(0,char.sic.${p}.h_cur-1); saveDisk(); applyToSheet();">-</button> ${i.h_cur}/${totalH} <button class="btn-vit" onclick="if(char.sic.${p}.h_cur <= ${totalH}) char.sic.${p}.h_cur++; saveDisk(); applyToSheet();">+</button> <span class="inline-ctrl">Max: <button onclick="char.sic.${p}.h_max--; saveDisk(); applyToSheet();">-</button><button onclick="char.sic.${p}.h_max++; saveDisk(); applyToSheet();">+</button></span></div>`+ i.mods.map((m,idx)=>`<div style="font-size:0.75rem; color:var(--cyan); margin-top:5px;">- ${m.name} <button style="color:var(--red); background:none; border:none;" onclick="char.sic.${p}.mods.splice(${idx},1); saveDisk(); applyToSheet();">x</button></div>`).join('');
                     }
-                } else { html += `<div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:20px 0;">[ OFFLINE ]</div>`; }
-                return html + `</div>`;
-            }).join('');
-        }
-
-        let cCromo = '';
-        window.openCromoSelector = function(cat) {
-            cCromo = cat; const list = document.getElementById('mg_list'); list.innerHTML = '';
-            if(!DB.arsenal || !DB.arsenal.cyber_units) return;
-            DB.arsenal.cyber_units.filter(u => u.cat === cat && !u.name.includes("Tier I")).forEach((item, i) => {
-                const locked = (char.nf||0) < item.nf;
-                list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--purple)">${item.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${item.nf} | ${item.cost} ¢]</span><div style="color:var(--text-muted); font-size:0.85rem; margin-top:4px;">${item.d}</div></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.cromo['${cat}'].m.push(${JSON.stringify(item).replace(/"/g, '&quot;')}); closeModal(); saveDisk(); applyToSheet();">INSTALAR</button></div>`;
-            });
-            document.getElementById('mg_title').innerText = "UNIDADES CIBERNÉTICAS: " + cat.toUpperCase();
-            document.getElementById('modal-generic').style.display = 'flex';
-        }
-
-        // --- GENERIC MODALS ---
-        let cGenP = '';
-        window.openGenericModal = function(dbKey, path, isShield=false) {
-            cGenP = path; const list = document.getElementById('mg_list'); list.innerHTML = ''; let items =[];
-            if(dbKey==='domains') {
-                sysDomains.forEach(d => { const h = char.dom.find(x=>x.n===d.name); list.innerHTML += `<div class="selectable-item ${h?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div><button class="btn btn-small" ${h?'disabled':''} onclick="char.dom.push({n:'${d.name}', lvl:1, flips:1}); closeModal(); saveDisk(); applyToSheet();">TREINAR</button></div>`; });
-            } else if(dbKey==='masteries') {
-                const cats =[...new Set(DB.masteries.map(m=>m.type))];
-                cats.forEach(cat => {
-                    list.innerHTML += `<div class="cat-header">${cat.toUpperCase()}</div>`;
-                    DB.masteries.filter(m=>m.type===cat).forEach(m => {
-                        const has = char.masteries.find(x=>x.name===m.name);
-                        list.innerHTML += `<div class="selectable-item ${has?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--gold)">${m.name}</strong><br><small style="color:var(--text-muted)">${m.effect}</small></div><button class="btn btn-small" ${has?'disabled':''} onclick="char.masteries.push({name:'${m.name}', effect:'${m.effect}'}); closeModal(); saveDisk(); applyToSheet();">ADD</button></div>`;
-                    });
-                });
-            } else if(dbKey==='drone_chassis') {
-                DB.arsenal.drone_chassis.forEach(ch => {
-                    const locked = (char.nf||0) < ch.nf;
-                    list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${ch.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${ch.nf} | ${ch.cost} ¢]</span><br><small style="color:var(--text-muted)">Slots: ${ch.slots} | Integ: ${ch.integ} | Abs: ${ch.abs} | Vel: ${ch.spd}<br>${ch.d}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.drones.push({name:'${ch.name}', slots:${ch.slots}, integ:${ch.integ}, abs:${ch.abs}, spd:'${ch.spd}', def:'${ch.def}', d:'${ch.d}', mods:[]}); closeModal(); saveDisk(); applyToSheet();">COMPRAR</button></div>`;
-                });
-            } else {
-                dbKey.split(',').forEach(k => { items = items.concat(DB.arsenal[k] || DB[k] ||[]); });
-                if(isShield) items = items.filter(i=>i.name.includes("Emissor"));
-                if(path === 'runic') items = items.filter(i=>i.name && i.name.includes("Runa"));
-                else if(path === 'inv_uti') items = items.filter(i=>!(i.name && i.name.includes("Runa")));
-                
-                let cats = {"Equipamento":[]};
-                if(dbKey==='general_load_items') cats = {"Energia & Luz":[], "Sobrevivência":[], "Ferramentas & Infiltração":[], "Sensores":[], "Diversos":[]};
-                if(path === 'inv_uti') cats = {"Injetores & Química":[], "Granadas & Armadilhas":[], "Diversos":[]};
-
-                items.forEach((item, i) => { 
-                    item._idx = i;
-                    if(dbKey==='general_load_items') {
-                        if(item.name.includes("Célula") || item.name.includes("Pedra") || item.name.includes("Cubo") || item.name.includes("Sinalizador") || item.name.includes("Carregador") || item.name.includes("Conversor")) cats["Energia & Luz"].push(item);
-                        else if(item.name.includes("Kit de") || item.name.includes("Sequenciador") || item.name.includes("Explosivo") || item.name.includes("Apagador") || item.name.includes("Arrombador") || item.name.includes("Bloqueador") || item.name.includes("Burlador") || item.name.includes("Pé de Cabra") || item.name.includes("Chave") || item.name.includes("Algemas")) cats["Ferramentas & Infiltração"].push(item);
-                        else if(item.name.includes("Scanner") || item.name.includes("Sensor") || item.name.includes("Commpad") || item.name.includes("Neurolink") || item.name.includes("Computador") || item.name.includes("Rádio") || item.name.includes("Servidor") || item.name.includes("Central") || item.name.includes("Binóculos") || item.name.includes("Visor")) cats["Sensores"].push(item);
-                        else if(item.name.includes("Tenda") || item.name.includes("Refeição") || item.name.includes("Sobrevivência") || item.name.includes("Máscara") || item.name.includes("Tanque") || item.name.includes("Vacc") || item.name.includes("Compressor") || item.name.includes("Corda") || item.name.includes("Escalada") || item.name.includes("Gancho") || item.name.includes("Navegação") || item.name.includes("Suprimentos")) cats["Sobrevivência"].push(item);
-                        else cats["Diversos"].push(item);
-                    } else if (path === 'inv_uti') {
-                        if(item.name.includes("Injetor") || item.name.includes("Sugar") || item.name.includes("Pantera") || item.name.includes("Dust") || item.name.includes("Névoa") || item.name.includes("Ritalina") || item.name.includes("Bravura") || item.name.includes("Synapse") || item.name.includes("Goliath") || item.name.includes("Hermes") || item.name.includes("Coruja") || item.name.includes("Void") || item.name.includes("VITAL") || item.name.includes("Mind") || item.name.includes("Vitalizer") || item.name.includes("Heal Max") || item.name.includes("Bio Shield")) cats["Injetores & Química"].push(item);
-                        else if(item.name.includes("Granada") || item.name.includes("Mina") || item.name.includes("Flashbang") || item.name.includes("Carga") || item.name.includes("Faca de Arremesso")) cats["Granadas & Armadilhas"].push(item);
-                        else cats["Diversos"].push(item);
-                    } else cats["Equipamento"].push(item);
-                });
-
-                Object.keys(cats).forEach(cat => {
-                    if(cats[cat].length > 0 && (dbKey==='general_load_items' || path==='inv_uti')) list.innerHTML += `<div class="cat-header">${cat.toUpperCase()}</div>`;
-                    cats[cat].forEach(item => {
-                        const locked = (item.nf !== undefined && (char.nf||0) < item.nf);
-                        let meta = ''; if(item.nf!==undefined) meta+=`[NF ${item.nf}]`; if(item.cost!==undefined) meta+=`[${item.cost} ¢]`;
-                        list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong>${item.name || item.n}</strong><span style="color:var(--gold); font-size:0.75rem; margin-left:10px;">${meta}</span><br><small style="color:var(--text-muted); display:block; margin-top:5px;">${item.effect || item.d || item.traits || ''}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="installGenItem('${dbKey}', ${item._idx})">ADD</button></div>`; 
-                    });
-                });
-            }
-            document.getElementById('mg_title').innerText = "BASE DE DADOS DO SINDICATO"; document.getElementById('modal-generic').style.display = 'flex';
-        }
-        
-        window.installGenItem = function(dbKey, idx) {
-            let items =[]; dbKey.split(',').forEach(k => items = items.concat(DB.arsenal[k] || DB[k] ||[]));
-            let iData = JSON.parse(JSON.stringify(items[idx]));
+                }
+            };
+            bSlot('slot_wpn_p', 'PRIMÁRIA', char.sic.wpn_p, 'wpn_p'); bSlot('slot_wpn_s', 'SECUNDÁRIA', char.sic.wpn_s, 'wpn_s'); bSlot('slot_armor', 'ARMADURA', char.sic.armor, 'armor');
             
-            if(cGenP === 'shield') {
-                if(!char.sic.armor) return alert("Equipe uma armadura primeiro!");
-                let mCount = char.sic.armor.mods ? char.sic.armor.mods.length : 0;
-                let sMod = char.sic.armor.shield ? 1 : 0;
-                if(mCount + sMod >= (char.sic.armor.slots||0)) return alert("Sem slots suficientes na armadura!");
-                char.sic.armor.shield = { name: iData.name, effect: iData.effect };
+            const rL = (id, arr, path) => { document.getElementById(id).innerHTML = arr.map((a,i)=> `<div class="selectable-item" style="padding:10px; display:block;"><div style="display:flex; justify-content:space-between; margin-bottom:5px;"><strong>${a.name||a.n}</strong><button class="btn btn-red btn-small" onclick="char.${path}.splice(${i},1); saveDisk(); applyToSheet();">X</button></div><small>${a.d||a.effect||''}</small>${a.u_max?`<div style="margin-top:8px;"><span class="inline-ctrl">USOS: <button onclick="char.${path}[${i}].u_cur=Math.max(0,char.${path}[${i}].u_cur-1); saveDisk(); applyToSheet();">-</button>${a.u_cur}/${a.u_max}<button onclick="char.${path}[${i}].u_cur=Math.min(char.${path}[${i}].u_max,char.${path}[${i}].u_cur+1); saveDisk(); applyToSheet();">+</button></span> <span class="inline-ctrl">Max: <button onclick="char.${path}[${i}].u_max--; saveDisk(); applyToSheet();">-</button><button onclick="char.${path}[${i}].u_max++; saveDisk(); applyToSheet();">+</button></span></div>`:''}</div>`).join(''); };
+            rL('s_tac_list', char.inv_tac, 'inv_tac'); rL('s_uti_list', char.inv_uti, 'inv_uti'); rL('s_runic_list', char.runic, 'runic'); rL('s_gen_list', char.inv_gen, 'inv_gen');
+            
+            document.getElementById('s_drones_list').innerHTML = char.drones.map((d,i)=> `
+                <div class="slot-box filled" style="border-color:var(--cyan); margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid #333; margin-bottom:10px;"><strong>${d.name}</strong><button class="btn btn-red btn-small" onclick="char.drones.splice(${i},1); saveDisk(); applyToSheet();">X</button></div>
+                    <div style="display:flex; gap:10px;"><span class="inline-ctrl">INT: <button onclick="char.drones[${i}].integ--; saveDisk(); applyToSheet();">-</button>${d.integ}<button onclick="char.drones[${i}].integ++; saveDisk(); applyToSheet();">+</button></span><span class="inline-ctrl">ABS: <button onclick="char.drones[${i}].abs--; saveDisk(); applyToSheet();">-</button>${d.abs}<button onclick="char.drones[${i}].abs++; saveDisk(); applyToSheet();">+</button></span></div>
+                    <div style="margin-top:10px;"><button class="btn btn-small" onclick="openModS('drone_${i}')">+ MOD (${d.mods.length}/${d.slots})</button></div>
+                    ${d.mods.map((m,idx)=> `<div style="font-size:0.7rem; color:var(--cyan); margin-top:5px;">- ${m.name} <button style="color:var(--red); background:none; border:none;" onclick="char.drones[${i}].mods.splice(${idx},1); saveDisk(); applyToSheet();">x</button></div>`).join('')}
+                </div>`).join('');
+        }
+
+        let curBuildSlot = ''; let buildType = 'fogo';
+        window.openBuild = (s) => {
+            curBuildSlot=s; buildType='fogo';
+            if(s==='wpn_p'||s==='wpn_s') {
+                document.getElementById('mb_f').innerHTML = DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.n}</option>`).join('');
+                document.getElementById('mb_c').innerHTML = DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.n} [${i===0?0:5}¢]</option>`).join('');
+                const mList = s==='wpn_p'?DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary):DB.arsenal.melee_secondary;
+                document.getElementById('mb_m').innerHTML = mList.map((m,i)=>`<option value="${i}">${m.n}</option>`).join('');
+                document.getElementById('mb_armor').style.display='none'; document.getElementById('mb_wpn_tabs').style.display='flex';
+                switchWType('fogo');
             } else {
-                if(cGenP === 'inv_uti') { iData.u_cur = 1; iData.u_max = 1; }
-                char[cGenP].push(iData);
+                document.getElementById('mb_a').innerHTML = DB.arsenal.armors.map((a,i)=>`<option value="${i}">${a.n} [NF ${a.nf} | ${a.cost}¢]</option>`).join('');
+                document.getElementById('mb_armor').style.display='block'; document.getElementById('mb_wpn_tabs').style.display='none'; document.getElementById('mb_fogo').style.display='none'; document.getElementById('mb_melee').style.display='none';
+            }
+            previewBuild(); document.getElementById('modal-builder').style.display='flex';
+        }
+        function switchWType(t) { buildType=t; document.getElementById('mb_fogo').style.display=t==='fogo'?'block':'none'; document.getElementById('mb_melee').style.display=t==='melee'?'block':'none'; previewBuild(); }
+        function previewBuild() {
+            const p = document.getElementById('mb_preview'); const btn = document.getElementById('mb_confirm'); btn.disabled=false;
+            if(curBuildSlot==='armor') {
+                const a = DB.arsenal.armors[document.getElementById('mb_a').value]; p.innerHTML = `<strong>${a.n}</strong><br>${a.traits}`; if(char.nf < a.nf) btn.disabled=true;
+            } else if(buildType==='fogo') {
+                const f = DB.arsenal.frames[document.getElementById('mb_f').value]; const c = DB.arsenal.cores[document.getElementById('mb_c').value]; p.innerHTML = `<strong>${f.n} // ${c.n}</strong><br>${f.eff}<br>${c.eff}`;
+            } else {
+                const mList = curBuildSlot==='wpn_p'?DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary):DB.arsenal.melee_secondary;
+                const m = mList[document.getElementById('mb_m').value]; p.innerHTML = `<strong>${m.n}</strong><br>${m.traits}`; if(char.nf < m.nf) btn.disabled=true;
+            }
+        }
+        function confirmBuild() {
+            if(curBuildSlot==='armor') {
+                const a = DB.arsenal.armors[document.getElementById('mb_a').value];
+                char.sic.armor = { name:a.n, abs:a.abs, broken:a.broken, slots:a.slots, traits:a.traits, mods:[], shield:null };
+                char.arm_base=a.abs; char.arm_dmg=Math.floor(a.abs/2); char.arm_brok=a.broken;
+            } else if(buildType==='fogo') {
+                const f = DB.arsenal.frames[document.getElementById('mb_f').value]; const c = DB.arsenal.cores[document.getElementById('mb_c').value];
+                const ft = Number(document.getElementById('mb_ft').value); const ct = Number(document.getElementById('mb_ct').value);
+                let d = c.dmg[3]; if(f.n.includes("Pistola")||f.n.includes("Revólver")) d=c.dmg[0]; if(f.n.includes("Subm")) d=c.dmg[1]; if(f.n.includes("Escopeta")) d=c.dmg[2]; if(f.n.includes("Precisão")) d=c.dmg[4];
+                if(ct===2) d+=1; if(ct===3) d+=(f.n.includes("Pistola")||f.n.includes("Subm")?1:2);
+                char.sic[curBuildSlot] = { is_melee:false, name:`${f.n} T${ft} (${c.n} T${ct})`, dmg:d, range:f.r, h_max:c.h, h_cur:0, desc:`${f.eff} // ${c.eff}`, slots:ft+1, mods:[] };
+            } else {
+                const mList = curBuildSlot==='wpn_p'?DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary):DB.arsenal.melee_secondary;
+                const m = mList[document.getElementById('mb_m').value];
+                char.sic[curBuildSlot] = { is_melee:true, name:m.n, dmg:m.dmg, traits:m.traits };
             }
             closeModal(); saveDisk(); applyToSheet();
         }
 
-        window.openModSelector = function(target) {
-            cGenP = target; const list = document.getElementById('mg_list'); list.innerHTML = '';
-            let src =[]; let currSlots = 0; let maxSlots = 0;
-            if(target.startsWith('drone_')) {
-                const dIdx = parseInt(target.split('_')[1]); const dr = char.drones[dIdx];
-                src = DB.arsenal.drone_modules; maxSlots = dr.slots; dr.mods.forEach(m=> currSlots += m.slots||1);
-                let dCats = {"Ofensivo":[], "Suporte":[], "Tático":[]};
-                src.forEach((m,i)=> { m._i = i; if(m.name.includes("Ofensivo")) dCats["Ofensivo"].push(m); else if(m.name.includes("Tático")) dCats["Tático"].push(m); else dCats["Suporte"].push(m); });
-                Object.keys(dCats).forEach(c => {
+        // --- SELECTORS ---
+        let cPath = '';
+        function openGenericModal(keys, path, isShield=false) {
+            cPath=path; const list = document.getElementById('mg_list'); list.innerHTML = '';
+            if(keys==='domains') {
+                sysDomains.forEach(d => {
+                    list.innerHTML += `<div class="selectable-item" onmouseover="showPrev('${d.d}')"><div style="flex-grow:1;"><strong>${d.name}</strong></div><button class="btn btn-small" onclick="char.dom.push({n:'${d.name}',lvl:1,flips:1}); closeModal(); applyToSheet();">TREINAR</button></div>`;
+                });
+            } else if(keys==='masteries') {
+                const cats = [...new Set(DB.masteries.map(m=>m.type))];
+                cats.forEach(c => {
                     list.innerHTML += `<div class="cat-header">${c.toUpperCase()}</div>`;
-                    dCats[c].forEach(m => {
-                        const locked = ((char.nf||0) < m.nf) || (currSlots + (m.slots||1) > maxSlots);
-                        list.innerHTML += `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${m.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢ | ${m.slots||1} Slot]</span><br><small style="color:var(--text-muted); display:block; margin-top:5px;">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.drones[${dIdx}].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); saveDisk(); applyToSheet();">ADD</button></div>`;
+                    DB.masteries.filter(m=>m.type===c).forEach(m=> {
+                        list.innerHTML += `<div class="selectable-item" onmouseover="showPrev('${m.effect}')"><div style="flex-grow:1;"><strong>${m.name}</strong></div><button class="btn btn-small" onclick="char.masteries.push({name:'${m.name}',effect:'${m.effect}'}); closeModal(); applyToSheet();">ADD</button></div>`;
                     });
+                });
+            } else if (keys==='drone_chassis') {
+                DB.arsenal.drone_chassis.forEach(ch => {
+                    list.innerHTML += `<div class="selectable-item ${char.nf<ch.nf?'locked':''}" onmouseover="showPrev('${ch.d}')"><div style="flex-grow:1;"><strong>${ch.name}</strong></div><button class="btn btn-small" ${char.nf<ch.nf?'disabled':''} onclick="addGen('${JSON.stringify(ch).replace(/"/g,'&quot;')}')">ADD</button></div>`;
                 });
             } else {
-                let mCats = {"Frame":[], "Núcleo":[]};
-                if(target==='armor') { 
-                    src = DB.arsenal.mods_armor; maxSlots = char.sic.armor.slots; 
-                    currSlots = (char.sic.armor.mods?char.sic.armor.mods.length:0) + (char.sic.armor.shield ? 1 : 0);
-                } else { src = DB.arsenal.mods_weapon; maxSlots = char.sic[target].slots; char.sic[target].mods.forEach(m=> currSlots++); }
+                let items = []; keys.split(',').forEach(k=> items = items.concat(DB.arsenal[k]||DB[k]||[]));
+                if(isShield) items = items.filter(i=> i.name.includes("Emissor"));
+                if(path==='runic') items = items.filter(i=> i.name && i.name.includes("Runa"));
+                else if(path==='inv_uti') items = items.filter(i=> !(i.name && i.name.includes("Runa")));
                 
-                src.forEach((m) => {
-                    const locked = ((char.nf||0) < m.nf) || (currSlots >= maxSlots);
-                    let html = `<div class="selectable-item ${locked?'locked':''}"><div style="flex-grow:1;"><strong style="color:var(--cyan)">${m.name}</strong> <span style="color:var(--gold); font-size:0.75rem;">[NF ${m.nf} | ${m.cost} ¢]</span><br><small style="color:var(--text-muted); display:block; margin-top:5px;">${m.effect}</small></div><button class="btn btn-small" ${locked?'disabled':''} onclick="char.sic['${target}'].mods.push(${JSON.stringify(m).replace(/"/g, '&quot;')}); closeModal(); saveDisk(); applyToSheet();">ADD</button></div>`;
-                    if(m.type) mCats[m.type].push(html); else list.innerHTML += html;
-                });
-                
-                if(target!=='armor') {
-                    Object.keys(mCats).forEach(cat => {
-                        list.innerHTML += `<div class="cat-header">${cat.toUpperCase()}</div>` + mCats[cat].join('');
-                    });
-                }
+                list.innerHTML = items.map(i=> `<div class="selectable-item ${char.nf<i.nf?'locked':''}" onmouseover="showPrev('${i.d||i.effect||i.traits}')"><div style="flex-grow:1;"><strong>${i.name||i.n}</strong> <small>${i.cost?`[${i.cost}¢]`:''}</small></div><button class="btn btn-small" ${char.nf<i.nf?'disabled':''} onclick="addGen('${JSON.stringify(i).replace(/"/g,'&quot;')}')">ADD</button></div>`).join('');
             }
-            document.getElementById('mg_title').innerText = "INSTALAR MODIFICAÇÃO"; document.getElementById('modal-generic').style.display = 'flex';
+            document.getElementById('mg_title').innerText="REQUISIÇÃO"; document.getElementById('modal-generic').style.display='flex';
+        }
+        function showPrev(t) { document.getElementById('mg_preview').innerText=t; }
+        function addGen(js) {
+            const i = JSON.parse(js);
+            if(cPath==='shield') { if(char.sic.armor) char.sic.armor.shield = i; }
+            else if(cPath==='drones') char.drones.push({name:i.name, slots:i.slots, integ:i.integ, abs:i.abs, spd:i.spd, def:i.def, d:i.d, mods:[]});
+            else { if(cPath==='inv_uti') { i.u_cur=1; i.u_max=1; } char[cPath].push(i); }
+            closeModal(); saveDisk(); applyToSheet();
+        }
+        function openModS(t) {
+            cPath=t; const list = document.getElementById('mg_list'); list.innerHTML = '';
+            let src = []; let max = 0; let cur = 0;
+            if(t.startsWith('drone_')) {
+                const idx = t.split('_')[1]; const dr = char.drones[idx]; src = DB.arsenal.drone_modules; max=dr.slots; dr.mods.forEach(m=>cur+=(m.slots||1));
+                list.innerHTML = src.map(m=> `<div class="selectable-item" onmouseover="showPrev('${m.effect}')"><div><strong>${m.name}</strong></div><button class="btn btn-small" ${cur+(m.slots||1)>max?'disabled':''} onclick="char.drones[${idx}].mods.push(${JSON.stringify(m).replace(/"/g,'&quot;')}); closeModal(); applyToSheet();">ADD</button></div>`).join('');
+            } else {
+                src = t==='armor'?DB.arsenal.mods_armor : DB.arsenal.mods_weapon; 
+                max = char.sic[t].slots; cur = char.sic[t].mods.length; if(t==='armor' && char.sic.armor.shield) cur++;
+                list.innerHTML = src.map(m=> `<div class="selectable-item" onmouseover="showPrev('${m.effect}')"><div><strong>${m.name}</strong></div><button class="btn btn-small" ${cur>=max?'disabled':''} onclick="char.sic.${t}.mods.push(${JSON.stringify(m).replace(/"/g,'&quot;')}); closeModal(); applyToSheet();">ADD</button></div>`).join('');
+            }
+            document.getElementById('modal-generic').style.display='flex';
         }
 
-        window.switchView = function(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        window.switchTab = function(id, btn) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
-        window.closeModal = function() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
-        
-        window.openRulesModal = async function() {
-            document.getElementById('modal-rules').style.display = 'flex';
-            try { const res = await fetch('regras.md'); if(!res.ok) throw new Error(); document.getElementById('rules-content').innerHTML = marked.parse(await res.text()); }
-            catch(e) { document.getElementById('rules-content').innerHTML = "<span style='color:var(--red)'>Erro 404: regras.md não encontrado no servidor.</span>"; }
+        // --- CORE UTILS ---
+        function switchView(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==='view-hub') renderHub(); }
+        function switchTab(id, b) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); b.classList.add('active'); }
+        function closeModal() { document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none'); }
+        function updateDirect(k,v) { if(char){ char[k]=v; saveDisk(); } }
+        function saveDisk() { localStorage.setItem('co_roster_v20', JSON.stringify(roster)); const p=document.getElementById('save_ping'); p.style.opacity=1; setTimeout(()=>p.style.opacity=0, 800); }
+        function saveRoster() { localStorage.setItem('co_roster_v20', JSON.stringify(roster)); }
+        function addContact() { char.contacts.push({name:"Novo Contato", cat:"Conhecido", sph:"Submundo", debt:0, d:""}); applyToSheet(); }
+        function backToHub() { activeIdx=-1; char=null; renderHub(); }
+
+        window.renderPersona = function() {
+            document.getElementById('s_con_list').innerHTML = char.contacts.map((c,i)=> `
+                <div class="selectable-item" style="display:block; border-color:var(--cyan);">
+                    <div style="display:flex; gap:10px; margin-bottom:5px;">
+                        <input value="${c.name}" onchange="char.contacts[${i}].name=this.value; saveDisk();" style="width:40%; font-weight:bold; color:var(--cyan);">
+                        <select onchange="char.contacts[${i}].cat=this.value; saveDisk();"><option ${c.cat==='Amigo'?'selected':''}>Amigo</option><option ${c.cat==='Conhecido'?'selected':''}>Conhecido</option></select>
+                        <select onchange="char.contacts[${i}].sph=this.value; saveDisk();"><option ${c.sph==='Submundo'?'selected':''}>Submundo</option><option ${c.sph==='Militar'?'selected':''}>Militar</option><option ${c.sph==='Corp'?'selected':''}>Corp</option></select>
+                        <input type="number" value="${c.debt}" onchange="char.contacts[${i}].debt=this.value; saveDisk();" style="width:45px;">
+                        <button class="btn btn-red btn-small" onclick="char.contacts.splice(${i},1); saveDisk(); applyToSheet();">X</button>
+                    </div>
+                    <textarea onchange="char.contacts[${i}].d=this.value; saveDisk();" rows="2">${c.d}</textarea>
+                </div>`).join('');
         }
+        window.renderSheetCromo = function() {
+            document.getElementById('cromo_grid').innerHTML = cyberCats.map(cat => `
+                <div class="panel" style="border-top:3px solid var(--purple)">
+                    <div style="display:flex; justify-content:space-between;"><h2>${cat}</h2><select style="width:100px;" onchange="char.cromo.${cat}.t=Number(this.value); char.cromo.${cat}.m=[]; saveDisk(); applyToSheet();"><option value="0" ${char.cromo[cat].t===0?'selected':''}>Off</option><option value="1" ${char.cromo[cat].t===1?'selected':''}>T1</option><option value="2" ${char.cromo[cat].t===2?'selected':''}>T2</option><option value="3" ${char.cromo[cat].t===3?'selected':''}>T3</option></select></div>
+                    <div style="font-size:0.75rem; color:var(--purple); margin:10px 0;">${char.cromo[cat].t > 0 ? cyberPassives[cat] : ''}</div>
+                    <div id="m_${cat}">`+ [0,1,2].slice(0, char.cromo[cat].t==3? (cat==='Neural'||cat==='Fluxo'?3:2) : char.cromo[cat].t).map((_,mi)=> char.cromo[cat].m[mi] ? `<div class="selectable-item" style="padding:5px;"><span>${char.cromo[cat].m[mi].name}</span><button class="btn-red" style="background:none;border:none;" onclick="char.cromo.${cat}.m.splice(${mi},1); applyToSheet();">X</button></div>` : `<button class="btn btn-small" style="width:100%; margin-top:5px;" onclick="openCromoS('${cat}')">INSTALAR MÓDULO</button>`).join('') +`</div>
+                </div>`).join('');
+        }
+        function openCromoS(c) { cPath=c; const list = document.getElementById('mg_list'); list.innerHTML = DB.arsenal.cyber_units.filter(u=>u.cat===c && !u.name.includes("Tier")).map(u=> `<div class="selectable-item ${char.nf<u.nf?'locked':''}" onmouseover="showPrev('${u.d}')"><div><strong>${u.name}</strong></div><button class="btn btn-small" ${char.nf<u.nf?'disabled':''} onclick="char.cromo.${c}.m.push(${JSON.stringify(u).replace(/"/g,'&quot;')}); closeModal(); applyToSheet();">ADD</button></div>`).join(''); document.getElementById('modal-generic').style.display='flex'; }
+        async function openRulesModal() { document.getElementById('modal-rules').style.display='flex'; const res = await fetch('regras.md'); document.getElementById('rules-content').innerHTML = marked.parse(await res.text()); }
     </script>
 </body>
 </html>
