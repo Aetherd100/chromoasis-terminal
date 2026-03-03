@@ -9,13 +9,13 @@
   "origins": {
     "humano": {
       "name": "Humano Comum",
-      "esf": 20, "agi": 20, "ard": 20, "cor": 20, "int": 20, "per": 20, "lab": 20, "von": 20, "bal": 20, "con": 20, "hp": 0, "pts": 130,
+      "esf": 20, "agi": 20, "ard": 20, "cor": 20, "int": 20, "per": 20, "lab": 20, "von": 20, "bal": 20, "con": 20, "hp": 0, "pts": 160,
       "description": "Ainda a maioria em Oásis e Miragem. O que falta em força bruta ou reflexos sobrenaturais, os humanos compensam com adaptabilidade e aprendizado rápido.",
       "traits": "Versatilidade: Humanos começam com 1 Maestria Extra (Talento) na criação de personagem. Ganham +10% livre para distribuir em qualquer Essência."
     },
     "jotun": {
       "name": "Jotun",
-      "esf": 30, "agi": 10, "ard": 20, "cor": 30, "int": 20, "per": 20, "lab": 10, "von": 20, "bal": 20, "con": 20, "hp": 5, "pts": 120,
+      "esf": 30, "agi": 10, "ard": 20, "cor": 30, "int": 20, "per": 20, "lab": 10, "von": 20, "bal": 20, "con": 20, "hp": 5, "pts": 150,
       "description": "Gigantes de músculos densos e pele resistente. Nascidos com mutações pelo Éter, eles são a força de trabalho pesada e os tanques naturais do submundo.",
       "traits": "Constituição Titânica: Recebem +5 Pontos de Resistência (PR) extras. Mãos Pesadas: Você sofre uma penalidade permanente de -10% na Essência para qualquer teste que exija coordenação motora fina ou manipulação de objetos pequenos (como Ladinagem, Cibernéticos, Biotech ou usar um Sequenciador).",
       "racial_choices": [
@@ -26,7 +26,7 @@
     },
     "oni": {
       "name": "Oni",
-      "esf": 10, "agi": 30, "ard": 20, "cor": 20, "int": 20, "per": 30, "lab": 10, "von": 20, "bal": 20, "con": 20, "hp": 0, "pts": 120,
+      "esf": 10, "agi": 30, "ard": 20, "cor": 20, "int": 20, "per": 30, "lab": 10, "von": 20, "bal": 20, "con": 20, "hp": 0, "pts": 150,
       "description": "Esguios, ágeis e marcados por padrões de pele diversos e chifres. Sua fisiologia é feita para a velocidade e percepção, mas sua aparência distorcida faz com que sejam temidos por outros.",
       "traits": "Miragem: Se o Oni realizou a ação Mudar de Zona ou se movimentou para buscar cobertura no seu turno, ele impõe -10% para ser acertado por ataques à distância até o início do seu próximo turno. Estigma Visual: Você sofre uma penalidade permanente de -10% em testes que usam a Essência Lábia.",
       "racial_choices": [
@@ -37,7 +37,7 @@
     },
     "dokka": {
       "name": "Dokka",
-      "esf": 10, "agi": 10, "ard": 20, "cor": 20, "int": 30, "per": 20, "lab": 20, "von": 30, "bal": 20, "con": 20, "hp": 0, "pts": 120,
+      "esf": 10, "agi": 10, "ard": 20, "cor": 20, "int": 30, "per": 20, "lab": 20, "von": 30, "bal": 20, "con": 20, "hp": 0, "pts": 150,
       "description": "Vindo dos Dokkalfar, assim como os Jotunns, são atarracados, densos e baixos. Possuem um tom de pele cinzento metálico e olhos sem pupilas visíveis que lembram lentes foscas.",
       "traits": "Sintonização Estável: O sistema nervoso dos Dokkas é um condutor perfeito. Eles recebem +2 Pontos de Sobrecarga Estrutural (SE) extras no valor máximo inicial. Inércia Física: Devido à sua massa molecular densa e foco mental, o Dokka é lento para reagir fisicamente. Ele sofre uma penalidade permanente de -2 em sua Iniciativa Base e -10% na Essência de Atletismo para saltos, natação ou corridas de longa distância.",
       "racial_choices": [
