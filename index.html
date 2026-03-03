@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChromOasis // Sindicato OS v21.0</title>
+    <title>ChromOasis // Sindicato OS v20.0</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
-            --bg-base: #1e1f20; /* Slate Grey sugerido */
+            --bg-base: #101014;
             --bg-panel: #1a1a20;
             --bg-modal: #0a0e14;
             --border-dim: #33333d;
@@ -18,7 +18,6 @@
             --gold: #ffcc00;
             --green: #00ff66;
             --purple: #b000ff;
-            --accent-gray: #4a4a55;
             --font-mono: 'Courier New', Courier, monospace;
             --font-ui: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -27,7 +26,7 @@
         
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(30, 31, 32, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background: linear-gradient(rgba(16, 16, 20, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
             background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 999; opacity: 0.4;
         }
 
@@ -91,9 +90,9 @@
         .ess-box { background: #101014; border: 1px solid var(--border-dim); padding: 10px; text-align: center; border-radius: 4px; }
         .ess-mod { color: var(--cyan); font-size: 0.8rem; font-family: var(--font-mono); background: rgba(34, 211, 238, 0.1); padding: 2px 6px; border-radius: 10px; margin-top: 5px; display:inline-block; }
 
-        .selectable-item { background: #18181c; border: 1px solid var(--border-dim); padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: flex-start; text-align: left; transition: 0.2s; cursor: help;}
-        .selectable-item:hover:not(.locked) { border-color: var(--cyan); background: #1f1f26; }
-        .selectable-item.locked { opacity: 0.4; border-color: var(--red); cursor: not-allowed; }
+        .selectable-item { background: #18181c; border: 1px solid var(--border-dim); padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: flex-start; text-align: left; transition: 0.2s;}
+        .selectable-item:hover:not(.locked) { border-color: var(--cyan); }
+        .selectable-item.locked { opacity: 0.4; border-color: var(--red); }
         .cat-header { color: var(--gold); border-bottom: 1px solid var(--border-dim); padding-bottom: 5px; margin: 20px 0 10px 0; font-family: var(--font-mono); font-size: 1rem; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
@@ -141,7 +140,7 @@
     <div id="view-hub" class="view active">
         <div style="text-align:center; margin: 60px 0;">
             <h1 style="font-size: 3.5rem; border:none; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">CHROMOASIS DB</h1>
-            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v21.0</p>
+            <p style="color:var(--text-muted); font-family:var(--font-mono); letter-spacing: 4px;">TERMINAL DE OPERAÇÕES v20.0</p>
         </div>
         <div style="display:flex; justify-content:center; gap:15px; margin-bottom: 50px;">
             <button class="btn" style="border-color:var(--cyan); color:var(--cyan);" onclick="startWizard()">+ RECRUTAR OPERADOR</button>
@@ -210,7 +209,7 @@
                 </div>
                 <h3 style="margin-top:20px; font-size:0.85rem; color:var(--cyan);">SELECIONADAS:</h3>
                 <div id="w_selected_advs" style="background:#101014; padding:10px; border-radius:4px; min-height:50px;"></div>
-                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(4)"><< VOLTAR</button><button class="btn" id="btn-finish-wizard" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR REGISTRO</button></div>
+                <div style="display:flex; justify-content:space-between; margin-top:30px;"><button class="btn btn-red" onclick="nextWizStep(4)"><< VOLTAR</button><button class="btn" style="border-color:var(--gold); color:var(--gold);" onclick="finalizeOperador()">FINALIZAR REGISTRO</button></div>
             </div>
         </div>
     </div>
@@ -297,7 +296,7 @@
 
                 <!-- DIREITA: VITALS -->
                 <div>
-                    <div id="s_dying_alert" class="blink-red" style="display:none;">⚠️ OPERADOR MORRENDO ⚠️</div>
+                    <div id="s_dying_alert" class="blink-red">⚠️ OPERADOR MORRENDO ⚠️</div>
 
                     <div class="panel" style="border-top: 3px solid var(--cyan); padding: 15px;">
                         <h3 style="color:var(--cyan); border-bottom:1px solid var(--border-dim); padding-bottom:5px;">ESCUDO ETÉREO (PE)</h3>
@@ -517,7 +516,7 @@
                 const res = await fetch('database.json?v=' + new Date().getTime());
                 if(res.ok) { DB = await res.json(); }
             } catch(e) { console.error("Falha ao carregar database.json."); }
-            roster = JSON.parse(localStorage.getItem('co_roster_v21') || '[]');
+            roster = JSON.parse(localStorage.getItem('co_roster_v20') || '[]');
             document.getElementById('loader').style.display = 'none';
             renderHub();
         };
@@ -544,7 +543,6 @@
                 document.getElementById('w_arch').innerHTML = '<option value="">-- Arquétipo --</option>' + Object.keys(DB.archetypes||{}).map(k => `<option value="${k}">${k}</option>`).join('');
                 document.getElementById('w_origin_sel').innerHTML = Object.keys(DB.origins||{}).map(k => `<option value="${k}">${(DB.origins[k]||{}).name}</option>`).join('');
                 document.getElementById('w_hist_sel').innerHTML = '<option value="">-- Histórico --</option>' + (DB.histories||[]).map((h,i) => `<option value="${i}">${h.name}</option>`).join('');
-                document.getElementById('btn-finish-wizard').disabled = false;
                 updateWizArchDesc(); renderWizOriginInfo(); nextWizStep(1); switchView('view-wizard');
             } catch(err) { alert("Falha ao abrir Wizard: " + err.message); }
         }
@@ -564,7 +562,7 @@
             document.getElementById('w_origin_desc').innerHTML = t;
             const box = document.getElementById('w_racial_choices_box'); const list = document.getElementById('w_racial_choices_list');
             if(k !== 'humano' && o.racial_choices) {
-                box.style.display = 'block'; list.innerHTML = o.racial_choices.map((c, i) => `<div class="selectable-item" title="${c.effect}"><div style="flex-grow:1;"><strong>${c.name}</strong><br><small style="color:var(--text-muted)">${c.effect}</small></div><input type="radio" name="r_pick" value="${i}" ${i===0?'checked':''}></div>`).join('');
+                box.style.display = 'block'; list.innerHTML = o.racial_choices.map((c, i) => `<div class="selectable-item"><div style="flex-grow:1;"><strong>${c.name}</strong><br><small style="color:var(--text-muted)">${c.effect}</small></div><input type="radio" name="r_pick" value="${i}" ${i===0?'checked':''}></div>`).join('');
             } else { box.style.display = 'none'; }
         }
         
@@ -604,7 +602,7 @@
         window.renderWizDomains = function() {
             document.getElementById('w_dom_list').innerHTML = sysDomains.map(d => {
                 const sel = wizDoms.includes(d.name);
-                return `<div class="selectable-item" title="${d.desc}" style="${sel?'border-color:var(--cyan); background:#111;':''}"><div style="flex-grow:1;"><strong style="color:${sel?'var(--cyan)':'#fff'}">${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div><button class="btn btn-small ${sel?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${sel?'REMOVER':'SELECIONAR'}</button></div>`;
+                return `<div class="selectable-item" style="${sel?'border-color:var(--cyan); background:#111;':''}"><div style="flex-grow:1;"><strong style="color:${sel?'var(--cyan)':'#fff'}">${d.name}</strong><br><small style="color:var(--text-muted)">${d.desc}</small></div><button class="btn btn-small ${sel?'btn-red':''}" onclick="toggleWizDom('${d.name}')">${sel?'REMOVER':'SELECIONAR'}</button></div>`;
             }).join('');
         }
         window.toggleWizDom = function(n) { if(wizDoms.includes(n)) wizDoms = wizDoms.filter(x=>x!==n); else { if(wizDoms.length>=2) return alert("Máximo 2 Domínios iniciais."); wizDoms.push(n); } renderWizDomains(); }
@@ -614,7 +612,7 @@
             if(hIdx==="") return;
             DB.histories[hIdx].advantages.forEach((a, i) => {
                 const isAdded = wizAdvs.find(x => x.n === a.name);
-                pool.innerHTML += `<div class="selectable-item" title="${a.effect}" style="${isAdded?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${a.name}</strong><br><small style="color:var(--text-muted)">${a.effect}</small></div><button class="btn btn-small" ${isAdded?'disabled':''} onclick="addWizAdv(${hIdx}, ${i})">ADD</button></div>`;
+                pool.innerHTML += `<div class="selectable-item" style="${isAdded?'opacity:0.3':''}"><div style="flex-grow:1;"><strong>${a.name}</strong><br><small style="color:var(--text-muted)">${a.effect}</small></div><button class="btn btn-small" ${isAdded?'disabled':''} onclick="addWizAdv(${hIdx}, ${i})">ADD</button></div>`;
             });
         }
         window.addWizAdv = function(hIdx, aIdx) {
@@ -629,16 +627,12 @@
             document.getElementById('w_selected_advs').innerHTML = wizAdvs.map((a, i) => `<div style="display:flex; justify-content:space-between; margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #333;"><span><strong style="color:var(--gold)">${a.n}</strong> <span style="color:#666">[${a.h}]</span></span><button style="background:none; border:none; color:var(--red); cursor:pointer; font-weight:bold;" onclick="wizAdvs.splice(${i},1); renderWizSelAdvs(); renderWizHistAdvs();">X</button></div>`).join('');
         }
         window.finalizeOperador = function() {
-            const btn = document.getElementById('btn-finish-wizard');
-            if(btn.disabled) return;
             if(parseInt(document.getElementById('w_pts_left').innerText) < 0) return alert("Ajuste os pontos.");
-            btn.disabled = true;
-
             const ok = document.getElementById('w_origin_sel').value;
             const n = {
                 name: document.getElementById('w_name').value || "Novo Operador", arch: document.getElementById('w_arch').value || "Desconhecido",
                 origin: DB.origins[ok].name, origin_k: ok, nf: 0, cred: 20, eter: 1, xp: 0, 
-                hp_cur: 10, shield_cur: 0, shield_max: 0, shield_rec: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_dmg: 0, arm_brok: 0,
+                hp_cur: 10, hp_max: 10, shield_cur: 0, shield_max: 0, shield_rec: 0, se_cur: 0, arm_state: "Normal", arm_base: 0, arm_dmg: 0, arm_brok: 0,
                 ex_init:0, ex_dodge:0, ex_parry:0,
                 ess: {}, dom: wizDoms.map(d => ({n: d, lvl: 1, flips: 1})), traits:[...wizAdvs], masteries:[],
                 sic: { armor: null, wpn_p: null, wpn_s: null },
@@ -647,10 +641,10 @@
                 contacts:[], flaw: "", app: "", bg: "", notes: ""
             };
             attrKeys.forEach(k => n.ess[k] = parseInt(document.getElementById('wa_'+k).value));
-            n.hp_cur = 5 + (Math.floor(n.ess.cor/10)*2) + Math.floor(n.ess.von/10) + (ok==='jotun'?5:0);
+            n.hp_max = 5 + (Math.floor(n.ess.cor/10)*2) + Math.floor(n.ess.von/10) + (ok==='jotun'?5:0);
+            n.hp_cur = n.hp_max;
             if(ok !== 'humano') {
-                const rPick = document.querySelector('input[name="r_pick"]:checked');
-                const p = rPick ? rPick.value : 0;
+                const p = document.querySelector('input[name="r_pick"]:checked').value;
                 n.traits.unshift({h: "Mutação Genética", n: DB.origins[ok].racial_choices[p].name, d: DB.origins[ok].racial_choices[p].effect});
             } else { n.traits.unshift({h: "Ancestral", n: "Versatilidade", d: "Ganha +1 Maestria Extra na criação."}); }
             
@@ -666,13 +660,27 @@
             catch(err) { alert("Falha ao ler dados da ficha: " + err.message); }
         }
         window.updateDirect = function(key, val) { if(!char) return; if(key==='app'||key==='flaw'||key==='bg'||key==='notes'||key==='arm_state') char[key] = val; else char[key] = parseInt(val)||0; saveDisk(); }
-        window.saveRoster = function() { localStorage.setItem('co_roster_v21', JSON.stringify(roster)); }
-        window.saveDisk = function() { if(activeIdx === -1 || !char) return; roster[activeIdx]=char; saveRoster(); const p = document.getElementById('save_ping'); p.style.opacity = 1; setTimeout(()=>p.style.opacity=0, 1000); }
-        window.backToHub = function() { saveDisk(); activeIdx = -1; char = null; renderHub(); }
+        window.saveRoster = function() { localStorage.setItem('co_roster_v20', JSON.stringify(roster)); }
+        
+        window.saveDisk = function() { 
+            if(activeIdx === -1 || !char) return; 
+            roster[activeIdx] = JSON.parse(JSON.stringify(char)); 
+            saveRoster(); 
+            const p = document.getElementById('save_ping'); 
+            if(p) { p.style.opacity = 1; setTimeout(()=>p.style.opacity=0, 1000); }
+        }
+        
+        window.backToHub = function() { 
+            saveDisk(); 
+            activeIdx = -1; 
+            char = null; 
+            renderHub(); 
+            switchView('view-hub');
+        }
         
         window.modVital = function(v, a) {
             if(!char) return;
-            if(v==='hp_cur') char.hp_cur = Math.max(0, char.hp_cur + a);
+            if(v==='hp_cur') char.hp_cur = Math.max(0, Math.min(char.hp_max, char.hp_cur + a));
             else if(v==='shield_cur') char.shield_cur = Math.min(char.shield_max||0, Math.max(0, char.shield_cur + a));
             else if(v==='se_cur') char.se_cur = Math.max(0, char.se_cur + a);
             else char[v] = Math.max(0, (char[v]||0) + a);
@@ -684,13 +692,12 @@
             document.getElementById('s_name').innerText = (char.name||"Sem Nome").toUpperCase(); 
             document.getElementById('s_origin').innerText = (char.origin||"").toUpperCase(); 
             document.getElementById('s_arch').innerText = (char.arch||"").toUpperCase();
-            ['nf','cred','eter','xp','shield_max','shield_rec','arm_base','arm_dmg','arm_brok','shield_cur','hp_cur'].forEach(k => { 
-                const el=document.getElementById('s_'+k); if(el) { if(el.tagName === 'INPUT') el.value = char[k]||0; else el.innerText = char[k]||0; } 
-            });
+            ['nf','cred','eter','xp','shield_max','shield_rec','arm_base','arm_dmg','arm_brok'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.innerText = char[k]||0; });
+            ['nf','cred','eter','xp'].forEach(k => { const el=document.getElementById('s_'+k); if(el) el.value = char[k]||0; });
             document.getElementById('s_arm_state').value = char.arm_state || "Normal";
             ['app','flaw','bg','notes'].forEach(k => { const el=document.getElementById('p_'+k); if(el) el.value = char[k]||""; });
             
-            renderSheetStatus(); renderSheetArsenal(); renderSheetCromo(); updateCalcs();
+            renderSheetStatus(); renderSheetArsenal(); renderSheetCromo(); renderPersona(); updateCalcs();
         }
 
         window.renderSheetStatus = function() {
@@ -718,7 +725,6 @@
             if(char.cromo['Sensorial'].t === 1) initB += 1; else if(char.cromo['Sensorial'].t === 2) initB += 2; else if(char.cromo['Sensorial'].t === 3) initB += 3;
             document.getElementById('s_init_total').innerText = "1d10 + " + initB;
 
-            // Domains
             document.getElementById('s_dom_list').innerHTML = char.dom.map((d, i) => `
             <div style="display:flex; justify-content:space-between; align-items:center; background:#141418; padding:12px; margin-bottom:8px; border-radius:4px; border:1px solid var(--border-dim);">
                 <strong style="color:var(--cyan); width:30%; font-size:1.1rem;">${d.n}</strong>
@@ -743,10 +749,11 @@
             
             let maxHp = 5 + (bC*2) + bV + (char.origin_k==='jotun'?5:0);
             if(char.cromo['Fluxo'].t === 1) maxHp += 2; if(char.cromo['Fluxo'].t === 2) maxHp += 4; if(char.cromo['Fluxo'].t === 3) maxHp += 6;
+            char.hp_max = maxHp;
             document.getElementById('s_hp_max').innerText = maxHp; document.getElementById('s_hp_cur').innerText = char.hp_cur;
             
             const dy = document.getElementById('s_dying_alert');
-            if(char.hp_cur <= 0) dy.style.display = 'block'; else dy.style.display = 'none';
+            if(char.hp_cur === 0) dy.style.display = 'block'; else dy.style.display = 'none';
 
             let cst = 0; 
             cyberCats.forEach(c => {
@@ -766,7 +773,6 @@
 
             document.getElementById('s_eff_abs').innerText = (char.arm_state==="Normal") ? char.arm_base : (char.arm_state==="Danificada" ? char.arm_dmg : char.arm_brok);
 
-            // Load
             let lt = 0, lu = 0, lg = 0;
             char.inv_tac.forEach(i => lt += (i.load||0)); lt += char.drones.length;
             char.inv_uti.forEach(i => lu += (i.load||0)); char.inv_gen.forEach(i => lg += (i.load||0));
@@ -779,70 +785,48 @@
             const bWpn = (id, t, i, p) => {
                 const el = document.getElementById(id);
                 if(!i) { el.className = "slot-box"; el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><button class="btn btn-small" onclick="openBuilder('${p}')">EQUIPAR</button></div><div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:10px 0;">[ VAZIO ]</div>`; return; } 
-                
                 el.className = "slot-box filled";
                 let btnHtml = `<div><button class="btn btn-small" onclick="openBuilder('${p}')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.${p}=null; saveDisk(); applyToSheet();">X</button></div>`;
-                
                 if(i.is_melee) {
                     el.innerHTML = `<div class="slot-header"><span class="slot-title">${t} (MELEE)</span>${btnHtml}</div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name} <span class="inline-ctrl" style="margin-left:10px; color:var(--red);">DANO: <button onclick="char.sic.${p}.dmg--; saveDisk(); applyToSheet();">-</button>+${i.dmg}<button onclick="char.sic.${p}.dmg++; saveDisk(); applyToSheet();">+</button></span></div><div class="slot-desc" style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${i.traits}</div>`;
                 } else {
-                    let totalH = i.h_max; let lim = totalH + 1;
-                    let hState = "";
-                    if(i.h_cur >= lim) hState = `<div style="background:var(--red); color:#fff; font-weight:bold; font-size:0.8rem; padding:4px; text-align:center; margin-top:10px; border-radius:4px;">⚠️ ARMA DANIFICADA/QUEBRADA</div>`;
+                    let totalH = i.h_max; let hState = "";
+                    if(i.h_cur > totalH) hState = `<div style="background:var(--red); color:#fff; font-weight:bold; font-size:0.8rem; padding:4px; text-align:center; margin-top:10px; border-radius:4px;">⚠️ ARMA DANIFICADA/QUEBRADA</div>`;
                     else if(i.h_cur === totalH) hState = `<div style="background:var(--gold); color:#000; font-weight:bold; font-size:0.8rem; padding:4px; text-align:center; margin-top:10px; border-radius:4px;">⚠️ ARMA TRAVADA</div>`;
-
-                    let x = `<div style="margin-top:10px; display:flex; align-items:center; gap:10px;"><span class="inline-ctrl" style="color:var(--gold);">CALOR: <button onclick="modHeat('${p}', -1)">-</button><span style="font-size:1.2rem;">${i.h_cur} / ${totalH}</span><button onclick="modHeat('${p}', 1)">+</button></span> <span class="inline-ctrl">Max: <button onclick="char.sic.${p}.h_max=Math.max(1, char.sic.${p}.h_max-1); saveDisk(); applyToSheet();">-</button>${i.h_max}<button onclick="char.sic.${p}.h_max++; saveDisk(); applyToSheet();">+</button></span> <button class="btn btn-small" style="border-color:#333; color:#aaa;" onclick="char.sic.${p}.h_cur=0; saveDisk(); applyToSheet();">Zerar</button></div>`;
-                    
+                    let x = `<div style="margin-top:10px; display:flex; align-items:center; gap:10px;"><span class="inline-ctrl" style="color:var(--gold);">CALOR: <button onclick="modHeat('${p}', -1)">-</button><span style="font-size:1.2rem;">${i.h_cur} / ${totalH}</span><button onclick="modHeat('${p}', 1)">+</button></span> <button class="btn btn-small" style="border-color:#333; color:#aaa;" onclick="char.sic.${p}.h_cur=0; saveDisk(); applyToSheet();">Zerar</button></div>`;
                     let mBtn = `<button class="btn btn-small" style="margin-right:10px; border-color:var(--gold); color:var(--gold);" onclick="openModSelector('${p}')">+ MOD (${i.mods?i.mods.length:0}/${i.slots||0})</button>`;
-                    let mList = (i.mods && i.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + i.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name} <span style="color:#666">[${md.type}]</span><br><span style="color:var(--text-muted); font-size:0.75rem;">${md.effect}</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.${p}.mods.splice(${midx},1); saveDisk(); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
-                    
-                    el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><div>${mBtn}${btnHtml}</div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name} <span class="inline-ctrl" style="margin-left:10px; color:var(--red);">DANO: <button onclick="char.sic.${p}.dmg--; saveDisk(); applyToSheet();">-</button>+${i.dmg}<button onclick="char.sic.${p}.dmg++; saveDisk(); applyToSheet();">+</button></span> <span style="font-size:0.8rem; color:#aaa;">[ALC ${i.range}]</span></div><div class="slot-desc" style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${i.desc}</div>${x}${hState}${mList}`;
+                    let mList = (i.mods && i.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + i.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name} <br><span style="color:var(--text-muted); font-size:0.75rem;">${md.effect}</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.${p}.mods.splice(${midx},1); saveDisk(); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
+                    el.innerHTML = `<div class="slot-header"><span class="slot-title">${t}</span><div>${mBtn}${btnHtml}</div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${i.name} <span class="inline-ctrl" style="margin-left:10px; color:var(--red);">DANO: <button onclick="char.sic.${p}.dmg--; saveDisk(); applyToSheet();">-</button>+${i.dmg}<button onclick="char.sic.${p}.dmg++; saveDisk(); applyToSheet();">+</button></span></div><div class="slot-desc" style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${i.desc}</div>${x}${hState}${mList}`;
                 }
             };
             bWpn('slot_wpn_p', 'SLOT PRIMÁRIO', char.sic.wpn_p, 'wpn_p');
             bWpn('slot_wpn_s', 'SLOT SECUNDÁRIO', char.sic.wpn_s, 'wpn_s');
             
-            // ARMOR
             const a = char.sic.armor; const elA = document.getElementById('slot_armor');
             if(!a) { elA.className = "slot-box"; elA.innerHTML = `<div class="slot-header"><span class="slot-title">TRAJE / ARMADURA</span><button class="btn btn-small" onclick="openBuilder('armor')">EQUIPAR</button></div><div style="color:var(--border-dim); font-family:var(--font-mono); text-align:center; padding:10px 0;">[ VAZIO ]</div>`; }
             else {
                 elA.className = "slot-box filled"; elA.style.borderLeftColor = "var(--accent-gray)";
-                let sMod = a.shield ? 1 : 0; let mTot = (a.mods?a.mods.length:0) + sMod;
-                
-                let sHtml = a.shield ? `<div style="background:#101014; border:1px solid var(--cyan); padding:10px; margin-top:10px; border-radius:4px;"><div style="display:flex; justify-content:space-between; color:var(--cyan); font-weight:bold; font-size:0.9rem;"><span>[GERADOR DE ESCUDO] ${a.shield.name}</span><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.sic.armor.shield=null; saveDisk(); applyToSheet();">X</button></div><div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;">${a.shield.effect || a.shield.d}</div></div>` : `<button class="btn btn-small" style="width:100%; margin-top:10px; border-color:var(--cyan); color:var(--cyan);" onclick="openGenericModal('mods_armor', 'shield', true)">+ ADD GERADOR DE ESCUDO (Consome 1 Slot)</button>`;
-
-                let mList = (a.mods && a.mods.length>0) ? `<div style="margin-top:10px; border-top:1px dashed #333; padding-top:5px;">` + a.mods.map((md, midx)=> `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-main);"><span>- ${md.name}<br><span style="color:var(--text-muted); font-size:0.75rem;">${md.effect}</span></span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.sic.armor.mods.splice(${midx},1); saveDisk(); applyToSheet();">x</button></div>`).join('') + `</div>` : '';
-
-                elA.innerHTML = `<div class="slot-header"><span class="slot-title">TRAJE / ARMADURA</span><div><button class="btn btn-small" style="margin-right:10px; border-color:var(--gold); color:var(--gold);" onclick="openModSelector('armor')">+ MOD (${mTot}/${a.slots||0})</button><button class="btn btn-small" onclick="openBuilder('armor')">EDITAR</button> <button class="btn-red" style="background:transparent; border:none; cursor:pointer;" onclick="char.sic.armor=null; saveDisk(); applyToSheet();">X</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${a.name} <span style="font-size:0.8rem; color:var(--text-muted);">[ABS ${a.abs} / QUB ${a.broken}]</span></div><div class="slot-desc" style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${a.traits}</div>${sHtml}${mList}`;
+                let sHtml = a.shield ? `<div style="background:#101014; border:1px solid var(--cyan); padding:10px; margin-top:10px; border-radius:4px;"><div style="display:flex; justify-content:space-between; color:var(--cyan); font-weight:bold; font-size:0.9rem;"><span>[ESCUDO] ${a.shield.name}</span><button style="background:none; border:none; color:var(--red); cursor:pointer;" onclick="char.sic.armor.shield=null; saveDisk(); applyToSheet();">X</button></div></div>` : `<button class="btn btn-small" style="width:100%; margin-top:10px;" onclick="openGenericModal('mods_armor', 'shield', true)">+ GERADOR DE ESCUDO</button>`;
+                elA.innerHTML = `<div class="slot-header"><span class="slot-title">TRAJE</span><div><button class="btn btn-small" onclick="openModSelector('armor')">+ MOD</button><button class="btn btn-small" onclick="openBuilder('armor')">EDITAR</button></div></div><div style="font-size:1.1rem; font-weight:bold; color:#fff;">${a.name}</div>${sHtml}`;
             }
 
-            const rUti = () => {
-                let html = '';
-                char.inv_uti.forEach((a, idx) => {
-                    let usesHtml = `<div style="margin-top:5px; font-size:0.85rem;"><span class="inline-ctrl" style="color:var(--gold);">Usos: <button onclick="char.inv_uti[${idx}].u_cur=Math.max(0, char.inv_uti[${idx}].u_cur-1); saveDisk(); applyToSheet();">-</button><span style="font-size:1.1rem;">${a.u_cur||0}</span><button onclick="char.inv_uti[${idx}].u_cur=Math.min(char.inv_uti[${idx}].u_max||0, char.inv_uti[${idx}].u_cur+1); saveDisk(); applyToSheet();">+</button></span></div>`;
-                    html += `<div class="selectable-item" style="padding:10px; display:block;" title="${a.d || a.traits || a.effect || ''}"><div style="display:flex; justify-content:space-between; align-items:flex-start;"><div><strong>${a.name || a.n}</strong> <br><small style="color:var(--text-muted); display:block; margin-top:4px;">${a.d || a.traits || a.effect || ''}</small></div><button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.inv_uti.splice(${idx},1); saveDisk(); applyToSheet();">X</button></div>${usesHtml}</div>`;
-                });
-                document.getElementById('s_uti_list').innerHTML = html;
-            };
-            rUti();
-
             const rGen = (id, arr, path) => {
-                document.getElementById(id).innerHTML = arr.map((a,i) => `<div class="selectable-item" style="padding:10px; display:block;" title="${a.d || a.traits || a.effect || ''}"><div style="display:flex; justify-content:space-between; align-items:flex-start;"><div><strong>${a.name || a.n}</strong><br><small style="color:var(--text-muted); display:block; margin-top:4px;">${a.d || a.traits || a.effect || ''}</small></div><button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.${path}.splice(${i},1); saveDisk(); applyToSheet();">X</button></div></div>`).join('');
+                document.getElementById(id).innerHTML = arr.map((a,i) => `<div class="selectable-item" style="padding:10px; display:block;"><div style="display:flex; justify-content:space-between;"><div><strong>${a.name || a.n}</strong><br><small style="color:var(--text-muted)">${a.effect || a.d || ''}</small></div><button class="btn-red" style="background:none; border:none; font-weight:bold; cursor:pointer;" onclick="char.${path}.splice(${i},1); saveDisk(); applyToSheet();">X</button></div></div>`).join('');
             };
             rGen('s_tac_list', char.inv_tac, 'inv_tac'); rGen('s_runic_list', char.runic, 'runic'); rGen('s_gen_list', char.inv_gen, 'inv_gen');
-            
+            rGen('s_uti_list', char.inv_uti, 'inv_uti');
+
             document.getElementById('s_drones_list').innerHTML = char.drones.map((d, i) => `
-                <div class="slot-box filled" style="border-left-color:var(--cyan); margin-bottom:10px; padding:10px;">
-                    <div class="slot-header"><strong style="color:#fff; font-size:1.1rem;">${d.name}</strong> <div><button class="btn btn-small" style="margin-right:10px; color:var(--cyan);" onclick="openModSelector('drone_${i}')">+ MOD (${d.mods.length}/${d.slots})</button><button class="btn-red" style="background:none;border:none;cursor:pointer;" onclick="char.drones.splice(${i},1); saveDisk(); applyToSheet();">X</button></div></div>
-                    <div style="display:flex; gap:10px; margin-bottom:5px;"><span class="inline-ctrl">INT: <button onclick="char.drones[${i}].integ--; saveDisk(); applyToSheet();">-</button>${d.integ}<button onclick="char.drones[${i}].integ++; saveDisk(); applyToSheet();">+</button></span><span class="inline-ctrl">ABS: <button onclick="char.drones[${i}].abs--; saveDisk(); applyToSheet();">-</button>${d.abs}<button onclick="char.drones[${i}].abs++; saveDisk(); applyToSheet();">+</button></span></div>
-                    ${d.mods.length>0 ? `<div style="border-top:1px dashed #333; padding-top:5px;">` + d.mods.map((md, midx)=>`<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--cyan);"><span>- ${md.name}</span><button style="background:none;border:none;color:var(--red);cursor:pointer;" onclick="char.drones[${i}].mods.splice(${midx},1); saveDisk(); applyToSheet();">x</button></div>`).join('') + `</div>` : ''}
+                <div class="slot-box filled" style="padding:10px;">
+                    <div style="display:flex; justify-content:space-between;"><strong>${d.name}</strong><button class="btn-red" style="background:none;border:none;cursor:pointer;" onclick="char.drones.splice(${i},1); saveDisk(); applyToSheet();">X</button></div>
+                    <div style="font-size:0.75rem; color:#666;">${d.d}</div>
                 </div>
             `).join('');
         }
 
         window.modHeat = function(slot, amt) {
             let w = char.sic[slot]; if(!w) return;
-            w.h_cur += amt; if(w.h_cur < 0) w.h_cur = 0;
+            w.h_cur = Math.max(0, Math.min(w.h_max + 1, w.h_cur + amt));
             saveDisk(); applyToSheet();
         }
 
@@ -850,143 +834,121 @@
         window.openBuilder = function(slot) {
             curBuildSlot = slot;
             if(slot==='wpn_p' || slot==='wpn_s') {
-                document.getElementById('mb_title').innerText = slot==='wpn_p' ? "MONTAR PRIMÁRIA" : "MONTAR SECUNDÁRIA";
+                document.getElementById('mb_title').innerText = "MONTAR ARMA";
                 document.getElementById('mb_armor_fields').style.display = 'none'; document.getElementById('mb_weapon_fogo').style.display = 'block'; document.getElementById('mb_wpn_tabs').style.display = 'block';
-                document.getElementById('mb_f').innerHTML = '<option value="">[ FRAME ]</option>' + DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.name||f.n}</option>`).join('');
-                document.getElementById('mb_c').innerHTML = '<option value="">[ NÚCLEO ]</option>' + DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.name||c.n}</option>`).join('');
-                let mList = slot==='wpn_p' ? DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary) : DB.arsenal.melee_secondary;
-                document.getElementById('mb_m').innerHTML = '<option value="">[ LÂMINA/CONTUSÃO ]</option>' + mList.map((m,i)=>`<option value="${i}">${m.name||m.n}</option>`).join('');
-                switchWeaponTab('fogo');
-                previewBuild(); document.getElementById('modal-builder').style.display = 'flex';
+                document.getElementById('mb_f').innerHTML = DB.arsenal.frames.map((f,i)=>`<option value="${i}">${f.n}</option>`).join('');
+                document.getElementById('mb_c').innerHTML = DB.arsenal.cores.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('');
+                document.getElementById('mb_m').innerHTML = DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary).map((m,i)=>`<option value="${i}">${m.n}</option>`).join('');
+                document.getElementById('modal-builder').style.display = 'flex'; previewBuild();
             } else if(slot==='armor') {
-                document.getElementById('mb_title').innerText = "EQUIPAR TRAJE/ARMADURA";
+                document.getElementById('mb_title').innerText = "EQUIPAR TRAJE";
                 document.getElementById('mb_weapon_fogo').style.display = 'none'; document.getElementById('mb_wpn_tabs').style.display = 'none'; document.getElementById('mb_weapon_melee').style.display = 'none'; document.getElementById('mb_armor_fields').style.display = 'block';
-                document.getElementById('mb_a').innerHTML = '<option value="">[ SELECIONAR ]</option>' + DB.arsenal.armors.map((a,i)=>`<option value="${i}">${a.n} [NF ${a.nf}]</option>`).join('');
-                previewBuild(); document.getElementById('modal-builder').style.display = 'flex';
+                document.getElementById('mb_a').innerHTML = DB.arsenal.armors.map((a,i)=>`<option value="${i}">${a.n}</option>`).join('');
+                document.getElementById('modal-builder').style.display = 'flex'; previewBuild();
             }
         }
 
         let wpnTab = 'fogo';
         window.switchWeaponTab = function(t) {
             wpnTab = t;
-            if(t==='fogo') { document.getElementById('mb_weapon_fogo').style.display='block'; document.getElementById('mb_weapon_melee').style.display='none'; }
-            else { document.getElementById('mb_weapon_fogo').style.display='none'; document.getElementById('mb_weapon_melee').style.display='block'; }
+            document.getElementById('mb_weapon_fogo').style.display = t==='fogo'?'block':'none';
+            document.getElementById('mb_weapon_melee').style.display = t==='melee'?'block':'none';
             previewBuild();
         }
 
         window.previewBuild = function() {
             const btn = document.getElementById('mb_confirm'); btn.disabled = false;
-            if(curBuildSlot==='wpn_p' || curBuildSlot==='wpn_s') {
-                if(wpnTab==='fogo') {
-                    const fi = document.getElementById('mb_f').value; const ci = document.getElementById('mb_c').value;
-                    if(fi==="" || ci==="") return document.getElementById('mb_preview').innerHTML = "Selecione as partes...";
-                    const f = DB.arsenal.frames[fi]; const c = DB.arsenal.cores[ci];
-                    document.getElementById('mb_preview').innerHTML = `<strong>${f.n || f.name} // ${c.n || c.name}</strong><br><small>${f.eff || f.effect}</small>`;
-                } else {
-                    const mi = document.getElementById('mb_m').value; if(mi==="") return document.getElementById('mb_preview').innerHTML = "Selecione...";
-                    const mList = curBuildSlot==='wpn_p' ? DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary) : DB.arsenal.melee_secondary;
-                    document.getElementById('mb_preview').innerHTML = `<strong>${mList[mi].n || mList[mi].name}</strong><br><small>${mList[mi].traits}</small>`;
-                }
-            } else if(curBuildSlot==='armor') {
-                const ai = document.getElementById('mb_a').value; if(ai==="") return document.getElementById('mb_preview').innerHTML = "Selecione...";
-                document.getElementById('mb_preview').innerHTML = `<strong>${DB.arsenal.armors[ai].n}</strong><br><small>${DB.arsenal.armors[ai].traits}</small>`;
-            }
+            document.getElementById('mb_preview').innerHTML = "Gerando preview tático...";
         }
 
         window.confirmBuild = function() {
             if(curBuildSlot==='wpn_p' || curBuildSlot==='wpn_s') {
                 if(wpnTab==='fogo') {
-                    const f = DB.arsenal.frames[document.getElementById('mb_f').value]; const c = DB.arsenal.cores[document.getElementById('mb_c').value];
-                    const ft = parseInt(document.getElementById('mb_f_t').value); const ct = parseInt(document.getElementById('mb_c_t').value);
-                    char.sic[curBuildSlot] = { is_melee: false, name: `${f.n||f.name} T${ft}`, dmg: c.dmg[3], range: (f.r||f.range), h_max: (c.h||c.heat), h_cur: 0, desc: f.eff||f.effect, slots: ft+1, mods: [] };
+                    const f = DB.arsenal.frames[document.getElementById('mb_f').value];
+                    const c = DB.arsenal.cores[document.getElementById('mb_c').value];
+                    char.sic[curBuildSlot] = { is_melee:false, name: f.n, dmg: c.dmg[3], h_max: c.h, h_cur:0, desc: f.eff, slots: 2, mods:[] };
                 } else {
-                    const mList = curBuildSlot==='wpn_p' ? DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary) : DB.arsenal.melee_secondary;
+                    const mList = DB.arsenal.melee_primary.concat(DB.arsenal.melee_secondary);
                     const m = mList[document.getElementById('mb_m').value];
-                    char.sic[curBuildSlot] = { is_melee: true, name: (m.n||m.name), dmg: m.dmg, traits: m.traits };
+                    char.sic[curBuildSlot] = { is_melee:true, name: m.n, dmg: m.dmg, traits: m.traits };
                 }
-            } else if(curBuildSlot==='armor') {
-                const a = DB.arsenal.armors[document.getElementById('mb_a').value];
-                char.arm_base = a.abs; char.arm_brok = a.broken; char.arm_dmg = Math.floor(a.abs/2); char.arm_state = "Normal";
-                char.sic.armor = { name: (a.n||a.name), abs: a.abs, broken: a.broken, traits: a.traits, slots: a.slots, mods: [], shield: null };
-            }
-            closeModal(); saveDisk(); applyToSheet();
-        }
-
-        // --- CROMO ---
-        window.renderSheetCromo = function() {
-            document.getElementById('cromo_container').innerHTML = cyberCats.map(c => {
-                const data = char.cromo[c];
-                let passivo = cyberPassives[c];
-                let html = `<div class="panel" style="border-top: 3px solid var(--purple);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"><h3 style="color:var(--purple); margin:0;">${c.toUpperCase()}</h3><select style="width:auto; font-size:0.8rem;" onchange="char.cromo['${c}'].t=parseInt(this.value); char.cromo['${c}'].m=[]; saveDisk(); applyToSheet();"><option value="0" ${data.t===0?'selected':''}>Offline</option><option value="1" ${data.t===1?'selected':''}>Tier I</option><option value="2" ${data.t===2?'selected':''}>Tier II</option><option value="3" ${data.t===3?'selected':''}>Tier III</option></select></div>`;
-                if(data.t > 0) {
-                    html += `<div style="font-size:0.8rem; color:var(--cyan); margin-bottom:10px;"><strong>${passivo}</strong></div>`;
-                    let maxM = c==='Neural'||c==='Fluxo' ? data.t : (data.t===3?2:1);
-                    for(let i=0; i<maxM; i++) {
-                        if(data.m[i]) html += `<div class="slot-box filled" style="padding:10px; margin-bottom:10px;"><div style="display:flex; justify-content:space-between;"><strong>${data.m[i].name}</strong><button onclick="char.cromo['${c}'].m.splice(${i},1); saveDisk(); applyToSheet();">X</button></div></div>`;
-                        else html += `<div class="slot-box" style="padding:15px; text-align:center; cursor:pointer;" onclick="openCromoSelector('${c}')">[ SOQUETE VAZIO ]</div>`;
-                    }
-                }
-                return html + `</div>`;
-            }).join('');
-        }
-
-        window.openCromoSelector = function(cat) {
-            const list = document.getElementById('mg_list'); list.innerHTML = '';
-            DB.arsenal.cyber_units.filter(u => u.cat === cat).forEach((item) => {
-                list.innerHTML += `<div class="selectable-item" title="${item.d}"><div style="flex-grow:1;"><strong>${item.name}</strong><br><small>${item.d}</small></div><button class="btn btn-small" onclick="char.cromo['${cat}'].m.push(${JSON.stringify(item).replace(/"/g, '&quot;')}); closeModal(); saveDisk(); applyToSheet();">INSTALAR</button></div>`;
-            });
-            document.getElementById('mg_title').innerText = "CROMO: " + cat; document.getElementById('modal-generic').style.display = 'flex';
-        }
-
-        window.openGenericModal = function(dbKey, path, isShield=false) {
-            const list = document.getElementById('mg_list'); list.innerHTML = ''; let items =[];
-            if(dbKey==='domains') {
-                sysDomains.forEach(d => { list.innerHTML += `<div class="selectable-item" title="${d.desc}"><div style="flex-grow:1;"><strong>${d.name}</strong></div><button onclick="char.dom.push({n:'${d.name}', lvl:1, flips:1}); closeModal(); saveDisk(); applyToSheet();">TREINAR</button></div>`; });
-            } else if(dbKey==='masteries') {
-                DB.masteries.forEach(m => { list.innerHTML += `<div class="selectable-item" title="${m.effect}"><div style="flex-grow:1;"><strong>${m.name}</strong></div><button onclick="char.masteries.push({name:'${m.name}', effect:'${m.effect}'}); closeModal(); saveDisk(); applyToSheet();">ADD</button></div>`; });
-            } else if(dbKey==='drone_chassis') {
-                DB.arsenal.drone_chassis.forEach(ch => { list.innerHTML += `<div class="selectable-item" title="${ch.d}"><div style="flex-grow:1;"><strong>${ch.name}</strong></div><button onclick="char.drones.push({name:'${ch.name}', slots:${ch.slots}, integ:${ch.integ}, abs:${ch.abs}, mods:[]}); closeModal(); saveDisk(); applyToSheet();">COMPRAR</button></div>`; });
             } else {
-                dbKey.split(',').forEach(k => { items = items.concat(DB.arsenal[k] || DB[k] ||[]); });
-                items.forEach((item, idx) => {
-                    const desc = item.effect || item.d || item.traits || "";
-                    list.innerHTML += `<div class="selectable-item" title="${desc}"><div style="flex-grow:1;"><strong>${item.name || item.n}</strong></div><button onclick="installGenItem('${dbKey}', ${idx}, '${path}', ${isShield})">ADD</button></div>`;
-                });
+                const a = DB.arsenal.armors[document.getElementById('mb_a').value];
+                char.arm_base = a.abs; char.arm_brok = a.broken; char.arm_dmg = Math.floor(a.abs/2);
+                char.sic.armor = { name: a.n, abs: a.abs, slots: a.slots, mods:[], shield: null };
             }
-            document.getElementById('mg_title').innerText = "SELEÇÃO DE EQUIPAMENTO"; document.getElementById('modal-generic').style.display = 'flex';
+            closeModal(); saveDisk(); applyToSheet();
         }
 
-        window.installGenItem = function(dbKey, idx, path, isShield) {
-            let items =[]; dbKey.split(',').forEach(k => items = items.concat(DB.arsenal[k] || DB[k] ||[]));
-            let iData = JSON.parse(JSON.stringify(items[idx]));
-            if(isShield) char.sic.armor.shield = { name: iData.name, effect: iData.effect };
-            else { if(path === 'inv_uti') { iData.u_cur = 1; iData.u_max = 1; } char[path].push(iData); }
-            closeModal(); saveDisk(); applyToSheet();
+        window.renderSheetCromo = function() {
+            document.getElementById('cromo_container').innerHTML = cyberCats.map(c => `
+                <div class="panel">
+                    <h3>${c.toUpperCase()}</h3>
+                    <select onchange="char.cromo['${c}'].t=parseInt(this.value); saveDisk(); applyToSheet();">
+                        <option value="0" ${char.cromo[c].t===0?'selected':''}>Offline</option>
+                        <option value="1" ${char.cromo[c].t===1?'selected':''}>Tier I</option>
+                        <option value="2" ${char.cromo[c].t===2?'selected':''}>Tier II</option>
+                        <option value="3" ${char.cromo[c].t===3?'selected':''}>Tier III</option>
+                    </select>
+                </div>
+            `).join('');
         }
 
         window.openModSelector = function(target) {
             const list = document.getElementById('mg_list'); list.innerHTML = '';
-            let src = (target === 'armor') ? DB.arsenal.mods_armor : DB.arsenal.mods_weapon;
-            if(target.startsWith('drone_')) src = DB.arsenal.drone_modules;
-            src.forEach((m) => {
-                list.innerHTML += `<div class="selectable-item" title="${m.effect}"><div style="flex-grow:1;"><strong>${m.name}</strong></div><button onclick="installMod('${target}', ${JSON.stringify(m).replace(/"/g, '&quot;')})">ADD</button></div>`;
+            document.getElementById('mg_title').innerText = "MODIFICAÇÕES";
+            document.getElementById('modal-generic').style.display = 'flex';
+        }
+
+        window.openGenericModal = function(dbKey, path, isShield=false) {
+            const list = document.getElementById('mg_list'); list.innerHTML = '';
+            let items = [];
+            dbKey.split(',').forEach(k => { items = items.concat(DB.arsenal[k] || DB[k] || []); });
+            items.forEach((it, i) => {
+                list.innerHTML += `<div class="selectable-item"><div><strong>${it.n || it.name}</strong></div><button class="btn btn-small" onclick="addItem('${path}', '${dbKey}', ${i})">ADD</button></div>`;
             });
             document.getElementById('modal-generic').style.display = 'flex';
         }
 
-        window.installMod = function(target, mData) {
-            if(target.startsWith('drone_')) { char.drones[target.split('_')[1]].mods.push(mData); }
-            else { char.sic[target].mods.push(mData); }
+        window.addItem = function(path, dbKey, idx) {
+            let items = [];
+            dbKey.split(',').forEach(k => { items = items.concat(DB.arsenal[k] || DB[k] || []); });
+            let it = items[idx];
+            if(path === 'shield') char.sic.armor.shield = it;
+            else char[path].push(it);
             closeModal(); saveDisk(); applyToSheet();
+        }
+
+        window.renderPersona = function() {
+            if(!char) return;
+            const list = document.getElementById('s_contacts_list');
+            if(list) list.innerHTML = (char.contacts||[]).map((c,i) => `
+                <div class="selectable-item" style="display:block; padding:10px;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong>${c.name}</strong>
+                        <button class="btn-red" style="background:none; border:none; cursor:pointer;" onclick="char.contacts.splice(${i},1); saveDisk(); renderPersona();">X</button>
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--text-muted);">${c.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        window.addContact = function() {
+            const n = prompt("Nome do Contato:"); if(!n) return;
+            const d = prompt("Descrição/Relação:");
+            if(!char.contacts) char.contacts = [];
+            char.contacts.push({name: n, desc: d});
+            saveDisk(); renderPersona();
         }
 
         window.switchView = function(id) { document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
         window.switchTab = function(id, btn) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
         window.closeModal = function() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
+        
         window.openRulesModal = async function() {
             document.getElementById('modal-rules').style.display = 'flex';
             try { const res = await fetch('regras.md'); document.getElementById('rules-content').innerHTML = marked.parse(await res.text()); }
-            catch(e) { document.getElementById('rules-content').innerHTML = "regras.md não encontrado."; }
+            catch(e) { document.getElementById('rules-content').innerHTML = "Erro ao carregar regras.md"; }
         }
     </script>
 </body>
